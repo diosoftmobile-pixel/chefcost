@@ -73,6 +73,9 @@ export default {
     createMenu: 'Creează meniu', saveEdit: 'Salvează', confirmDelete: 'Ștergi acest meniu?',
     colRecipe: 'Rețetă', colPortions: 'Porții', colCost: 'Cost',
     costPerGuestView: 'Cost/invitat', finalPriceView: 'Preț final',
+    lockedTitle: 'Abonează-te pentru a crea meniuri',
+    lockedDesc: 'Conturile demo și gratuite pot vizualiza meniurile dar nu le pot adăuga, edita sau șterge.',
+    upgradeBtn: 'Vezi planuri',
   },
   events: {
     title: 'Evenimente', newEvent: 'Eveniment nou',
@@ -89,6 +92,9 @@ export default {
     clientLabel: 'Client:', dateLabel: 'Dată:', guestsLabel: 'Invitați:', statusViewLabel: 'Status:',
     shoppingList: 'Listă de cumpărături', exportPdf: 'Exportă PDF', viewDetails: 'Vezi detalii',
     statuses: { Draft: 'Ciornă', 'Sent Offer': 'Ofertă trimisă', Approved: 'Aprobat', Cancelled: 'Anulat', Completed: 'Finalizat' },
+    lockedTitle: 'Abonează-te pentru a gestiona evenimente',
+    lockedDesc: 'Conturile demo și gratuite pot vizualiza evenimentele dar nu le pot adăuga, edita sau șterge.',
+    upgradeBtn: 'Vezi planuri',
   },
   admin: {
     title: 'Panou Admin', usersTab: 'Utilizatori',
@@ -123,5 +129,7 @@ export default {
     trialUsed: 'Trial-ul a fost deja folosit.',
     paymentSuccess: 'Plată reușită! Planul tău a fost activat.',
     stripeNotConfigured: 'Plățile online nu sunt configurate încă. Contactați suportul.',
+    welcomeTitle: 'Bun venit la App4Chef!',
+    welcomeDesc: 'Alege un plan mai jos pentru a începe. Poți încerca 14 zile sau te poți abona direct.',
   },
 };

@@ -79,9 +79,11 @@ export function AppProvider({ children }) {
     || user?.subscription_status === 'active'
     || (user?.subscription_status === 'trial' && user?.trial_end && new Date(user.trial_end) > new Date());
 
+  const isDemo = user?.subscription_status === 'demo';
+
   return (
     <AppContext.Provider value={{
-      user, login, register, logout, loading, isPaid, refreshUser,
+      user, login, register, logout, loading, isPaid, isDemo, refreshUser,
       ingredients, setIngredients, recipes, setRecipes,
       menus, setMenus, events, setEvents, loadAll
     }}>

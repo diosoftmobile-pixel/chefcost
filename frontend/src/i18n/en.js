@@ -73,6 +73,9 @@ export default {
     createMenu: 'Create menu', saveEdit: 'Save changes', confirmDelete: 'Delete this menu?',
     colRecipe: 'Recipe', colPortions: 'Portions', colCost: 'Cost',
     costPerGuestView: 'Cost/guest', finalPriceView: 'Final price',
+    lockedTitle: 'Upgrade to create menus',
+    lockedDesc: 'Demo and free accounts can view menus but cannot add, edit, or delete them.',
+    upgradeBtn: 'View plans',
   },
   events: {
     title: 'Events', newEvent: 'New event',
@@ -89,6 +92,9 @@ export default {
     clientLabel: 'Client:', dateLabel: 'Date:', guestsLabel: 'Guests:', statusViewLabel: 'Status:',
     shoppingList: 'Shopping list', exportPdf: 'Export PDF quote', viewDetails: 'View details',
     statuses: { Draft: 'Draft', 'Sent Offer': 'Sent Offer', Approved: 'Approved', Cancelled: 'Cancelled', Completed: 'Completed' },
+    lockedTitle: 'Upgrade to manage events',
+    lockedDesc: 'Demo and free accounts can view events but cannot add, edit, or delete them.',
+    upgradeBtn: 'View plans',
   },
   admin: {
     title: 'Admin Panel', usersTab: 'Users',
@@ -124,5 +130,7 @@ export default {
     trialUsed: 'Trial has already been used.',
     paymentSuccess: 'Payment successful! Your plan has been activated.',
     stripeNotConfigured: 'Online payments are not yet configured. Contact support to upgrade.',
+    welcomeTitle: 'Welcome to App4Chef!',
+    welcomeDesc: 'Choose a plan below to get started. You can try the app for 14 days or subscribe directly.',
   },
 };

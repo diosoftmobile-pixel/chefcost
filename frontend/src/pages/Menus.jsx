@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../hooks/useApp.jsx';
 import { api } from '../lib/api.js';
 import { fmt, calcMenuFinalPrice, calcCostPerPortion } from '../lib/calc.js';
@@ -8,7 +9,8 @@ import Modal from '../components/Modal.jsx';
 const blank = () => ({ name:'', description:'', guest_count:50, markup:30, vat:19, recipes:[] });
 
 export default function Menus() {
-  const { menus, setMenus, recipes, ingredients } = useApp();
+  const { menus, setMenus, recipes, ingredients, isPaid } = useApp();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [modal, setModal] = useState(null);
   const [viewId, setViewId] = useState(null);
@@ -56,8 +58,25 @@ export default function Menus() {
     <>
       <div className="topbar">
         <div className="topbar-title">{t('menus.title')}</div>
-        <button className="btn btn-primary" onClick={openAdd}><i className="ti ti-plus"></i> {t('menus.newMenu')}</button>
+        {isPaid
+          ? <button className="btn btn-primary" onClick={openAdd}><i className="ti ti-plus"></i> {t('menus.newMenu')}</button>
+          : <button className="btn btn-ghost" onClick={() => navigate('/billing')}><i className="ti ti-lock"></i> {t('menus.upgradeBtn')}</button>
+        }
       </div>
+
+      {!isPaid && (
+        <div style={{ margin: '0 0 16px', padding: '12px 20px', background: 'var(--amber-soft, #fef9ec)', border: '1px solid var(--amber, #f59e0b)', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <i className="ti ti-lock" style={{ color: 'var(--amber, #f59e0b)', fontSize: 18 }}></i>
+          <div>
+            <div style={{ fontWeight: 600, fontSize: 13 }}>{t('menus.lockedTitle')}</div>
+            <div style={{ fontSize: 12, color: 'var(--text3)', marginTop: 2 }}>{t('menus.lockedDesc')}</div>
+          </div>
+          <button className="btn btn-primary" style={{ marginLeft: 'auto', whiteSpace: 'nowrap' }} onClick={() => navigate('/billing')}>
+            {t('menus.upgradeBtn')}
+          </button>
+        </div>
+      )}
+
       <div className="page-content">
         <div className="card">
           <table>
@@ -76,8 +95,9 @@ export default function Menus() {
                   <td className="mono green">{fmt(p.costPerGuest)}</td>
                   <td><div className="action-btns">
                     <button className="icon-btn" onClick={() => setViewId(m.id)}><i className="ti ti-eye"></i></button>
-                    <button className="icon-btn" onClick={() => openEdit(m)}><i className="ti ti-edit"></i></button>
-                    <button className="icon-btn danger" onClick={() => del(m.id)}><i className="ti ti-trash"></i></button>
+                    {isPaid && <button className="icon-btn" onClick={() => openEdit(m)}><i className="ti ti-edit"></i></button>}
+                    {isPaid && <button className="icon-btn danger" onClick={() => del(m.id)}><i className="ti ti-trash"></i></button>}
+                    {!isPaid && <i className="ti ti-lock" style={{ color: 'var(--text3)', fontSize: 14, padding: '0 8px' }}></i>}
                   </div></td>
                 </tr>;
               })}
@@ -86,7 +106,7 @@ export default function Menus() {
         </div>
       </div>
 
-      {modal && (
+      {isPaid && modal && (
         <Modal title={modal === 'add' ? t('menus.newModal') : t('menus.editModal')} onClose={close}
           footer={<><button className="btn" onClick={close}>{t('common.cancel')}</button><button className="btn btn-primary" onClick={save} disabled={saving}>{saving ? t('common.saving') : modal === 'add' ? t('menus.createMenu') : t('menus.saveEdit')}</button></>}>
           <div className="form-row">

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
 import db from '../db/index.js';
 import { auth } from '../middleware/auth.js';
+import { requireSubscription } from '../middleware/subscription.js';
 
 const router = Router();
 router.use(auth);
@@ -21,7 +22,7 @@ router.get('/', (req, res) => {
   res.json(menus.map(m => getMenuFull(m.id)));
 });
 
-router.post('/', (req, res) => {
+router.post('/', requireSubscription, (req, res) => {
   const { name, description = '', guest_count = 1, markup = 30, vat = 19, recipes = [] } = req.body;
   if (!name) return res.status(400).json({ error: 'name required' });
   const id = uuid();
@@ -33,7 +34,7 @@ router.post('/', (req, res) => {
   res.status(201).json(getMenuFull(id));
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', requireSubscription, (req, res) => {
   const menu = db.prepare('SELECT id FROM menus WHERE id = ? AND user_id = ?').get(req.params.id, req.user.id);
   if (!menu) return res.status(404).json({ error: 'Not found' });
   const { name, description, guest_count, markup, vat, recipes = [] } = req.body;
@@ -46,7 +47,7 @@ router.put('/:id', (req, res) => {
   res.json(getMenuFull(req.params.id));
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', requireSubscription, (req, res) => {
   const menu = db.prepare('SELECT id FROM menus WHERE id = ? AND user_id = ?').get(req.params.id, req.user.id);
   if (!menu) return res.status(404).json({ error: 'Not found' });
   db.prepare('DELETE FROM menus WHERE id = ?').run(req.params.id);

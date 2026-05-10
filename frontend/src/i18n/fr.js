@@ -73,6 +73,9 @@ export default {
     createMenu: 'Créer menu', saveEdit: 'Enregistrer', confirmDelete: 'Supprimer ce menu ?',
     colRecipe: 'Recette', colPortions: 'Portions', colCost: 'Coût',
     costPerGuestView: 'Coût/invité', finalPriceView: 'Prix final',
+    lockedTitle: 'Passez à la version supérieure pour créer des menus',
+    lockedDesc: 'Les comptes démo et gratuits peuvent consulter mais pas ajouter, modifier ou supprimer des menus.',
+    upgradeBtn: 'Voir les plans',
   },
   events: {
     title: 'Événements', newEvent: 'Nouvel événement',
@@ -89,6 +92,9 @@ export default {
     clientLabel: 'Client :', dateLabel: 'Date :', guestsLabel: 'Invités :', statusViewLabel: 'Statut :',
     shoppingList: 'Liste de courses', exportPdf: 'Exporter PDF', viewDetails: 'Voir détails',
     statuses: { Draft: 'Brouillon', 'Sent Offer': 'Offre envoyée', Approved: 'Approuvé', Cancelled: 'Annulé', Completed: 'Terminé' },
+    lockedTitle: 'Passez à la version supérieure pour gérer les événements',
+    lockedDesc: 'Les comptes démo et gratuits peuvent consulter mais pas ajouter, modifier ou supprimer des événements.',
+    upgradeBtn: 'Voir les plans',
   },
   admin: {
     title: 'Panneau Admin', usersTab: 'Utilisateurs',
@@ -123,5 +129,7 @@ export default {
     trialUsed: 'L\'essai a déjà été utilisé.',
     paymentSuccess: 'Paiement réussi ! Votre plan a été activé.',
     stripeNotConfigured: 'Les paiements en ligne ne sont pas encore configurés. Contactez le support.',
+    welcomeTitle: 'Bienvenue sur App4Chef !',
+    welcomeDesc: 'Choisissez un plan ci-dessous pour commencer. Essayez pendant 14 jours ou abonnez-vous directement.',
   },
 };

@@ -73,6 +73,9 @@ export default {
     createMenu: 'Menü létrehozása', saveEdit: 'Mentés', confirmDelete: 'Törli ezt a menüt?',
     colRecipe: 'Recept', colPortions: 'Adagok', colCost: 'Költség',
     costPerGuestView: 'Költség/vendég', finalPriceView: 'Végső ár',
+    lockedTitle: 'Frissítsen menük létrehozásához',
+    lockedDesc: 'A demo és ingyenes fiókok megtekinthetik a menüket, de nem adhatják hozzá, szerkeszthetik vagy törölhetik azokat.',
+    upgradeBtn: 'Tervek megtekintése',
   },
   events: {
     title: 'Események', newEvent: 'Új esemény',
@@ -89,6 +92,9 @@ export default {
     clientLabel: 'Ügyfél:', dateLabel: 'Dátum:', guestsLabel: 'Vendégek:', statusViewLabel: 'Státusz:',
     shoppingList: 'Bevásárlólista', exportPdf: 'PDF exportálása', viewDetails: 'Részletek',
     statuses: { Draft: 'Vázlat', 'Sent Offer': 'Ajánlat elküldve', Approved: 'Jóváhagyott', Cancelled: 'Törölve', Completed: 'Befejezett' },
+    lockedTitle: 'Frissítsen az események kezeléséhez',
+    lockedDesc: 'A demo és ingyenes fiókok megtekinthetik az eseményeket, de nem adhatják hozzá, szerkeszthetik vagy törölhetik azokat.',
+    upgradeBtn: 'Tervek megtekintése',
   },
   admin: {
     title: 'Admin Panel', usersTab: 'Felhasználók',
@@ -123,5 +129,7 @@ export default {
     trialUsed: 'A próbaverzió már felhasználásra került.',
     paymentSuccess: 'Sikeres fizetés! Az Ön terve aktiválva lett.',
     stripeNotConfigured: 'Az online fizetés még nincs beállítva. Vegye fel a kapcsolatot az ügyfélszolgálattal.',
+    welcomeTitle: 'Üdvözöljük az App4Chef-ben!',
+    welcomeDesc: 'Válasszon egy tervet az induláshoz. Próbálja ki 14 napig vagy iratkozzon fel közvetlenül.',
   },
 };

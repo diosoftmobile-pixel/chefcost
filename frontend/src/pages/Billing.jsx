@@ -59,18 +59,9 @@ export default function Billing() {
 
   const sub = user?.subscription_status || 'free';
   const trialUsed = sub !== 'free';
+  const isNewUser = sub === 'free';
 
   const plans = [
-    {
-      id: 'free',
-      name: t('billing.planFree'),
-      price: t('billing.free'),
-      period: '',
-      features: [t('billing.featViewIngredients'), t('billing.featViewRecipes'), t('billing.featMenus'), t('billing.featEvents')],
-      locked: [t('billing.featAddIngredients'), t('billing.featAddRecipes')],
-      cta: null,
-      current: sub === 'free',
-    },
     {
       id: 'trial',
       name: t('billing.planTrial'),
@@ -116,6 +107,13 @@ export default function Billing() {
         )}
       </div>
       <div className="content">
+        {isNewUser && (
+          <div className="card" style={{ padding: '16px 20px', marginBottom: 16, background: 'var(--accent-soft)', border: '2px solid var(--accent)', textAlign: 'center' }}>
+            <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 4 }}>{t('billing.welcomeTitle')}</div>
+            <div style={{ color: 'var(--text2)', fontSize: 13 }}>{t('billing.welcomeDesc')}</div>
+          </div>
+        )}
+
         {msg && (
           <div className="card" style={{ padding: '12px 20px', marginBottom: 16, background: 'var(--accent-soft)', color: 'var(--accent)', border: '1px solid var(--accent)' }}>
             {msg}

@@ -16,7 +16,7 @@ if (userCount === 0) {
   const userId = uuid();
   const hash = bcrypt.hashSync('demo1234', 10);
   db.transaction(() => {
-    db.prepare(`INSERT INTO users (id,name,email,password_hash,role,subscription_status) VALUES (?,?,?,?,?,?)`).run(userId, 'Demo Chef', 'demo@chefcost.app', hash, 'chef', 'active');
+    db.prepare(`INSERT INTO users (id,name,email,password_hash,role,subscription_status) VALUES (?,?,?,?,?,?)`).run(userId, 'Demo Chef', 'demo@chefcost.app', hash, 'chef', 'demo');
     const ings = [
       [uuid(),'Beef Tenderloin','Meat','kg',1,38,'Local Butcher'],
       [uuid(),'Extra Virgin Olive Oil','Oils & Fats','liter',1,12,''],
@@ -70,8 +70,11 @@ if (!existing) {
   db.prepare(`UPDATE users SET role='admin', subscription_status='active' WHERE email=?`).run(SUPER_ADMIN_EMAIL);
 }
 
-// Ensure all admins and the demo account have active subscription
-db.prepare("UPDATE users SET subscription_status='active' WHERE (role='admin' OR email='demo@chefcost.app') AND subscription_status='free'").run();
+// Ensure all admins have active subscription
+db.prepare("UPDATE users SET subscription_status='active' WHERE role='admin' AND subscription_status='free'").run();
+
+// Ensure demo account always stays as 'demo' (read-only, never paid)
+db.prepare("UPDATE users SET subscription_status='demo' WHERE email='demo@chefcost.app' AND subscription_status != 'demo'").run();
 
 import authRoutes from './routes/auth.js';
 import ingredientRoutes from './routes/ingredients.js';

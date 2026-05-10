@@ -15,6 +15,21 @@ function ProtectedRoutes() {
   const { user, loading } = useApp();
   if (loading) return <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100vh', color:'var(--text3)' }}>Loading…</div>;
   if (!user) return <AuthPage />;
+
+  // Free accounts must choose a plan before accessing the app
+  const isFree = user.subscription_status === 'free';
+  if (isFree) {
+    return (
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/billing" element={<Billing />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="*" element={<Navigate to="/billing" />} />
+        </Route>
+      </Routes>
+    );
+  }
+
   return (
     <Routes>
       <Route element={<Layout />}>

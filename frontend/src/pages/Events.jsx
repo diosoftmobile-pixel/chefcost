@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../hooks/useApp.jsx';
 import { api } from '../lib/api.js';
 import { fmt, calcEventTotal, calcMenuFinalPrice, buildShoppingList } from '../lib/calc.js';
@@ -11,7 +12,8 @@ const STATUS_BADGE = { 'Draft':'badge-gray','Sent Offer':'badge-blue','Approved'
 const blank = () => ({ name:'', client_name:'', client_email:'', client_phone:'', event_date:'', guest_count:50, notes:'', status:'Draft', menus:[] });
 
 export default function Events() {
-  const { events, setEvents, menus, recipes, ingredients } = useApp();
+  const { events, setEvents, menus, recipes, ingredients, isPaid } = useApp();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [modal, setModal] = useState(null);
   const [viewId, setViewId] = useState(null);
@@ -56,8 +58,25 @@ export default function Events() {
     <>
       <div className="topbar">
         <div className="topbar-title">{t('events.title')}</div>
-        <button className="btn btn-primary" onClick={openAdd}><i className="ti ti-plus"></i> {t('events.newEvent')}</button>
+        {isPaid
+          ? <button className="btn btn-primary" onClick={openAdd}><i className="ti ti-plus"></i> {t('events.newEvent')}</button>
+          : <button className="btn btn-ghost" onClick={() => navigate('/billing')}><i className="ti ti-lock"></i> {t('events.upgradeBtn')}</button>
+        }
       </div>
+
+      {!isPaid && (
+        <div style={{ margin: '0 0 16px', padding: '12px 20px', background: 'var(--amber-soft, #fef9ec)', border: '1px solid var(--amber, #f59e0b)', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <i className="ti ti-lock" style={{ color: 'var(--amber, #f59e0b)', fontSize: 18 }}></i>
+          <div>
+            <div style={{ fontWeight: 600, fontSize: 13 }}>{t('events.lockedTitle')}</div>
+            <div style={{ fontSize: 12, color: 'var(--text3)', marginTop: 2 }}>{t('events.lockedDesc')}</div>
+          </div>
+          <button className="btn btn-primary" style={{ marginLeft: 'auto', whiteSpace: 'nowrap' }} onClick={() => navigate('/billing')}>
+            {t('events.upgradeBtn')}
+          </button>
+        </div>
+      )}
+
       <div className="page-content">
         <div className="card">
           <table>
@@ -75,8 +94,9 @@ export default function Events() {
                   <td><div className="action-btns">
                     <button className="icon-btn" title={t('events.viewDetails')} onClick={() => setViewId(e.id)}><i className="ti ti-eye"></i></button>
                     <button className="icon-btn pdf-btn" title={t('events.exportPdf')} onClick={() => exportEventPDF(e, menus, recipes, ingredients)}><i className="ti ti-file-text"></i></button>
-                    <button className="icon-btn" onClick={() => openEdit(e)}><i className="ti ti-edit"></i></button>
-                    <button className="icon-btn danger" onClick={() => del(e.id)}><i className="ti ti-trash"></i></button>
+                    {isPaid && <button className="icon-btn" onClick={() => openEdit(e)}><i className="ti ti-edit"></i></button>}
+                    {isPaid && <button className="icon-btn danger" onClick={() => del(e.id)}><i className="ti ti-trash"></i></button>}
+                    {!isPaid && <i className="ti ti-lock" style={{ color: 'var(--text3)', fontSize: 14, padding: '0 8px' }}></i>}
                   </div></td>
                 </tr>
               ))}
@@ -85,7 +105,7 @@ export default function Events() {
         </div>
       </div>
 
-      {modal && (
+      {isPaid && modal && (
         <Modal title={modal === 'add' ? t('events.newModal') : t('events.editModal')} onClose={close}
           footer={<><button className="btn" onClick={close}>{t('common.cancel')}</button><button className="btn btn-primary" onClick={save} disabled={saving}>{saving ? t('common.saving') : modal === 'add' ? t('events.createEvent') : t('events.saveEdit')}</button></>}>
           <div className="form-row">

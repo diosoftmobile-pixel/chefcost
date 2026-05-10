@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
 import db from '../db/index.js';
 import { auth } from '../middleware/auth.js';
+import { requireSubscription } from '../middleware/subscription.js';
 
 const router = Router();
 router.use(auth);
@@ -21,7 +22,7 @@ router.get('/', (req, res) => {
   res.json(events.map(e => getEventFull(e.id)));
 });
 
-router.post('/', (req, res) => {
+router.post('/', requireSubscription, (req, res) => {
   const { name, client_name = '', client_email = '', client_phone = '', event_date = '', guest_count = 1, notes = '', status = 'Draft', menus = [] } = req.body;
   if (!name) return res.status(400).json({ error: 'name required' });
   const id = uuid();
@@ -34,7 +35,7 @@ router.post('/', (req, res) => {
   res.status(201).json(getEventFull(id));
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', requireSubscription, (req, res) => {
   const ev = db.prepare('SELECT id FROM events WHERE id = ? AND user_id = ?').get(req.params.id, req.user.id);
   if (!ev) return res.status(404).json({ error: 'Not found' });
   const { name, client_name, client_email, client_phone, event_date, guest_count, notes, status, menus = [] } = req.body;
@@ -48,7 +49,7 @@ router.put('/:id', (req, res) => {
   res.json(getEventFull(req.params.id));
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', requireSubscription, (req, res) => {
   const ev = db.prepare('SELECT id FROM events WHERE id = ? AND user_id = ?').get(req.params.id, req.user.id);
   if (!ev) return res.status(404).json({ error: 'Not found' });
   db.prepare('DELETE FROM events WHERE id = ?').run(req.params.id);
