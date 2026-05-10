@@ -29,10 +29,12 @@ export default function Events() {
   const setMen = (idx, k, v) => setForm(f => ({ ...f, menus: f.menus.map((m, n) => n === idx ? { ...m, [k]: v } : m) }));
   const removeMen = idx => setForm(f => ({ ...f, menus: f.menus.filter((_, n) => n !== idx) }));
 
-  const totalCost = form.menus.reduce((s, em) => {
+  const guests = +form.guest_count || 1;
+  const perPersonTotal = form.menus.reduce((s, em) => {
     const m = menus.find(x => x.id === em.menu_id);
     return s + (m ? calcMenuFinalPrice(m, recipes, ingredients).final : 0);
   }, 0);
+  const totalCost = perPersonTotal * guests;
 
   const save = async () => {
     if (!form.name) return alert(t('events.nameRequired'));
@@ -134,19 +136,21 @@ export default function Events() {
           </div>
           {form.menus.map((em, idx) => {
             const menu = menus.find(m => m.id === em.menu_id);
+            const pp = menu ? calcMenuFinalPrice(menu, recipes, ingredients).final : 0;
             return <div className="ing-row" key={idx}>
               <select className="form-control" style={{ fontSize: 12 }} value={em.menu_id} onChange={e => setMen(idx, 'menu_id', e.target.value)}>
                 <option value="">{t('events.selectMenu')}</option>
                 {menus.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
               </select>
-              <div style={{ fontSize: 11, color: 'var(--text3)' }}>{menu ? `${menu.guest_count} ${t('common.guests')}` : ''}</div>
-              <span className="mono accent" style={{ fontSize: 12 }}>{menu ? fmt(calcMenuFinalPrice(menu, recipes, ingredients).final) : '—'}</span>
+              <div style={{ fontSize: 11, color: 'var(--text3)' }}>{menu ? `${fmt(pp)} / ${t('common.person')}` : ''}</div>
+              <span className="mono accent" style={{ fontSize: 12 }}>{menu ? fmt(pp * guests) : '—'}</span>
               <button className="icon-btn danger" onClick={() => removeMen(idx)}><i className="ti ti-x"></i></button>
             </div>;
           })}
           <div className="summary-box">
-            <div className="summary-row"><span>{t('events.totalEventValue')}</span><span>{fmt(totalCost)}</span></div>
-            <div className="summary-row total"><span>{t('events.costPerGuest')}</span><span>{fmt(+form.guest_count > 0 ? totalCost / +form.guest_count : 0)}</span></div>
+            <div className="summary-row"><span>{t('events.pricePerPerson')}</span><span>{fmt(perPersonTotal)}</span></div>
+            <div className="summary-row"><span>{t('events.guestCount')} × {guests}</span><span></span></div>
+            <div className="summary-row total"><span>{t('events.totalEventValue')}</span><span>{fmt(totalCost)}</span></div>
           </div>
         </Modal>
       )}
@@ -173,7 +177,8 @@ export default function Events() {
             </div>
           ))}
           <div className="summary-box" style={{ marginTop: 16 }}>
-            <div className="summary-row total"><span>{t('events.totalEventValue')}</span><span>{fmt(total)}</span></div>
+            <div className="summary-row"><span>{t('events.pricePerPerson')}</span><span>{fmt(total / (viewing.guest_count || 1))}</span></div>
+            <div className="summary-row total"><span>{t('events.totalEventValue')} ({viewing.guest_count} {t('common.guests')})</span><span>{fmt(total)}</span></div>
           </div>
         </Modal>;
       })()}

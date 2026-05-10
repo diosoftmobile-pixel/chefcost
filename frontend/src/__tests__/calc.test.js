@@ -85,7 +85,6 @@ describe('calcMenuFinalPrice', () => {
     expect(result.cost).toBeCloseTo(77.9);
     expect(result.selling).toBeCloseTo(101.27);
     expect(result.final).toBeCloseTo(120.51);
-    expect(result.costPerGuest).toBeCloseTo(7.79);
   });
 
   it('returns zeros for empty menu', () => {

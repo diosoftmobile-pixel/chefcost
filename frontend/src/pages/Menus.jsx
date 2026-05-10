@@ -6,7 +6,7 @@ import { api } from '../lib/api.js';
 import { fmt, calcMenuFinalPrice, calcCostPerPortion } from '../lib/calc.js';
 import Modal from '../components/Modal.jsx';
 
-const blank = () => ({ name:'', description:'', guest_count:50, markup:30, vat:19, recipes:[] });
+const blank = () => ({ name:'', description:'', markup:30, vat:19, recipes:[] });
 
 export default function Menus() {
   const { menus, setMenus, recipes, ingredients, isPaid } = useApp();
@@ -80,19 +80,17 @@ export default function Menus() {
       <div className="page-content">
         <div className="card">
           <table>
-            <thead><tr><th>{t('menus.colMenu')}</th><th>{t('menus.colGuests')}</th><th>{t('menus.colFoodCost')}</th><th>{t('menus.colMarkup')}</th><th>{t('menus.colVat')}</th><th>{t('menus.colFinalPrice')}</th><th>{t('menus.colCostPerGuest')}</th><th></th></tr></thead>
+            <thead><tr><th>{t('menus.colMenu')}</th><th>{t('menus.colFoodCost')}</th><th>{t('menus.colMarkup')}</th><th>{t('menus.colVat')}</th><th>{t('menus.colPricePerPerson')}</th><th></th></tr></thead>
             <tbody>
-              {menus.length === 0 && <tr><td colSpan={8}><div className="empty-state"><i className="ti ti-list"></i><p>{t('menus.none')}</p></div></td></tr>}
+              {menus.length === 0 && <tr><td colSpan={6}><div className="empty-state"><i className="ti ti-list"></i><p>{t('menus.none')}</p></div></td></tr>}
               {menus.map(m => {
                 const p = calcMenuFinalPrice(m, recipes, ingredients);
                 return <tr key={m.id}>
                   <td>{m.name}<div style={{ fontSize: 11, color: 'var(--text3)' }}>{m.description}</div></td>
-                  <td>{m.guest_count}</td>
                   <td className="mono">{fmt(p.cost)}</td>
                   <td><span className="badge badge-amber">{m.markup}%</span></td>
                   <td><span className="badge badge-gray">{m.vat}%</span></td>
                   <td className="mono accent" style={{ fontWeight: 500 }}>{fmt(p.final)}</td>
-                  <td className="mono green">{fmt(p.costPerGuest)}</td>
                   <td><div className="action-btns">
                     <button className="icon-btn" onClick={() => setViewId(m.id)}><i className="ti ti-eye"></i></button>
                     {isPaid && <button className="icon-btn" onClick={() => openEdit(m)}><i className="ti ti-edit"></i></button>}
@@ -109,10 +107,7 @@ export default function Menus() {
       {isPaid && modal && (
         <Modal title={modal === 'add' ? t('menus.newModal') : t('menus.editModal')} onClose={close}
           footer={<><button className="btn" onClick={close}>{t('common.cancel')}</button><button className="btn btn-primary" onClick={save} disabled={saving}>{saving ? t('common.saving') : modal === 'add' ? t('menus.createMenu') : t('menus.saveEdit')}</button></>}>
-          <div className="form-row">
-            <div className="form-group"><label className="form-label">{t('menus.menuName')}</label><input className="form-control" value={form.name} onChange={e => set('name', e.target.value)} /></div>
-            <div className="form-group"><label className="form-label">{t('menus.guestCount')}</label><input className="form-control" type="number" min="1" value={form.guest_count} onChange={e => set('guest_count', e.target.value)} /></div>
-          </div>
+          <div className="form-group"><label className="form-label">{t('menus.menuName')}</label><input className="form-control" value={form.name} onChange={e => set('name', e.target.value)} /></div>
           <div className="form-group"><label className="form-label">{t('menus.descriptionLabel')}</label><input className="form-control" value={form.description} onChange={e => set('description', e.target.value)} /></div>
           <div className="form-row">
             <div className="form-group"><label className="form-label">{t('menus.markupPct')}</label><input className="form-control" type="number" min="0" step="0.5" value={form.markup} onChange={e => set('markup', e.target.value)} /></div>
@@ -140,10 +135,9 @@ export default function Menus() {
           })}
           <div className="summary-box">
             <div className="summary-row"><span>{t('menus.foodCostLabel')}</span><span>{fmt(totalCost)}</span></div>
-            <div className="summary-row"><span>{t('menus.costPerGuestLabel')}</span><span>{fmt(+form.guest_count > 0 ? totalCost / +form.guest_count : 0)}</span></div>
             <div className="summary-row"><span>{t('menus.colMarkup')} ({form.markup}%)</span><span>+{fmt(selling - totalCost)}</span></div>
             <div className="summary-row"><span>{t('menus.colVat')} ({form.vat}%)</span><span>+{fmt(vatAmt)}</span></div>
-            <div className="summary-row total"><span>{t('menus.finalPriceVat')}</span><span>{fmt(final)}</span></div>
+            <div className="summary-row total"><span>{t('menus.pricePerPerson')}</span><span>{fmt(final)}</span></div>
           </div>
         </Modal>
       )}
@@ -159,10 +153,9 @@ export default function Menus() {
             </table>
             <div className="summary-box">
               <div className="summary-row"><span>{t('menus.colFoodCost')}</span><span>{fmt(p.cost)}</span></div>
-              <div className="summary-row"><span>{t('menus.costPerGuestView')}</span><span>{fmt(p.costPerGuest)}</span></div>
               <div className="summary-row"><span>{t('menus.colMarkup')} ({viewing.markup}%)</span><span>+{fmt(p.selling - p.cost)}</span></div>
               <div className="summary-row"><span>{t('menus.colVat')} ({viewing.vat}%)</span><span>+{fmt(p.vat)}</span></div>
-              <div className="summary-row total"><span>{t('menus.finalPriceView')}</span><span>{fmt(p.final)}</span></div>
+              <div className="summary-row total"><span>{t('menus.pricePerPerson')}</span><span>{fmt(p.final)}</span></div>
             </div>
           </>; })()}
         </Modal>

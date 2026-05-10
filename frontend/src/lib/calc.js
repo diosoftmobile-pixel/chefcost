@@ -35,33 +35,29 @@ export function calcMenuFinalPrice(menu, recipes, ingredients) {
   const cost = calcMenuCost(menu, recipes, ingredients);
   const selling = cost * (1 + menu.markup / 100);
   const vat = selling * (menu.vat / 100);
-  return {
-    cost,
-    selling,
-    vat,
-    final: selling + vat,
-    costPerGuest: menu.guest_count > 0 ? cost / menu.guest_count : 0,
-  };
+  return { cost, selling, vat, final: selling + vat };
 }
 
 export function calcEventTotal(event, menus, recipes, ingredients) {
   if (!event.menus) return 0;
+  const guests = event.guest_count || 1;
   return event.menus.reduce((sum, em) => {
     const menu = menus.find(m => m.id === em.menu_id);
     if (!menu) return sum;
-    return sum + calcMenuFinalPrice(menu, recipes, ingredients).final;
+    return sum + calcMenuFinalPrice(menu, recipes, ingredients).final * guests;
   }, 0);
 }
 
 export function buildShoppingList(event, menus, recipes, ingredients) {
   const shopping = {};
+  const guests = event.guest_count || 1;
   (event.menus || []).forEach(em => {
     const menu = menus.find(m => m.id === em.menu_id);
     if (!menu) return;
     (menu.recipes || []).forEach(mr => {
       const recipe = recipes.find(r => r.id === mr.recipe_id);
       if (!recipe) return;
-      const scale = mr.portions / (recipe.portions || 1);
+      const scale = (mr.portions / (recipe.portions || 1)) * guests;
       (recipe.ingredients || []).forEach(ri => {
         const ing = ingredients.find(i => i.id === ri.ingredient_id);
         if (!ing) return;

@@ -85,15 +85,16 @@ export function exportEventPDF(event, menus, recipes, ingredients) {
     y += 4;
     doc.setDrawColor(...lineGray); doc.setLineWidth(0.3);
     doc.line(ml + cw / 2, y, ml + cw, y); y += 5;
-    [['Food cost', fmt(mp.cost)], [`Markup (${menu.markup}%)`, '+' + fmt(mp.selling - mp.cost)], [`VAT (${menu.vat}%)`, '+' + fmt(mp.vat)]].forEach(([lbl, val]) => {
+    const menuGuests = event.guest_count || 1;
+    [['Food cost (per person)', fmt(mp.cost)], [`Markup (${menu.markup}%)`, '+' + fmt(mp.selling - mp.cost)], [`VAT (${menu.vat}%)`, '+' + fmt(mp.vat)], [`Price per person`, fmt(mp.final)], [`× ${menuGuests} guests`, '']].forEach(([lbl, val]) => {
       doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...gray);
       doc.text(lbl, ml + cw - 50, y + 3.5);
-      doc.setTextColor(...dark); doc.text(val, ml + cw - 3, y + 3.5, { align: 'right' }); y += 6;
+      doc.setTextColor(...dark); if (val) doc.text(val, ml + cw - 3, y + 3.5, { align: 'right' }); y += 6;
     });
     doc.setFillColor(...gold); doc.roundedRect(ml + cw - 62, y, 62, 9, 2, 2, 'F');
     doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.setTextColor(...white);
-    doc.text('Menu total', ml + cw - 59, y + 6);
-    doc.text(fmt(mp.final), ml + cw - 3, y + 6, { align: 'right' });
+    doc.text('Menu subtotal', ml + cw - 59, y + 6);
+    doc.text(fmt(mp.final * menuGuests), ml + cw - 3, y + 6, { align: 'right' });
     y += 16;
   });
 
