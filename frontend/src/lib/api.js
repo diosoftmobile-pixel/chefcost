@@ -40,4 +40,14 @@ export const api = {
 
   getAdminUsers: () => req('GET', '/admin/users'),
   deleteAdminUser: (id) => req('DELETE', `/admin/users/${id}`),
+  setAdminSubscription: (id, subscription_status) => req('PUT', `/admin/users/${id}/subscription`, { subscription_status }),
+
+  getSettings: () => req('GET', '/settings'),
+  updateSettings: (d) => req('PUT', '/settings', d),
+
+  getBillingPlans: () => req('GET', '/billing/plans'),
+  getBillingStatus: () => req('GET', '/billing/status'),
+  startTrial: () => req('POST', '/billing/start-trial'),
+  createCheckout: (plan) => req('POST', '/billing/checkout', { plan }),
+  createPortal: () => req('POST', '/billing/portal'),
 };

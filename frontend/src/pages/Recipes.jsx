@@ -1,17 +1,20 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../hooks/useApp.jsx';
 import { api } from '../lib/api.js';
 import { fmt, calcRecipeCost, calcCostPerPortion, unitPrice } from '../lib/calc.js';
 import Modal from '../components/Modal.jsx';
 
 const CATS = ['Starter','Main Course','Dessert','Side Dish','Soup','Salad','Other'];
+const CAT_KEYS = ['catStarter','catMain','catDessert','catSide','catSoup','catSalad','catOther'];
 const UNITS = ['kg','gram','liter','ml','piece'];
 const blank = () => ({ name:'', category:'Main Course', portions:4, notes:'', ingredients:[] });
 
 export default function Recipes() {
-  const { recipes, setRecipes, ingredients } = useApp();
+  const { recipes, setRecipes, ingredients, isPaid } = useApp();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [modal, setModal] = useState(null);
   const [viewId, setViewId] = useState(null);
   const [form, setForm] = useState(blank());
@@ -49,14 +52,32 @@ export default function Recipes() {
     setRecipes(p => p.filter(r => r.id !== id));
   };
 
+  const tCat = cat => { const idx = CATS.indexOf(cat); return idx >= 0 ? t(`recipes.${CAT_KEYS[idx]}`) : cat; };
   const viewing = viewId ? recipes.find(r => r.id === viewId) : null;
 
   return (
     <>
       <div className="topbar">
         <div className="topbar-title">{t('recipes.title')}</div>
-        <button className="btn btn-primary" onClick={openAdd}><i className="ti ti-plus"></i> {t('recipes.newRecipe')}</button>
+        {isPaid
+          ? <button className="btn btn-primary" onClick={openAdd}><i className="ti ti-plus"></i> {t('recipes.newRecipe')}</button>
+          : <button className="btn btn-ghost" onClick={() => navigate('/billing')}><i className="ti ti-lock"></i> {t('recipes.upgradeBtn')}</button>
+        }
       </div>
+
+      {!isPaid && (
+        <div style={{ margin: '0 0 16px', padding: '12px 20px', background: 'var(--amber-soft, #fef9ec)', border: '1px solid var(--amber, #f59e0b)', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <i className="ti ti-lock" style={{ color: 'var(--amber, #f59e0b)', fontSize: 18 }}></i>
+          <div>
+            <div style={{ fontWeight: 600, fontSize: 13 }}>{t('recipes.lockedTitle')}</div>
+            <div style={{ fontSize: 12, color: 'var(--text3)', marginTop: 2 }}>{t('recipes.lockedDesc')}</div>
+          </div>
+          <button className="btn btn-primary" style={{ marginLeft: 'auto', whiteSpace: 'nowrap' }} onClick={() => navigate('/billing')}>
+            {t('recipes.upgradeBtn')}
+          </button>
+        </div>
+      )}
+
       <div className="page-content">
         <div className="card">
           <table>
@@ -66,15 +87,16 @@ export default function Recipes() {
               {recipes.map(r => (
                 <tr key={r.id}>
                   <td>{r.name}</td>
-                  <td><span className="badge badge-gray">{r.category}</span></td>
+                  <td><span className="badge badge-gray">{tCat(r.category)}</span></td>
                   <td>{r.portions}</td>
                   <td className="mono">{fmt(calcRecipeCost(r, ingredients))}</td>
                   <td className="mono accent">{fmt(calcCostPerPortion(r, ingredients))}</td>
                   <td><span className="badge badge-blue">{r.ingredients?.length || 0} {t('common.items')}</span></td>
                   <td><div className="action-btns">
                     <button className="icon-btn" onClick={() => setViewId(r.id)}><i className="ti ti-eye"></i></button>
-                    <button className="icon-btn" onClick={() => openEdit(r)}><i className="ti ti-edit"></i></button>
-                    <button className="icon-btn danger" onClick={() => del(r.id)}><i className="ti ti-trash"></i></button>
+                    {isPaid && <button className="icon-btn" onClick={() => openEdit(r)}><i className="ti ti-edit"></i></button>}
+                    {isPaid && <button className="icon-btn danger" onClick={() => del(r.id)}><i className="ti ti-trash"></i></button>}
+                    {!isPaid && <i className="ti ti-lock" style={{ color: 'var(--text3)', fontSize: 14, padding: '0 8px' }}></i>}
                   </div></td>
                 </tr>
               ))}
@@ -83,13 +105,13 @@ export default function Recipes() {
         </div>
       </div>
 
-      {modal && (
+      {isPaid && modal && (
         <Modal title={modal === 'add' ? t('recipes.newModal') : t('recipes.editModal')} onClose={close}
           footer={<><button className="btn" onClick={close}>{t('common.cancel')}</button><button className="btn btn-primary" onClick={save} disabled={saving}>{saving ? t('common.saving') : modal === 'add' ? t('recipes.createRecipe') : t('recipes.saveEdit')}</button></>}>
           <div className="form-row">
             <div className="form-group"><label className="form-label">{t('recipes.recipeName')}</label><input className="form-control" value={form.name} onChange={e => set('name', e.target.value)} /></div>
             <div className="form-group"><label className="form-label">{t('recipes.categoryLabel')}</label>
-              <select className="form-control" value={form.category} onChange={e => set('category', e.target.value)}>{CATS.map(c => <option key={c}>{c}</option>)}</select>
+              <select className="form-control" value={form.category} onChange={e => set('category', e.target.value)}>{CATS.map((c, i) => <option key={c} value={c}>{t(`recipes.${CAT_KEYS[i]}`)}</option>)}</select>
             </div>
           </div>
           <div className="form-row">
@@ -127,7 +149,7 @@ export default function Recipes() {
         <Modal title={viewing.name} onClose={() => setViewId(null)}
           footer={<button className="btn btn-primary" onClick={() => setViewId(null)}>{t('common.close')}</button>}>
           <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
-            <span className="badge badge-gray">{viewing.category}</span>
+            <span className="badge badge-gray">{tCat(viewing.category)}</span>
             <span className="badge badge-blue">{viewing.portions} {t('common.portions')}</span>
           </div>
           <table style={{ width: '100%', fontSize: 13, marginBottom: 16 }}>

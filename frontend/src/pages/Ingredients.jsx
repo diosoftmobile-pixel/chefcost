@@ -1,22 +1,26 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../hooks/useApp.jsx';
 import { api } from '../lib/api.js';
 import { fmt, unitPrice } from '../lib/calc.js';
 import Modal from '../components/Modal.jsx';
 
 const CATS = ['Meat','Fish & Seafood','Vegetables','Fruits','Dairy','Grains','Oils & Fats','Spices','Beverages','Other'];
+const CAT_KEYS = ['catMeat','catFish','catVegetables','catFruits','catDairy','catGrains','catOils','catSpices','catBeverages','catOther'];
 const UNITS = ['kg','gram','liter','ml','piece','pack'];
 const blank = () => ({ name:'', category:'Vegetables', unit:'kg', purchase_qty:1, purchase_price:0, supplier:'', notes:'' });
 
 export default function Ingredients() {
-  const { ingredients, setIngredients } = useApp();
+  const { ingredients, setIngredients, isPaid } = useApp();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [modal, setModal] = useState(null);
   const [form, setForm] = useState(blank());
   const [saving, setSaving] = useState(false);
 
+  const tCat = cat => { const idx = CATS.indexOf(cat); return idx >= 0 ? t(`ingredients.${CAT_KEYS[idx]}`) : cat; };
   const filtered = ingredients.filter(i => i.name.toLowerCase().includes(search.toLowerCase()) || i.category.toLowerCase().includes(search.toLowerCase()));
 
   const openAdd = () => { setForm(blank()); setModal('add'); };
@@ -57,8 +61,25 @@ export default function Ingredients() {
     <>
       <div className="topbar">
         <div className="topbar-title">{t('ingredients.title')}</div>
-        <button className="btn btn-primary" onClick={openAdd}><i className="ti ti-plus"></i> {t('ingredients.addIngredient')}</button>
+        {isPaid
+          ? <button className="btn btn-primary" onClick={openAdd}><i className="ti ti-plus"></i> {t('ingredients.addIngredient')}</button>
+          : <button className="btn btn-ghost" onClick={() => navigate('/billing')}><i className="ti ti-lock"></i> {t('ingredients.upgradeBtn')}</button>
+        }
       </div>
+
+      {!isPaid && (
+        <div style={{ margin: '0 0 16px', padding: '12px 20px', background: 'var(--amber-soft, #fef9ec)', border: '1px solid var(--amber, #f59e0b)', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <i className="ti ti-lock" style={{ color: 'var(--amber, #f59e0b)', fontSize: 18 }}></i>
+          <div>
+            <div style={{ fontWeight: 600, fontSize: 13 }}>{t('ingredients.lockedTitle')}</div>
+            <div style={{ fontSize: 12, color: 'var(--text3)', marginTop: 2 }}>{t('ingredients.lockedDesc')}</div>
+          </div>
+          <button className="btn btn-primary" style={{ marginLeft: 'auto', whiteSpace: 'nowrap' }} onClick={() => navigate('/billing')}>
+            {t('ingredients.upgradeBtn')}
+          </button>
+        </div>
+      )}
+
       <div className="page-content">
         <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
           <div className="search-wrap" style={{ flex: 1 }}>
@@ -74,14 +95,15 @@ export default function Ingredients() {
               {filtered.map(i => (
                 <tr key={i.id}>
                   <td>{i.name}</td>
-                  <td><span className="badge badge-gray">{i.category}</span></td>
+                  <td><span className="badge badge-gray">{tCat(i.category)}</span></td>
                   <td>{i.purchase_qty} {i.unit}</td>
                   <td>{fmt(i.purchase_price)}</td>
                   <td className="mono accent">{fmt(unitPrice(i))}/{i.unit} · {fmt((i.unit==='kg'||i.unit==='liter') ? unitPrice(i)/1000 : unitPrice(i))}/{baseUnit(i.unit)}</td>
                   <td>{i.supplier || '—'}</td>
                   <td><div className="action-btns">
-                    <button className="icon-btn" onClick={() => openEdit(i)}><i className="ti ti-edit"></i></button>
-                    <button className="icon-btn danger" onClick={() => del(i.id)}><i className="ti ti-trash"></i></button>
+                    {isPaid && <button className="icon-btn" onClick={() => openEdit(i)}><i className="ti ti-edit"></i></button>}
+                    {isPaid && <button className="icon-btn danger" onClick={() => del(i.id)}><i className="ti ti-trash"></i></button>}
+                    {!isPaid && <i className="ti ti-lock" style={{ color: 'var(--text3)', fontSize: 14, padding: '0 8px' }}></i>}
                   </div></td>
                 </tr>
               ))}
@@ -90,14 +112,14 @@ export default function Ingredients() {
         </div>
       </div>
 
-      {modal && (
+      {isPaid && modal && (
         <Modal title={modal === 'add' ? t('ingredients.addModal') : t('ingredients.editModal')} onClose={close}
           footer={<><button className="btn" onClick={close}>{t('common.cancel')}</button><button className="btn btn-primary" onClick={save} disabled={saving}>{saving ? t('common.saving') : modal === 'add' ? t('ingredients.saveAdd') : t('ingredients.saveEdit')}</button></>}>
           <div className="form-row">
             <div className="form-group"><label className="form-label">{t('ingredients.productName')}</label><input className="form-control" value={form.name} onChange={e => set('name', e.target.value)} /></div>
             <div className="form-group"><label className="form-label">{t('ingredients.categoryLabel')}</label>
               <select className="form-control" value={form.category} onChange={e => set('category', e.target.value)}>
-                {CATS.map(c => <option key={c}>{c}</option>)}
+                {CATS.map((c, i) => <option key={c} value={c}>{t(`ingredients.${CAT_KEYS[i]}`)}</option>)}
               </select>
             </div>
           </div>

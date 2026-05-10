@@ -29,7 +29,7 @@ export default function AuthPage() {
         <div className="auth-logo">
           <div className="auth-logo-icon"><i className="ti ti-chef-hat"></i></div>
           <div>
-            <div className="brand-name" style={{ fontSize: 18 }}>ChefCost</div>
+            <div className="brand-name" style={{ fontSize: 18 }}>App4Chef</div>
             <div className="brand-sub">{t('nav.brandSub')}</div>
           </div>
         </div>

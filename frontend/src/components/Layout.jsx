@@ -16,7 +16,7 @@ function changeLang(code) {
 }
 
 export default function Layout() {
-  const { user, logout, ingredients, recipes, menus, events } = useApp();
+  const { user, logout, ingredients, recipes, menus, events, isPaid } = useApp();
   const { t, i18n: i18nInst } = useTranslation();
 
   return (
@@ -24,7 +24,7 @@ export default function Layout() {
       <aside className="sidebar">
         <div className="sidebar-brand">
           <div className="brand-icon"><i className="ti ti-chef-hat"></i></div>
-          <div className="brand-name">ChefCost</div>
+          <div className="brand-name">App4Chef</div>
           <div className="brand-sub">{t('nav.brandSub')}</div>
         </div>
         <nav className="sidebar-nav">
@@ -54,6 +54,16 @@ export default function Layout() {
             <NavLink to="/events" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
               <i className="ti ti-calendar-event"></i> {t('nav.events')}
               <span className="nav-badge">{events.length}</span>
+            </NavLink>
+          </div>
+          <div className="nav-section">
+            <div className="nav-label">{t('nav.account')}</div>
+            <NavLink to="/settings" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+              <i className="ti ti-settings"></i> {t('nav.settings')}
+            </NavLink>
+            <NavLink to="/billing" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+              <i className="ti ti-credit-card"></i> {t('nav.billing')}
+              {!isPaid && <span className="nav-badge" style={{ background: 'var(--amber)', color: '#000' }}>FREE</span>}
             </NavLink>
           </div>
           {user?.role === 'admin' && (

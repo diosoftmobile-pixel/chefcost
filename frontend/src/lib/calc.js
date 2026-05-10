@@ -1,4 +1,8 @@
-export const fmt = n => '€' + (Math.round(n * 100) / 100).toFixed(2);
+const CURRENCY_SYMBOLS = { EUR: '€', USD: '$', GBP: '£', RON: 'RON ', HUF: 'HUF ' };
+export const fmt = n => {
+  const c = localStorage.getItem('cc_currency') || 'EUR';
+  return (CURRENCY_SYMBOLS[c] || c + ' ') + (Math.round(n * 100) / 100).toFixed(2);
+};
 
 export function unitPrice(ing) {
   return ing.purchase_price / ing.purchase_qty;

@@ -11,7 +11,7 @@ export function exportEventPDF(event, menus, recipes, ingredients) {
 
   doc.setFillColor(...gold); doc.rect(0, 0, pw, 14, 'F');
   doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(...white);
-  doc.text('CHEFCOST', ml, 9.5);
+  doc.text('APP4CHEF', ml, 9.5);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
   doc.text('Event Quotation', ml + 32, 9.5);
   const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
 import db from '../db/index.js';
 import { auth } from '../middleware/auth.js';
+import { requireSubscription } from '../middleware/subscription.js';
 
 const router = Router();
 router.use(auth);
@@ -11,7 +12,7 @@ router.get('/', (req, res) => {
   res.json(rows);
 });
 
-router.post('/', (req, res) => {
+router.post('/', requireSubscription, (req, res) => {
   const { name, category, unit, purchase_qty, purchase_price, supplier = '', notes = '' } = req.body;
   if (!name || !category || !unit) return res.status(400).json({ error: 'name, category, unit required' });
   const id = uuid();
@@ -20,7 +21,7 @@ router.post('/', (req, res) => {
   res.status(201).json(db.prepare('SELECT * FROM ingredients WHERE id = ?').get(id));
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', requireSubscription, (req, res) => {
   const ing = db.prepare('SELECT id FROM ingredients WHERE id = ? AND user_id = ?').get(req.params.id, req.user.id);
   if (!ing) return res.status(404).json({ error: 'Not found' });
   const { name, category, unit, purchase_qty, purchase_price, supplier, notes } = req.body;
@@ -29,7 +30,7 @@ router.put('/:id', (req, res) => {
   res.json(db.prepare('SELECT * FROM ingredients WHERE id = ?').get(req.params.id));
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', requireSubscription, (req, res) => {
   const ing = db.prepare('SELECT id FROM ingredients WHERE id = ? AND user_id = ?').get(req.params.id, req.user.id);
   if (!ing) return res.status(404).json({ error: 'Not found' });
   db.prepare('DELETE FROM ingredients WHERE id = ?').run(req.params.id);

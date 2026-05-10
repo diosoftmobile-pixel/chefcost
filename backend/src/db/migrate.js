@@ -98,5 +98,18 @@ db.exec(`
   );
 `);
 
+// Add new columns to existing tables (idempotent)
+const alterColumns = [
+  "ALTER TABLE users ADD COLUMN subscription_status TEXT NOT NULL DEFAULT 'free'",
+  "ALTER TABLE users ADD COLUMN trial_end TEXT DEFAULT NULL",
+  "ALTER TABLE users ADD COLUMN stripe_customer_id TEXT DEFAULT NULL",
+  "ALTER TABLE users ADD COLUMN stripe_subscription_id TEXT DEFAULT NULL",
+  "ALTER TABLE users ADD COLUMN currency TEXT NOT NULL DEFAULT 'EUR'",
+  "ALTER TABLE users ADD COLUMN language TEXT NOT NULL DEFAULT 'en'",
+];
+for (const sql of alterColumns) {
+  try { db.exec(sql); } catch {}
+}
+
 console.log('✅ Database migrated successfully');
 export default db;

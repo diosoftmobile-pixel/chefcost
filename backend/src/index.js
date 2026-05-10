@@ -16,7 +16,7 @@ if (userCount === 0) {
   const userId = uuid();
   const hash = bcrypt.hashSync('demo1234', 10);
   db.transaction(() => {
-    db.prepare(`INSERT INTO users (id,name,email,password_hash,role) VALUES (?,?,?,?,?)`).run(userId, 'Demo Chef', 'demo@chefcost.app', hash, 'admin');
+    db.prepare(`INSERT INTO users (id,name,email,password_hash,role,subscription_status) VALUES (?,?,?,?,?,?)`).run(userId, 'Demo Chef', 'demo@chefcost.app', hash, 'chef', 'active');
     const ings = [
       [uuid(),'Beef Tenderloin','Meat','kg',1,38,'Local Butcher'],
       [uuid(),'Extra Virgin Olive Oil','Oils & Fats','liter',1,12,''],
@@ -53,18 +53,25 @@ if (userCount === 0) {
   console.log('✅ Demo data seeded — login: demo@chefcost.app / demo1234');
 }
 
-// Ensure super admin account exists
+// Ensure demo account is never admin
+db.prepare("UPDATE users SET role='chef' WHERE email='demo@chefcost.app' AND role='admin'").run();
+
+// Ensure super admin account exists and always has active subscription
 const SUPER_ADMIN_EMAIL = 'diosoft.mobile@gmail.com';
 const SUPER_ADMIN_PASS = process.env.SUPER_ADMIN_PASS || '?Admin1234';
 const existing = db.prepare('SELECT id, role FROM users WHERE email = ?').get(SUPER_ADMIN_EMAIL);
 if (!existing) {
-  db.prepare(`INSERT INTO users (id,name,email,password_hash,role) VALUES (?,?,?,?,?)`)
-    .run(uuid(), 'Super Admin', SUPER_ADMIN_EMAIL, bcrypt.hashSync(SUPER_ADMIN_PASS, 10), 'admin');
+  db.prepare(`INSERT INTO users (id,name,email,password_hash,role,subscription_status) VALUES (?,?,?,?,?,?)`)
+    .run(uuid(), 'Super Admin', SUPER_ADMIN_EMAIL, bcrypt.hashSync(SUPER_ADMIN_PASS, 10), 'admin', 'active');
   console.log('✅ Super admin created:', SUPER_ADMIN_EMAIL);
-} else if (existing.role !== 'admin') {
-  db.prepare(`UPDATE users SET role = 'admin' WHERE email = ?`).run(SUPER_ADMIN_EMAIL);
-  console.log('✅ Super admin role updated:', SUPER_ADMIN_EMAIL);
+} else {
+  const updates = [];
+  if (existing.role !== 'admin') updates.push("role='admin'");
+  db.prepare(`UPDATE users SET role='admin', subscription_status='active' WHERE email=?`).run(SUPER_ADMIN_EMAIL);
 }
+
+// Ensure all admins and the demo account have active subscription
+db.prepare("UPDATE users SET subscription_status='active' WHERE (role='admin' OR email='demo@chefcost.app') AND subscription_status='free'").run();
 
 import authRoutes from './routes/auth.js';
 import ingredientRoutes from './routes/ingredients.js';
@@ -72,6 +79,8 @@ import recipeRoutes from './routes/recipes.js';
 import menuRoutes from './routes/menus.js';
 import eventRoutes from './routes/events.js';
 import adminRoutes from './routes/admin.js';
+import settingsRoutes from './routes/settings.js';
+import billingRoutes from './routes/billing.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.join(__dirname, '../../frontend/dist');
@@ -80,6 +89,10 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173' }));
+
+// Raw body needed for Stripe webhook
+app.use('/api/billing/webhook', express.raw({ type: 'application/json' }));
+
 app.use(express.json());
 
 app.get('/health', (_, res) => res.json({ ok: true, ts: new Date().toISOString() }));
@@ -90,6 +103,8 @@ app.use('/api/recipes', recipeRoutes);
 app.use('/api/menus', menuRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/settings', settingsRoutes);
+app.use('/api/billing', billingRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err);

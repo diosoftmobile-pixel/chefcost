@@ -11,7 +11,7 @@ function adminOnly(req, res, next) {
 
 router.get('/users', auth, adminOnly, (req, res) => {
   const users = db.prepare(
-    `SELECT id, name, email, role, created_at FROM users ORDER BY created_at DESC`
+    `SELECT id, name, email, role, subscription_status, trial_end, created_at FROM users ORDER BY created_at DESC`
   ).all();
   res.json(users);
 });
@@ -20,6 +20,18 @@ router.delete('/users/:id', auth, adminOnly, (req, res) => {
   const { id } = req.params;
   if (id === req.user.id) return res.status(400).json({ error: 'Cannot delete your own account' });
   db.prepare('DELETE FROM users WHERE id = ?').run(id);
+  res.json({ ok: true });
+});
+
+router.put('/users/:id/subscription', auth, adminOnly, (req, res) => {
+  const { id } = req.params;
+  const { subscription_status } = req.body;
+  const allowed = ['free', 'trial', 'active'];
+  if (!allowed.includes(subscription_status)) return res.status(400).json({ error: 'Invalid status' });
+  const trialEnd = subscription_status === 'trial'
+    ? (() => { const d = new Date(); d.setDate(d.getDate() + 14); return d.toISOString(); })()
+    : null;
+  db.prepare('UPDATE users SET subscription_status=?, trial_end=? WHERE id=?').run(subscription_status, trialEnd, id);
   res.json({ ok: true });
 });
 
