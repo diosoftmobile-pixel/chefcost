@@ -139,5 +139,6 @@ export default {
     reactivated: "Abonnement réactivé ! Votre accès continue normalement.",
     cancelledTitle: 'Résiliation planifiée',
     cancelledDesc: "Vous avez un accès complet jusqu'au {{date}}. Ensuite votre compte repasse en mode démo.",
+    switchPlanHint: 'Pour changer de mensuel à annuel, utilisez',
   },
 };

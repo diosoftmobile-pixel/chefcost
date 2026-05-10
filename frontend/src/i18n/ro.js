@@ -139,5 +139,6 @@ export default {
     reactivated: 'Abonament reactivat! Accesul tău continuă normal.',
     cancelledTitle: 'Abonament programat pentru anulare',
     cancelledDesc: 'Ai acces complet până pe {{date}}. După aceea contul tău revine la modul demo.',
+    switchPlanHint: 'Pentru a schimba între lunar și anual, folosește',
   },
 };

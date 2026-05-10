@@ -115,6 +115,16 @@ router.post('/checkout', auth, async (req, res) => {
     if (!userRow) return res.status(404).json({ error: 'User not found' });
 
     let customer = userRow.stripe_customer_id;
+    if (customer) {
+      try {
+        await stripe.customers.retrieve(customer);
+      } catch (e) {
+        if (e.code === 'resource_missing') {
+          customer = null;
+          db.prepare('UPDATE users SET stripe_customer_id=NULL WHERE id=?').run(req.user.id);
+        } else throw e;
+      }
+    }
     if (!customer) {
       const cust = await stripe.customers.create({ email: userRow.email, name: userRow.name });
       customer = cust.id;

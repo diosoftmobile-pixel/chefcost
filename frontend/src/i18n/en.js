@@ -140,5 +140,6 @@ export default {
     reactivated: 'Subscription reactivated! Your access continues as normal.',
     cancelledTitle: 'Subscription scheduled for cancellation',
     cancelledDesc: 'You have full access until {{date}}. After that your account reverts to demo mode.',
+    switchPlanHint: 'To switch between monthly and yearly, use',
   },
 };

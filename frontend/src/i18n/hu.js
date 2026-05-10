@@ -139,5 +139,6 @@ export default {
     reactivated: 'Előfizetés visszaállítva! A hozzáférés normálisan folytatódik.',
     cancelledTitle: 'Az előfizetés lemondásra van ütemezve',
     cancelledDesc: '{{date}}-ig teljes hozzáférése van. Utána fiókja demo módra vált.',
+    switchPlanHint: 'A havi és éves csomag közötti váltáshoz használja a',
   },
 };

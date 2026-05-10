@@ -75,6 +75,8 @@ export default function Billing() {
   const isNewUser = sub === 'free';
   const cancelAt = user?.cancel_at ? new Date(user.cancel_at) : null;
   const isCancelled = cancelAt && cancelAt > new Date();
+  // Active Stripe subscribers must switch plans via the portal, not create a new subscription
+  const hasActiveStripe = sub === 'active';
 
   const plans = [
     {
@@ -94,7 +96,7 @@ export default function Billing() {
       price: '€49.99',
       period: `/${t('billing.month')}`,
       features: [t('billing.featAll'), t('billing.featCancel')],
-      cta: t('billing.subscribe'),
+      cta: hasActiveStripe ? null : t('billing.subscribe'),
       ctaAction: () => checkout('monthly'),
       current: sub === 'active' && plan === 'monthly',
     },
@@ -105,7 +107,7 @@ export default function Billing() {
       period: `/${t('billing.year')}`,
       badge: t('billing.save17'),
       features: [t('billing.featAll'), t('billing.featBestValue')],
-      cta: t('billing.subscribe'),
+      cta: hasActiveStripe ? null : t('billing.subscribe'),
       ctaAction: () => checkout('yearly'),
       current: sub === 'active' && plan === 'yearly',
     },
@@ -206,6 +208,12 @@ export default function Billing() {
             </div>
           ))}
         </div>
+
+        {hasActiveStripe && (
+          <p style={{ color: 'var(--text3)', marginTop: 16, fontSize: 13, textAlign: 'center' }}>
+            {t('billing.switchPlanHint')} <button className="btn btn-ghost" style={{ fontSize: 13, padding: '2px 8px' }} onClick={openPortal} disabled={loading}>{t('billing.manageSubscription')}</button>
+          </p>
+        )}
       </div>
     </>
   );
