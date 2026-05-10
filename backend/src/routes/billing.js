@@ -4,7 +4,6 @@ import db from '../db/index.js';
 import { auth } from '../middleware/auth.js';
 
 const router = Router();
-router.use(auth);
 
 const PLANS = {
   trial:   { id: 'trial',   label: '14-Day Trial', price: 6.99,  period: 'one-time', durationDays: 14 },
@@ -12,11 +11,11 @@ const PLANS = {
   yearly:  { id: 'yearly',  label: 'Yearly',        price: 499,   period: 'year', savingsPct: 17 },
 };
 
-router.get('/plans', (req, res) => {
+router.get('/plans', auth, (req, res) => {
   res.json(PLANS);
 });
 
-router.get('/status', (req, res) => {
+router.get('/status', auth, (req, res) => {
   const user = db.prepare('SELECT subscription_status, trial_end FROM users WHERE id = ?').get(req.user.id);
   if (!user) return res.status(404).json({ error: 'Not found' });
   const isTrialActive = user.subscription_status === 'trial' && user.trial_end && new Date(user.trial_end) > new Date();
@@ -28,7 +27,7 @@ router.get('/status', (req, res) => {
 });
 
 // Activate trial without Stripe (manual, for testing — replace with Stripe in production)
-router.post('/start-trial', (req, res) => {
+router.post('/start-trial', auth, (req, res) => {
   const user = db.prepare('SELECT subscription_status FROM users WHERE id = ?').get(req.user.id);
   if (!user) return res.status(404).json({ error: 'Not found' });
   if (user.subscription_status !== 'free') {
@@ -42,7 +41,7 @@ router.post('/start-trial', (req, res) => {
 });
 
 // Cancel subscription — takes effect at end of current billing period
-router.post('/cancel', async (req, res) => {
+router.post('/cancel', auth, async (req, res) => {
   const userRow = db.prepare('SELECT subscription_status, trial_end, stripe_subscription_id FROM users WHERE id = ?').get(req.user.id);
   if (!userRow) return res.status(404).json({ error: 'User not found' });
   const { subscription_status, trial_end, stripe_subscription_id } = userRow;
@@ -82,7 +81,7 @@ router.post('/cancel', async (req, res) => {
 });
 
 // Reactivate a cancelled subscription (reverse cancel_at_period_end)
-router.post('/reactivate', async (req, res) => {
+router.post('/reactivate', auth, async (req, res) => {
   const userRow = db.prepare('SELECT stripe_subscription_id, cancel_at FROM users WHERE id = ?').get(req.user.id);
   if (!userRow) return res.status(404).json({ error: 'User not found' });
   if (!userRow.cancel_at) return res.status(400).json({ error: 'Subscription is not set to cancel' });
@@ -103,7 +102,7 @@ router.post('/reactivate', async (req, res) => {
 });
 
 // Stripe checkout — requires STRIPE_SECRET_KEY env var
-router.post('/checkout', async (req, res) => {
+router.post('/checkout', auth, async (req, res) => {
   if (!process.env.STRIPE_SECRET_KEY) {
     return res.status(503).json({ error: 'stripe_not_configured' });
   }
@@ -198,7 +197,7 @@ router.post('/webhook', async (req, res) => {
 });
 
 // Customer portal for managing billing
-router.post('/portal', async (req, res) => {
+router.post('/portal', auth, async (req, res) => {
   if (!process.env.STRIPE_SECRET_KEY) {
     return res.status(503).json({ error: 'stripe_not_configured' });
   }
