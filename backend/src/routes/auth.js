@@ -2,7 +2,7 @@ import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
 import db from '../db/index.js';
-import { signToken } from '../middleware/auth.js';
+import { signToken, auth } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -28,13 +28,10 @@ router.post('/login', (req, res) => {
   res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
 });
 
-router.get('/me', (req, res) => {
-  const header = req.headers.authorization;
-  if (!header) return res.status(401).json({ error: 'No token' });
-  try {
-    const { signToken: _, ...rest } = await import('../middleware/auth.js');
-  } catch {}
-  res.json({ ok: true });
+router.get('/me', auth, (req, res) => {
+  const user = db.prepare('SELECT id, name, email, role FROM users WHERE id = ?').get(req.user.id);
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  res.json({ user });
 });
 
 export default router;
