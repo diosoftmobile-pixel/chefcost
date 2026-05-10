@@ -7,7 +7,7 @@ router.use(auth);
 
 router.get('/', (req, res) => {
   const user = db.prepare(
-    'SELECT id, name, email, role, subscription_status, trial_end, cancel_at, currency, language, created_at FROM users WHERE id = ?'
+    'SELECT id, name, email, role, subscription_status, subscription_plan, trial_end, cancel_at, currency, language, created_at FROM users WHERE id = ?'
   ).get(req.user.id);
   if (!user) return res.status(404).json({ error: 'User not found' });
   res.json(user);

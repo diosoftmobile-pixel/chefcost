@@ -168,8 +168,8 @@ router.post('/webhook', async (req, res) => {
         db.prepare("UPDATE users SET subscription_status='trial', trial_end=? WHERE id=?")
           .run(trialEnd.toISOString(), user_id);
       } else {
-        db.prepare("UPDATE users SET subscription_status='active', stripe_subscription_id=? WHERE id=?")
-          .run(session.subscription || null, user_id);
+        db.prepare("UPDATE users SET subscription_status='active', subscription_plan=?, stripe_subscription_id=? WHERE id=?")
+          .run(plan, session.subscription || null, user_id);
       }
     }
 
@@ -185,7 +185,7 @@ router.post('/webhook', async (req, res) => {
 
     if (event.type === 'customer.subscription.deleted') {
       const sub = event.data.object;
-      db.prepare("UPDATE users SET subscription_status='free', stripe_subscription_id=NULL, cancel_at=NULL WHERE stripe_subscription_id=?")
+      db.prepare("UPDATE users SET subscription_status='free', subscription_plan=NULL, stripe_subscription_id=NULL, cancel_at=NULL WHERE stripe_subscription_id=?")
         .run(sub.id);
     }
 

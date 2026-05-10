@@ -108,6 +108,7 @@ const alterColumns = [
   "ALTER TABLE users ADD COLUMN language TEXT NOT NULL DEFAULT 'en'",
   "ALTER TABLE users ADD COLUMN is_locked INTEGER NOT NULL DEFAULT 0",
   "ALTER TABLE users ADD COLUMN cancel_at TEXT DEFAULT NULL",
+  "ALTER TABLE users ADD COLUMN subscription_plan TEXT DEFAULT NULL",
 ];
 for (const sql of alterColumns) {
   try { db.exec(sql); } catch {}

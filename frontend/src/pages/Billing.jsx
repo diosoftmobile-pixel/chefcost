@@ -70,6 +70,7 @@ export default function Billing() {
   };
 
   const sub = user?.subscription_status || 'free';
+  const plan = user?.subscription_plan || null;
   const trialUsed = sub !== 'free';
   const isNewUser = sub === 'free';
   const cancelAt = user?.cancel_at ? new Date(user.cancel_at) : null;
@@ -95,7 +96,7 @@ export default function Billing() {
       features: [t('billing.featAll'), t('billing.featCancel')],
       cta: t('billing.subscribe'),
       ctaAction: () => checkout('monthly'),
-      current: sub === 'active',
+      current: sub === 'active' && plan === 'monthly',
     },
     {
       id: 'yearly',
@@ -106,7 +107,7 @@ export default function Billing() {
       features: [t('billing.featAll'), t('billing.featBestValue')],
       cta: t('billing.subscribe'),
       ctaAction: () => checkout('yearly'),
-      current: false,
+      current: sub === 'active' && plan === 'yearly',
     },
   ];
 
