@@ -103,6 +103,8 @@ export default {
     totalUsers: 'Total utilizatori', chefs: 'Chefi', admins: 'Admini',
     confirmDelete: 'Ștergi acest cont? Toate datele vor fi pierdute.',
     deleteBtn: 'Șterge', setFree: 'Gratuit', setActive: 'Activează', setTrial: 'Trial',
+    lockBtn: 'Blochează', unlockBtn: 'Deblochează', locked: 'Blocat',
+    confirmLock: 'Blochezi acest cont? Utilizatorul nu va putea să se autentifice până nu îl deblochezi.',
   },
   settings: {
     title: 'Setări cont', profile: 'Profil',

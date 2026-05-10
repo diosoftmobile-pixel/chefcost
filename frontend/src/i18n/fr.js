@@ -103,6 +103,8 @@ export default {
     totalUsers: 'Total utilisateurs', chefs: 'Chefs', admins: 'Admins',
     confirmDelete: 'Supprimer ce compte ? Toutes les données seront perdues.',
     deleteBtn: 'Supprimer', setFree: 'Gratuit', setActive: 'Activer', setTrial: 'Essai',
+    lockBtn: 'Bloquer', unlockBtn: 'Débloquer', locked: 'Bloqué',
+    confirmLock: "Bloquer ce compte ? L'utilisateur ne pourra pas se connecter jusqu'à ce que vous le débloquez.",
   },
   settings: {
     title: 'Paramètres du compte', profile: 'Profil',

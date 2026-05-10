@@ -41,6 +41,7 @@ export const api = {
   getAdminUsers: () => req('GET', '/admin/users'),
   deleteAdminUser: (id) => req('DELETE', `/admin/users/${id}`),
   setAdminSubscription: (id, subscription_status) => req('PUT', `/admin/users/${id}/subscription`, { subscription_status }),
+  lockAdminUser: (id, locked) => req('PUT', `/admin/users/${id}/lock`, { locked }),
 
   getSettings: () => req('GET', '/settings'),
   updateSettings: (d) => req('PUT', '/settings', d),

@@ -6,6 +6,7 @@ const SUB_BADGE = {
   active: 'badge-green',
   trial: 'badge-blue',
   free: 'badge-gray',
+  demo: 'badge-amber',
 };
 
 export default function Admin() {
@@ -26,6 +27,13 @@ export default function Admin() {
   const setSub = async (id, status) => {
     await api.setAdminSubscription(id, status);
     setUsers(prev => prev.map(u => u.id === id ? { ...u, subscription_status: status } : u));
+  };
+
+  const toggleLock = async (id, currentlyLocked) => {
+    const newLocked = !currentlyLocked;
+    if (newLocked && !confirm(t('admin.confirmLock'))) return;
+    await api.lockAdminUser(id, newLocked);
+    setUsers(prev => prev.map(u => u.id === id ? { ...u, is_locked: newLocked ? 1 : 0 } : u));
   };
 
   const chefs = users.filter(u => u.role !== 'admin').length;
@@ -63,9 +71,12 @@ export default function Admin() {
                   <td>{u.email}</td>
                   <td><span className={`badge ${u.role === 'admin' ? 'badge-blue' : 'badge-gray'}`}>{u.role}</span></td>
                   <td>
-                    <span className={`badge ${SUB_BADGE[u.subscription_status] || 'badge-gray'}`}>
-                      {u.subscription_status || 'free'}
-                    </span>
+                    <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                      <span className={`badge ${SUB_BADGE[u.subscription_status] || 'badge-gray'}`}>
+                        {u.subscription_status || 'free'}
+                      </span>
+                      {u.is_locked ? <span className="badge badge-red"><i className="ti ti-lock" style={{ fontSize: 10, marginRight: 3 }}></i>{t('admin.locked')}</span> : null}
+                    </div>
                   </td>
                   <td style={{ fontSize: 12, color: 'var(--text3)' }}>{u.created_at ? new Date(u.created_at).toLocaleDateString() : '—'}</td>
                   <td>
@@ -80,6 +91,14 @@ export default function Admin() {
                         {u.subscription_status !== 'free' && (
                           <button className="btn btn-ghost" style={{ fontSize: 11, padding: '2px 8px' }} onClick={() => setSub(u.id, 'free')}>{t('admin.setFree')}</button>
                         )}
+                        <button
+                          className={`btn ${u.is_locked ? 'btn-ghost' : 'btn-ghost'}`}
+                          style={{ fontSize: 11, padding: '2px 8px', color: u.is_locked ? 'var(--green)' : 'var(--red)' }}
+                          onClick={() => toggleLock(u.id, u.is_locked)}
+                          title={u.is_locked ? t('admin.unlockBtn') : t('admin.lockBtn')}
+                        >
+                          <i className={`ti ${u.is_locked ? 'ti-lock-open' : 'ti-lock'}`}></i> {u.is_locked ? t('admin.unlockBtn') : t('admin.lockBtn')}
+                        </button>
                         <button className="icon-btn danger" title={t('admin.deleteBtn')} onClick={() => del(u.id)}><i className="ti ti-trash"></i></button>
                       </div>
                     )}

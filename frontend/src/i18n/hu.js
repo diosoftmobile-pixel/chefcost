@@ -103,6 +103,8 @@ export default {
     totalUsers: 'Összes felhasználó', chefs: 'Séfek', admins: 'Adminok',
     confirmDelete: 'Törli ezt a fiókot? Minden adat elvész.',
     deleteBtn: 'Törlés', setFree: 'Ingyenes', setActive: 'Aktiválás', setTrial: 'Próbaverzió',
+    lockBtn: 'Zárolás', unlockBtn: 'Feloldás', locked: 'Zárolva',
+    confirmLock: 'Zárolja ezt a fiókot? A felhasználó nem tud bejelentkezni, amíg fel nem oldja.',
   },
   settings: {
     title: 'Fiókbeállítások', profile: 'Profil',

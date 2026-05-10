@@ -106,6 +106,7 @@ const alterColumns = [
   "ALTER TABLE users ADD COLUMN stripe_subscription_id TEXT DEFAULT NULL",
   "ALTER TABLE users ADD COLUMN currency TEXT NOT NULL DEFAULT 'EUR'",
   "ALTER TABLE users ADD COLUMN language TEXT NOT NULL DEFAULT 'en'",
+  "ALTER TABLE users ADD COLUMN is_locked INTEGER NOT NULL DEFAULT 0",
 ];
 for (const sql of alterColumns) {
   try { db.exec(sql); } catch {}

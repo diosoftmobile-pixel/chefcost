@@ -40,6 +40,7 @@ router.post('/login', (req, res) => {
   if (!email || !password) return res.status(400).json({ error: 'email and password required' });
   const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
   if (!user || !bcrypt.compareSync(password, user.password_hash)) return res.status(401).json({ error: 'Invalid credentials' });
+  if (user.is_locked) return res.status(403).json({ error: 'Account locked. Contact support.' });
   const token = signToken({ id: user.id, name: user.name, email: user.email, role: user.role });
   res.json({ token, user: publicUser(user) });
 });

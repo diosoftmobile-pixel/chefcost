@@ -104,6 +104,8 @@ export default {
     confirmDelete: 'Delete this user account? All their data will be lost.',
     deleteBtn: 'Delete user', activateBtn: 'Activate', deactivateBtn: 'Deactivate',
     setFree: 'Set Free', setActive: 'Set Active', setTrial: 'Set Trial',
+    lockBtn: 'Lock', unlockBtn: 'Unlock', locked: 'Locked',
+    confirmLock: 'Lock this account? The user will not be able to log in until you unlock it.',
   },
   settings: {
     title: 'Account Settings', profile: 'Profile',
