@@ -20,16 +20,7 @@ export default function Billing() {
     }
   }, []);
 
-  const startTrial = async () => {
-    setLoading(true);
-    try {
-      await api.startTrial();
-      await refreshUser();
-      setMsg(t('billing.trialStarted'));
-    } catch (e) {
-      setMsg(e.message === 'Trial or subscription already used' ? t('billing.trialUsed') : e.message);
-    } finally { setLoading(false); }
-  };
+  const startTrial = () => checkout('trial');
 
   const checkout = async (plan) => {
     setLoading(true);
