@@ -1,7 +1,7 @@
 const CURRENCY_SYMBOLS = { EUR: '€', USD: '$', GBP: '£', RON: 'RON ', HUF: 'HUF ' };
 export const fmt = n => {
   const c = localStorage.getItem('cc_currency') || 'EUR';
-  return (CURRENCY_SYMBOLS[c] || c + ' ') + (Math.round(n * 100) / 100).toFixed(2);
+  return (CURRENCY_SYMBOLS[c] || c + ' ') + (Math.round(n * 1000) / 1000).toFixed(3);
 };
 
 export function unitPrice(ing) {
