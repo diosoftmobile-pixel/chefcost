@@ -132,7 +132,7 @@ router.post('/checkout', async (req, res) => {
       line_items: [{
         price_data: {
           currency: 'eur',
-          product_data: { name: `ChefCost ${p.label}` },
+          product_data: { name: `App4Chef ${p.label}` },
           unit_amount: Math.round(p.price * 100),
           ...(plan !== 'trial' && { recurring: { interval: plan === 'yearly' ? 'year' : 'month' } }),
         },
