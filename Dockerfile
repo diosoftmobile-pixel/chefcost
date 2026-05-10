@@ -5,10 +5,16 @@ RUN npm ci
 COPY frontend/ ./
 RUN npm run build
 
+FROM node:20-alpine AS backend-build
+WORKDIR /app/backend
+RUN apk add --no-cache python3 make g++
+COPY backend/package*.json ./
+RUN npm ci --omit=dev
+
 FROM node:20-alpine
+RUN apk add --no-cache libstdc++
 WORKDIR /app
-COPY backend/package*.json ./backend/
-RUN cd backend && npm ci --omit=dev
+COPY --from=backend-build /app/backend/node_modules ./backend/node_modules
 COPY backend/ ./backend/
 COPY --from=frontend-build /app/frontend/dist ./frontend/dist
 RUN mkdir -p /data
