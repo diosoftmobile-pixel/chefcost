@@ -9,7 +9,7 @@ FROM node:20-alpine AS backend-build
 WORKDIR /app/backend
 RUN apk add --no-cache python3 make g++
 COPY backend/package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 
 FROM node:20-alpine
 RUN apk add --no-cache libstdc++
