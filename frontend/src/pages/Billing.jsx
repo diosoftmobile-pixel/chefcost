@@ -57,9 +57,32 @@ export default function Billing() {
     }
   };
 
+  const cancelSub = async () => {
+    if (!confirm(t('billing.confirmCancel'))) return;
+    setLoading(true);
+    try {
+      const result = await api.cancelSubscription();
+      await refreshUser();
+      setMsg(t('billing.cancelScheduled', { date: new Date(result.cancel_at).toLocaleDateString() }));
+    } catch (e) { setMsg(e.message); }
+    finally { setLoading(false); }
+  };
+
+  const reactivateSub = async () => {
+    setLoading(true);
+    try {
+      await api.reactivateSubscription();
+      await refreshUser();
+      setMsg(t('billing.reactivated'));
+    } catch (e) { setMsg(e.message); }
+    finally { setLoading(false); }
+  };
+
   const sub = user?.subscription_status || 'free';
   const trialUsed = sub !== 'free';
   const isNewUser = sub === 'free';
+  const cancelAt = user?.cancel_at ? new Date(user.cancel_at) : null;
+  const isCancelled = cancelAt && cancelAt > new Date();
 
   const plans = [
     {
@@ -100,13 +123,40 @@ export default function Billing() {
     <>
       <div className="topbar">
         <div className="topbar-title">{t('billing.title')}</div>
-        {isPaid && (
-          <button className="btn btn-ghost" onClick={openPortal} disabled={loading}>
-            <i className="ti ti-credit-card"></i> {t('billing.manageSubscription')}
-          </button>
-        )}
+        <div style={{ display: 'flex', gap: 8 }}>
+          {isPaid && !isCancelled && (
+            <button className="btn btn-ghost" style={{ color: 'var(--red)' }} onClick={cancelSub} disabled={loading}>
+              <i className="ti ti-x"></i> {t('billing.cancelBtn')}
+            </button>
+          )}
+          {isPaid && isCancelled && (
+            <button className="btn btn-ghost" style={{ color: 'var(--green)' }} onClick={reactivateSub} disabled={loading}>
+              <i className="ti ti-refresh"></i> {t('billing.reactivateBtn')}
+            </button>
+          )}
+          {isPaid && (
+            <button className="btn btn-ghost" onClick={openPortal} disabled={loading}>
+              <i className="ti ti-credit-card"></i> {t('billing.manageSubscription')}
+            </button>
+          )}
+        </div>
       </div>
       <div className="content">
+        {isCancelled && (
+          <div className="card" style={{ padding: '12px 20px', marginBottom: 16, background: 'var(--red-soft, #fef2f2)', border: '1px solid var(--red, #ef4444)', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <i className="ti ti-clock" style={{ color: 'var(--red, #ef4444)', fontSize: 18 }}></i>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: 13 }}>{t('billing.cancelledTitle')}</div>
+              <div style={{ fontSize: 12, color: 'var(--text3)', marginTop: 2 }}>
+                {t('billing.cancelledDesc', { date: cancelAt.toLocaleDateString() })}
+              </div>
+            </div>
+            <button className="btn btn-ghost" style={{ marginLeft: 'auto', color: 'var(--green)', whiteSpace: 'nowrap' }} onClick={reactivateSub} disabled={loading}>
+              {t('billing.reactivateBtn')}
+            </button>
+          </div>
+        )}
+
         {isNewUser && (
           <div className="card" style={{ padding: '16px 20px', marginBottom: 16, background: 'var(--accent-soft)', border: '2px solid var(--accent)', textAlign: 'center' }}>
             <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 4 }}>{t('billing.welcomeTitle')}</div>

@@ -41,6 +41,67 @@ router.post('/start-trial', (req, res) => {
   res.json({ ok: true, trial_end: trialEnd.toISOString() });
 });
 
+// Cancel subscription — takes effect at end of current billing period
+router.post('/cancel', async (req, res) => {
+  const userRow = db.prepare('SELECT subscription_status, trial_end, stripe_subscription_id FROM users WHERE id = ?').get(req.user.id);
+  if (!userRow) return res.status(404).json({ error: 'User not found' });
+  const { subscription_status, trial_end, stripe_subscription_id } = userRow;
+
+  if (subscription_status === 'free' || subscription_status === 'demo') {
+    return res.status(400).json({ error: 'No active subscription to cancel' });
+  }
+
+  // Stripe-managed subscription
+  if (stripe_subscription_id && process.env.STRIPE_SECRET_KEY) {
+    try {
+      const { default: Stripe } = await import('stripe');
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+      const sub = await stripe.subscriptions.update(stripe_subscription_id, { cancel_at_period_end: true });
+      const cancelAt = new Date(sub.current_period_end * 1000).toISOString();
+      db.prepare('UPDATE users SET cancel_at=? WHERE id=?').run(cancelAt, req.user.id);
+      return res.json({ ok: true, cancel_at: cancelAt });
+    } catch (e) {
+      console.error('Stripe cancel error:', e.message);
+      return res.status(500).json({ error: 'Failed to cancel subscription' });
+    }
+  }
+
+  // Trial: cancel_at = trial_end
+  if (subscription_status === 'trial' && trial_end) {
+    db.prepare('UPDATE users SET cancel_at=? WHERE id=?').run(trial_end, req.user.id);
+    return res.json({ ok: true, cancel_at: trial_end });
+  }
+
+  // Manual active account without Stripe — cancel at end of current month
+  const endOfMonth = new Date();
+  endOfMonth.setMonth(endOfMonth.getMonth() + 1, 1);
+  endOfMonth.setHours(0, 0, 0, 0);
+  const cancelAt = endOfMonth.toISOString();
+  db.prepare('UPDATE users SET cancel_at=? WHERE id=?').run(cancelAt, req.user.id);
+  res.json({ ok: true, cancel_at: cancelAt });
+});
+
+// Reactivate a cancelled subscription (reverse cancel_at_period_end)
+router.post('/reactivate', async (req, res) => {
+  const userRow = db.prepare('SELECT stripe_subscription_id, cancel_at FROM users WHERE id = ?').get(req.user.id);
+  if (!userRow) return res.status(404).json({ error: 'User not found' });
+  if (!userRow.cancel_at) return res.status(400).json({ error: 'Subscription is not set to cancel' });
+
+  if (userRow.stripe_subscription_id && process.env.STRIPE_SECRET_KEY) {
+    try {
+      const { default: Stripe } = await import('stripe');
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+      await stripe.subscriptions.update(userRow.stripe_subscription_id, { cancel_at_period_end: false });
+    } catch (e) {
+      console.error('Stripe reactivate error:', e.message);
+      return res.status(500).json({ error: 'Failed to reactivate subscription' });
+    }
+  }
+
+  db.prepare('UPDATE users SET cancel_at=NULL WHERE id=?').run(req.user.id);
+  res.json({ ok: true });
+});
+
 // Stripe checkout — requires STRIPE_SECRET_KEY env var
 router.post('/checkout', async (req, res) => {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -113,9 +174,19 @@ router.post('/webhook', async (req, res) => {
       }
     }
 
+    if (event.type === 'customer.subscription.updated') {
+      const sub = event.data.object;
+      if (sub.cancel_at_period_end) {
+        const cancelAt = new Date(sub.current_period_end * 1000).toISOString();
+        db.prepare('UPDATE users SET cancel_at=? WHERE stripe_subscription_id=?').run(cancelAt, sub.id);
+      } else {
+        db.prepare('UPDATE users SET cancel_at=NULL WHERE stripe_subscription_id=?').run(sub.id);
+      }
+    }
+
     if (event.type === 'customer.subscription.deleted') {
       const sub = event.data.object;
-      db.prepare("UPDATE users SET subscription_status='free', stripe_subscription_id=NULL WHERE stripe_subscription_id=?")
+      db.prepare("UPDATE users SET subscription_status='free', stripe_subscription_id=NULL, cancel_at=NULL WHERE stripe_subscription_id=?")
         .run(sub.id);
     }
 

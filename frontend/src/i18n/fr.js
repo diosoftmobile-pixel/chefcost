@@ -113,6 +113,7 @@ export default {
     subscriptionTitle: 'Abonnement',
     status_free: 'Gratuit', status_trial: 'Essai', status_active: 'Actif',
     trialEnds: "Essai expire le :",
+    cancelledOn: "L'abonnement se termine le {{date}}. Vous avez un accès complet jusqu'à cette date.",
     upgradeHint: 'Passez à la version supérieure pour ajouter et modifier des ingrédients et recettes.',
   },
   billing: {
@@ -133,5 +134,11 @@ export default {
     stripeNotConfigured: 'Les paiements en ligne ne sont pas encore configurés. Contactez le support.',
     welcomeTitle: 'Bienvenue sur App4Chef !',
     welcomeDesc: 'Choisissez un plan ci-dessous pour commencer. Essayez pendant 14 jours ou abonnez-vous directement.',
+    cancelBtn: "Résilier l'abonnement", reactivateBtn: "Réactiver l'abonnement",
+    confirmCancel: "Résilier votre abonnement ? Vous garderez l'accès complet jusqu'à la fin de la période de facturation.",
+    cancelScheduled: "Abonnement résilié. Vous avez accès jusqu'au {{date}}.",
+    reactivated: "Abonnement réactivé ! Votre accès continue normalement.",
+    cancelledTitle: 'Résiliation planifiée',
+    cancelledDesc: "Vous avez un accès complet jusqu'au {{date}}. Ensuite votre compte repasse en mode démo.",
   },
 };

@@ -51,4 +51,6 @@ export const api = {
   startTrial: () => req('POST', '/billing/start-trial'),
   createCheckout: (plan) => req('POST', '/billing/checkout', { plan }),
   createPortal: () => req('POST', '/billing/portal'),
+  cancelSubscription: () => req('POST', '/billing/cancel'),
+  reactivateSubscription: () => req('POST', '/billing/reactivate'),
 };

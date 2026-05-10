@@ -113,6 +113,7 @@ export default {
     subscriptionTitle: 'Előfizetés',
     status_free: 'Ingyenes', status_trial: 'Próbaverzió', status_active: 'Aktív',
     trialEnds: 'Próbaverzió lejárata:',
+    cancelledOn: 'Az előfizetés {{date}}-ig érvényes. Addig teljes hozzáférése van.',
     upgradeHint: 'Frissítsen az alapanyagok és receptek hozzáadásához és szerkesztéséhez.',
   },
   billing: {
@@ -133,5 +134,11 @@ export default {
     stripeNotConfigured: 'Az online fizetés még nincs beállítva. Vegye fel a kapcsolatot az ügyfélszolgálattal.',
     welcomeTitle: 'Üdvözöljük az App4Chef-ben!',
     welcomeDesc: 'Válasszon egy tervet az induláshoz. Próbálja ki 14 napig vagy iratkozzon fel közvetlenül.',
+    cancelBtn: 'Előfizetés lemondása', reactivateBtn: 'Előfizetés visszaállítása',
+    confirmCancel: 'Lemondja az előfizetést? A számlázási időszak végéig teljes hozzáférése marad.',
+    cancelScheduled: 'Előfizetés lemondva. Hozzáférése {{date}}-ig tart.',
+    reactivated: 'Előfizetés visszaállítva! A hozzáférés normálisan folytatódik.',
+    cancelledTitle: 'Az előfizetés lemondásra van ütemezve',
+    cancelledDesc: '{{date}}-ig teljes hozzáférése van. Utána fiókja demo módra vált.',
   },
 };

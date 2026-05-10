@@ -114,6 +114,7 @@ export default {
     subscriptionTitle: 'Subscription',
     status_free: 'Free', status_trial: 'Trial', status_active: 'Active',
     trialEnds: 'Trial ends:',
+    cancelledOn: 'Subscription cancels on {{date}}. You have full access until then.',
     upgradeHint: 'Upgrade to unlock adding and editing ingredients and recipes.',
   },
   billing: {
@@ -134,5 +135,11 @@ export default {
     stripeNotConfigured: 'Online payments are not yet configured. Contact support to upgrade.',
     welcomeTitle: 'Welcome to App4Chef!',
     welcomeDesc: 'Choose a plan below to get started. You can try the app for 14 days or subscribe directly.',
+    cancelBtn: 'Cancel subscription', reactivateBtn: 'Reactivate subscription',
+    confirmCancel: 'Cancel your subscription? You will keep full access until the end of your billing period.',
+    cancelScheduled: 'Subscription cancelled. You have access until {{date}}.',
+    reactivated: 'Subscription reactivated! Your access continues as normal.',
+    cancelledTitle: 'Subscription scheduled for cancellation',
+    cancelledDesc: 'You have full access until {{date}}. After that your account reverts to demo mode.',
   },
 };

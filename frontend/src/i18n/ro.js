@@ -113,6 +113,7 @@ export default {
     subscriptionTitle: 'Abonament',
     status_free: 'Gratuit', status_trial: 'Trial', status_active: 'Activ',
     trialEnds: 'Trial expiră:',
+    cancelledOn: 'Abonamentul se termină pe {{date}}. Ai acces complet până atunci.',
     upgradeHint: 'Abonează-te pentru a adăuga și edita ingrediente și rețete.',
   },
   billing: {
@@ -133,5 +134,11 @@ export default {
     stripeNotConfigured: 'Plățile online nu sunt configurate încă. Contactați suportul.',
     welcomeTitle: 'Bun venit la App4Chef!',
     welcomeDesc: 'Alege un plan mai jos pentru a începe. Poți încerca 14 zile sau te poți abona direct.',
+    cancelBtn: 'Anulează abonamentul', reactivateBtn: 'Reactivează abonamentul',
+    confirmCancel: 'Anulezi abonamentul? Vei păstra accesul complet până la sfârșitul perioadei de facturare.',
+    cancelScheduled: 'Abonament anulat. Ai acces până pe {{date}}.',
+    reactivated: 'Abonament reactivat! Accesul tău continuă normal.',
+    cancelledTitle: 'Abonament programat pentru anulare',
+    cancelledDesc: 'Ai acces complet până pe {{date}}. După aceea contul tău revine la modul demo.',
   },
 };

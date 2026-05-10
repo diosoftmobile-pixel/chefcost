@@ -99,6 +99,12 @@ export default function Settings() {
               </span>
             )}
           </div>
+          {user?.cancel_at && new Date(user.cancel_at) > new Date() && (
+            <div style={{ marginTop: 10, padding: '8px 12px', background: 'var(--red-soft, #fef2f2)', border: '1px solid var(--red, #ef4444)', borderRadius: 6, fontSize: 13, color: 'var(--red, #ef4444)' }}>
+              <i className="ti ti-clock" style={{ marginRight: 6 }}></i>
+              {t('settings.cancelledOn', { date: new Date(user.cancel_at).toLocaleDateString() })}
+            </div>
+          )}
           {(user?.subscription_status === 'free') && (
             <p style={{ margin: '12px 0 0', fontSize: 13, color: 'var(--text3)' }}>
               {t('settings.upgradeHint')}
