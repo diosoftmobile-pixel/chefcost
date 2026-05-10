@@ -37,4 +37,7 @@ export const api = {
   createEvent: (d) => req('POST', '/events', d),
   updateEvent: (id, d) => req('PUT', `/events/${id}`, d),
   deleteEvent: (id) => req('DELETE', `/events/${id}`),
+
+  getAdminUsers: () => req('GET', '/admin/users'),
+  deleteAdminUser: (id) => req('DELETE', `/admin/users/${id}`),
 };

@@ -58,6 +58,7 @@ import ingredientRoutes from './routes/ingredients.js';
 import recipeRoutes from './routes/recipes.js';
 import menuRoutes from './routes/menus.js';
 import eventRoutes from './routes/events.js';
+import adminRoutes from './routes/admin.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.join(__dirname, '../../frontend/dist');
@@ -75,6 +76,7 @@ app.use('/api/ingredients', ingredientRoutes);
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/menus', menuRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err);

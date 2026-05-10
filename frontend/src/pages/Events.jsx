@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useApp } from '../hooks/useApp.jsx';
 import { api } from '../lib/api.js';
 import { fmt, calcEventTotal, calcMenuFinalPrice, buildShoppingList } from '../lib/calc.js';
@@ -11,6 +12,7 @@ const blank = () => ({ name:'', client_name:'', client_email:'', client_phone:''
 
 export default function Events() {
   const { events, setEvents, menus, recipes, ingredients } = useApp();
+  const { t } = useTranslation();
   const [modal, setModal] = useState(null);
   const [viewId, setViewId] = useState(null);
   const [form, setForm] = useState(blank());
@@ -31,7 +33,7 @@ export default function Events() {
   }, 0);
 
   const save = async () => {
-    if (!form.name) return alert('Event name required');
+    if (!form.name) return alert(t('events.nameRequired'));
     setSaving(true);
     const payload = { ...form, menus: form.menus.filter(m => m.menu_id) };
     try {
@@ -43,7 +45,7 @@ export default function Events() {
   };
 
   const del = async id => {
-    if (!confirm('Delete this event?')) return;
+    if (!confirm(t('events.confirmDelete'))) return;
     await api.deleteEvent(id);
     setEvents(p => p.filter(e => e.id !== id));
   };
@@ -53,15 +55,15 @@ export default function Events() {
   return (
     <>
       <div className="topbar">
-        <div className="topbar-title">Events</div>
-        <button className="btn btn-primary" onClick={openAdd}><i className="ti ti-plus"></i> New event</button>
+        <div className="topbar-title">{t('events.title')}</div>
+        <button className="btn btn-primary" onClick={openAdd}><i className="ti ti-plus"></i> {t('events.newEvent')}</button>
       </div>
       <div className="page-content">
         <div className="card">
           <table>
-            <thead><tr><th>Event</th><th>Client</th><th>Date</th><th>Guests</th><th>Total value</th><th>Status</th><th></th></tr></thead>
+            <thead><tr><th>{t('events.colEvent')}</th><th>{t('events.colClient')}</th><th>{t('events.colDate')}</th><th>{t('events.colGuests')}</th><th>{t('events.colTotalValue')}</th><th>{t('events.colStatus')}</th><th></th></tr></thead>
             <tbody>
-              {events.length === 0 && <tr><td colSpan={7}><div className="empty-state"><i className="ti ti-calendar-event"></i><p>No events yet</p></div></td></tr>}
+              {events.length === 0 && <tr><td colSpan={7}><div className="empty-state"><i className="ti ti-calendar-event"></i><p>{t('events.none')}</p></div></td></tr>}
               {events.map(e => (
                 <tr key={e.id}>
                   <td>{e.name}</td>
@@ -69,10 +71,10 @@ export default function Events() {
                   <td>{e.event_date}</td>
                   <td>{e.guest_count}</td>
                   <td className="mono accent">{fmt(calcEventTotal(e, menus, recipes, ingredients))}</td>
-                  <td><span className={`badge ${STATUS_BADGE[e.status] || 'badge-gray'}`}>{e.status}</span></td>
+                  <td><span className={`badge ${STATUS_BADGE[e.status] || 'badge-gray'}`}>{t(`events.statuses.${e.status}`, e.status)}</span></td>
                   <td><div className="action-btns">
-                    <button className="icon-btn" title="View details" onClick={() => setViewId(e.id)}><i className="ti ti-eye"></i></button>
-                    <button className="icon-btn pdf-btn" title="Export PDF quote" onClick={() => exportEventPDF(e, menus, recipes, ingredients)}><i className="ti ti-file-text"></i></button>
+                    <button className="icon-btn" title={t('events.viewDetails')} onClick={() => setViewId(e.id)}><i className="ti ti-eye"></i></button>
+                    <button className="icon-btn pdf-btn" title={t('events.exportPdf')} onClick={() => exportEventPDF(e, menus, recipes, ingredients)}><i className="ti ti-file-text"></i></button>
                     <button className="icon-btn" onClick={() => openEdit(e)}><i className="ti ti-edit"></i></button>
                     <button className="icon-btn danger" onClick={() => del(e.id)}><i className="ti ti-trash"></i></button>
                   </div></td>
@@ -84,45 +86,47 @@ export default function Events() {
       </div>
 
       {modal && (
-        <Modal title={modal === 'add' ? 'New event' : 'Edit event'} onClose={close}
-          footer={<><button className="btn" onClick={close}>Cancel</button><button className="btn btn-primary" onClick={save} disabled={saving}>{saving ? 'Saving…' : modal === 'add' ? 'Create event' : 'Save changes'}</button></>}>
+        <Modal title={modal === 'add' ? t('events.newModal') : t('events.editModal')} onClose={close}
+          footer={<><button className="btn" onClick={close}>{t('common.cancel')}</button><button className="btn btn-primary" onClick={save} disabled={saving}>{saving ? t('common.saving') : modal === 'add' ? t('events.createEvent') : t('events.saveEdit')}</button></>}>
           <div className="form-row">
-            <div className="form-group"><label className="form-label">Event name *</label><input className="form-control" value={form.name} onChange={e => set('name', e.target.value)} /></div>
-            <div className="form-group"><label className="form-label">Status</label>
-              <select className="form-control" value={form.status} onChange={e => set('status', e.target.value)}>{STATUSES.map(s => <option key={s}>{s}</option>)}</select>
+            <div className="form-group"><label className="form-label">{t('events.eventName')}</label><input className="form-control" value={form.name} onChange={e => set('name', e.target.value)} /></div>
+            <div className="form-group"><label className="form-label">{t('events.statusLabel')}</label>
+              <select className="form-control" value={form.status} onChange={e => set('status', e.target.value)}>
+                {STATUSES.map(s => <option key={s} value={s}>{t(`events.statuses.${s}`, s)}</option>)}
+              </select>
             </div>
           </div>
           <div className="form-row">
-            <div className="form-group"><label className="form-label">Client name</label><input className="form-control" value={form.client_name} onChange={e => set('client_name', e.target.value)} /></div>
-            <div className="form-group"><label className="form-label">Client email</label><input className="form-control" type="email" value={form.client_email} onChange={e => set('client_email', e.target.value)} /></div>
+            <div className="form-group"><label className="form-label">{t('events.clientName')}</label><input className="form-control" value={form.client_name} onChange={e => set('client_name', e.target.value)} /></div>
+            <div className="form-group"><label className="form-label">{t('events.clientEmail')}</label><input className="form-control" type="email" value={form.client_email} onChange={e => set('client_email', e.target.value)} /></div>
           </div>
           <div className="form-row">
-            <div className="form-group"><label className="form-label">Phone</label><input className="form-control" value={form.client_phone} onChange={e => set('client_phone', e.target.value)} /></div>
-            <div className="form-group"><label className="form-label">Event date</label><input className="form-control" type="date" value={form.event_date} onChange={e => set('event_date', e.target.value)} /></div>
+            <div className="form-group"><label className="form-label">{t('events.phone')}</label><input className="form-control" value={form.client_phone} onChange={e => set('client_phone', e.target.value)} /></div>
+            <div className="form-group"><label className="form-label">{t('events.eventDate')}</label><input className="form-control" type="date" value={form.event_date} onChange={e => set('event_date', e.target.value)} /></div>
           </div>
           <div className="form-row">
-            <div className="form-group"><label className="form-label">Guest count</label><input className="form-control" type="number" min="1" value={form.guest_count} onChange={e => set('guest_count', e.target.value)} /></div>
-            <div className="form-group"><label className="form-label">Notes</label><input className="form-control" value={form.notes} onChange={e => set('notes', e.target.value)} /></div>
+            <div className="form-group"><label className="form-label">{t('events.guestCount')}</label><input className="form-control" type="number" min="1" value={form.guest_count} onChange={e => set('guest_count', e.target.value)} /></div>
+            <div className="form-group"><label className="form-label">{t('events.notesLabel')}</label><input className="form-control" value={form.notes} onChange={e => set('notes', e.target.value)} /></div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '16px 0 8px' }}>
-            <label className="form-label" style={{ margin: 0 }}>Menus</label>
-            <button className="btn btn-ghost" onClick={addMenu} style={{ fontSize: 12, padding: '4px 10px' }}><i className="ti ti-plus"></i> Add menu</button>
+            <label className="form-label" style={{ margin: 0 }}>{t('events.menusLabel')}</label>
+            <button className="btn btn-ghost" onClick={addMenu} style={{ fontSize: 12, padding: '4px 10px' }}><i className="ti ti-plus"></i> {t('events.addMenuBtn')}</button>
           </div>
           {form.menus.map((em, idx) => {
             const menu = menus.find(m => m.id === em.menu_id);
             return <div className="ing-row" key={idx}>
               <select className="form-control" style={{ fontSize: 12 }} value={em.menu_id} onChange={e => setMen(idx, 'menu_id', e.target.value)}>
-                <option value="">— Select menu —</option>
+                <option value="">{t('events.selectMenu')}</option>
                 {menus.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
               </select>
-              <div style={{ fontSize: 11, color: 'var(--text3)' }}>{menu ? `${menu.guest_count} guests` : ''}</div>
+              <div style={{ fontSize: 11, color: 'var(--text3)' }}>{menu ? `${menu.guest_count} ${t('common.guests')}` : ''}</div>
               <span className="mono accent" style={{ fontSize: 12 }}>{menu ? fmt(calcMenuFinalPrice(menu, recipes, ingredients).final) : '—'}</span>
               <button className="icon-btn danger" onClick={() => removeMen(idx)}><i className="ti ti-x"></i></button>
             </div>;
           })}
           <div className="summary-box">
-            <div className="summary-row"><span>Total event value</span><span>{fmt(totalCost)}</span></div>
-            <div className="summary-row total"><span>Cost per guest</span><span>{fmt(+form.guest_count > 0 ? totalCost / +form.guest_count : 0)}</span></div>
+            <div className="summary-row"><span>{t('events.totalEventValue')}</span><span>{fmt(totalCost)}</span></div>
+            <div className="summary-row total"><span>{t('events.costPerGuest')}</span><span>{fmt(+form.guest_count > 0 ? totalCost / +form.guest_count : 0)}</span></div>
           </div>
         </Modal>
       )}
@@ -132,16 +136,16 @@ export default function Events() {
         const shopping = buildShoppingList(viewing, menus, recipes, ingredients);
         return <Modal title={viewing.name} onClose={() => setViewId(null)}
           footer={<>
-            <button className="btn btn-pdf" onClick={() => { exportEventPDF(viewing, menus, recipes, ingredients); setViewId(null); }}><i className="ti ti-file-text"></i> Export PDF quote</button>
-            <button className="btn btn-primary" onClick={() => setViewId(null)}>Close</button>
+            <button className="btn btn-pdf" onClick={() => { exportEventPDF(viewing, menus, recipes, ingredients); setViewId(null); }}><i className="ti ti-file-text"></i> {t('events.exportPdf')}</button>
+            <button className="btn btn-primary" onClick={() => setViewId(null)}>{t('common.close')}</button>
           </>}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
-            <div style={{ fontSize: 13 }}><span className="text3">Client: </span>{viewing.client_name}</div>
-            <div style={{ fontSize: 13 }}><span className="text3">Date: </span>{viewing.event_date}</div>
-            <div style={{ fontSize: 13 }}><span className="text3">Guests: </span>{viewing.guest_count}</div>
-            <div style={{ fontSize: 13 }}><span className="text3">Status: </span><span className={`badge ${STATUS_BADGE[viewing.status] || 'badge-gray'}`}>{viewing.status}</span></div>
+            <div style={{ fontSize: 13 }}><span className="text3">{t('events.clientLabel')} </span>{viewing.client_name}</div>
+            <div style={{ fontSize: 13 }}><span className="text3">{t('events.dateLabel')} </span>{viewing.event_date}</div>
+            <div style={{ fontSize: 13 }}><span className="text3">{t('events.guestsLabel')} </span>{viewing.guest_count}</div>
+            <div style={{ fontSize: 13 }}><span className="text3">{t('events.statusViewLabel')} </span><span className={`badge ${STATUS_BADGE[viewing.status] || 'badge-gray'}`}>{t(`events.statuses.${viewing.status}`, viewing.status)}</span></div>
           </div>
-          <div style={{ fontSize: 12, fontWeight: 500, color: 'var(--text2)', letterSpacing: '0.5px', textTransform: 'uppercase', margin: '16px 0 8px' }}>Shopping list</div>
+          <div style={{ fontSize: 12, fontWeight: 500, color: 'var(--text2)', letterSpacing: '0.5px', textTransform: 'uppercase', margin: '16px 0 8px' }}>{t('events.shoppingList')}</div>
           {Object.entries(shopping).map(([name, data]) => (
             <div key={name} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
               <span style={{ fontSize: 13 }}>{name}</span>
@@ -149,7 +153,7 @@ export default function Events() {
             </div>
           ))}
           <div className="summary-box" style={{ marginTop: 16 }}>
-            <div className="summary-row total"><span>Total event value</span><span>{fmt(total)}</span></div>
+            <div className="summary-row total"><span>{t('events.totalEventValue')}</span><span>{fmt(total)}</span></div>
           </div>
         </Modal>;
       })()}

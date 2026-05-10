@@ -7,6 +7,7 @@ import Ingredients from './pages/Ingredients.jsx';
 import Recipes from './pages/Recipes.jsx';
 import Menus from './pages/Menus.jsx';
 import Events from './pages/Events.jsx';
+import Admin from './pages/Admin.jsx';
 
 function ProtectedRoutes() {
   const { user, loading } = useApp();
@@ -20,6 +21,7 @@ function ProtectedRoutes() {
         <Route path="/recipes" element={<Recipes />} />
         <Route path="/menus" element={<Menus />} />
         <Route path="/events" element={<Events />} />
+        {user.role === 'admin' && <Route path="/admin" element={<Admin />} />}
         <Route path="*" element={<Navigate to="/" />} />
       </Route>
     </Routes>

@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
 import db from '../db/index.js';
 import { signToken, auth } from '../middleware/auth.js';
+import { notifyNewChef } from '../lib/mailer.js';
 
 const router = Router();
 
@@ -16,6 +17,7 @@ router.post('/register', (req, res) => {
   const hash = bcrypt.hashSync(password, 10);
   db.prepare('INSERT INTO users (id,name,email,password_hash,role) VALUES (?,?,?,?,?)').run(id, name, email, hash, role);
   const token = signToken({ id, name, email, role });
+  notifyNewChef({ name, email });
   res.status(201).json({ token, user: { id, name, email, role } });
 });
 

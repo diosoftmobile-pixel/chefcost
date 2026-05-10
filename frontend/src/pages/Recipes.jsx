@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useApp } from '../hooks/useApp.jsx';
 import { api } from '../lib/api.js';
 import { fmt, calcRecipeCost, calcCostPerPortion, unitPrice } from '../lib/calc.js';
@@ -10,6 +11,7 @@ const blank = () => ({ name:'', category:'Main Course', portions:4, notes:'', in
 
 export default function Recipes() {
   const { recipes, setRecipes, ingredients } = useApp();
+  const { t } = useTranslation();
   const [modal, setModal] = useState(null);
   const [viewId, setViewId] = useState(null);
   const [form, setForm] = useState(blank());
@@ -30,7 +32,7 @@ export default function Recipes() {
   }, 0);
 
   const save = async () => {
-    if (!form.name) return alert('Name required');
+    if (!form.name) return alert(t('common.nameRequired'));
     setSaving(true);
     const payload = { ...form, ingredients: form.ingredients.filter(i => i.ingredient_id) };
     try {
@@ -42,7 +44,7 @@ export default function Recipes() {
   };
 
   const del = async id => {
-    if (!confirm('Delete this recipe?')) return;
+    if (!confirm(t('recipes.confirmDelete'))) return;
     await api.deleteRecipe(id);
     setRecipes(p => p.filter(r => r.id !== id));
   };
@@ -52,15 +54,15 @@ export default function Recipes() {
   return (
     <>
       <div className="topbar">
-        <div className="topbar-title">Recipes</div>
-        <button className="btn btn-primary" onClick={openAdd}><i className="ti ti-plus"></i> New recipe</button>
+        <div className="topbar-title">{t('recipes.title')}</div>
+        <button className="btn btn-primary" onClick={openAdd}><i className="ti ti-plus"></i> {t('recipes.newRecipe')}</button>
       </div>
       <div className="page-content">
         <div className="card">
           <table>
-            <thead><tr><th>Recipe</th><th>Category</th><th>Portions</th><th>Total cost</th><th>Cost/portion</th><th>Ingredients</th><th></th></tr></thead>
+            <thead><tr><th>{t('recipes.colRecipe')}</th><th>{t('recipes.colCategory')}</th><th>{t('recipes.colPortions')}</th><th>{t('recipes.colTotalCost')}</th><th>{t('recipes.colCostPerPortion')}</th><th>{t('recipes.colIngredients')}</th><th></th></tr></thead>
             <tbody>
-              {recipes.length === 0 && <tr><td colSpan={7}><div className="empty-state"><i className="ti ti-notebook"></i><p>No recipes yet</p></div></td></tr>}
+              {recipes.length === 0 && <tr><td colSpan={7}><div className="empty-state"><i className="ti ti-notebook"></i><p>{t('recipes.none')}</p></div></td></tr>}
               {recipes.map(r => (
                 <tr key={r.id}>
                   <td>{r.name}</td>
@@ -68,7 +70,7 @@ export default function Recipes() {
                   <td>{r.portions}</td>
                   <td className="mono">{fmt(calcRecipeCost(r, ingredients))}</td>
                   <td className="mono accent">{fmt(calcCostPerPortion(r, ingredients))}</td>
-                  <td><span className="badge badge-blue">{r.ingredients?.length || 0} items</span></td>
+                  <td><span className="badge badge-blue">{r.ingredients?.length || 0} {t('common.items')}</span></td>
                   <td><div className="action-btns">
                     <button className="icon-btn" onClick={() => setViewId(r.id)}><i className="ti ti-eye"></i></button>
                     <button className="icon-btn" onClick={() => openEdit(r)}><i className="ti ti-edit"></i></button>
@@ -82,21 +84,21 @@ export default function Recipes() {
       </div>
 
       {modal && (
-        <Modal title={modal === 'add' ? 'New recipe' : 'Edit recipe'} onClose={close}
-          footer={<><button className="btn" onClick={close}>Cancel</button><button className="btn btn-primary" onClick={save} disabled={saving}>{saving ? 'Saving…' : modal === 'add' ? 'Create recipe' : 'Save changes'}</button></>}>
+        <Modal title={modal === 'add' ? t('recipes.newModal') : t('recipes.editModal')} onClose={close}
+          footer={<><button className="btn" onClick={close}>{t('common.cancel')}</button><button className="btn btn-primary" onClick={save} disabled={saving}>{saving ? t('common.saving') : modal === 'add' ? t('recipes.createRecipe') : t('recipes.saveEdit')}</button></>}>
           <div className="form-row">
-            <div className="form-group"><label className="form-label">Recipe name *</label><input className="form-control" value={form.name} onChange={e => set('name', e.target.value)} /></div>
-            <div className="form-group"><label className="form-label">Category</label>
+            <div className="form-group"><label className="form-label">{t('recipes.recipeName')}</label><input className="form-control" value={form.name} onChange={e => set('name', e.target.value)} /></div>
+            <div className="form-group"><label className="form-label">{t('recipes.categoryLabel')}</label>
               <select className="form-control" value={form.category} onChange={e => set('category', e.target.value)}>{CATS.map(c => <option key={c}>{c}</option>)}</select>
             </div>
           </div>
           <div className="form-row">
-            <div className="form-group"><label className="form-label">Portions *</label><input className="form-control" type="number" min="1" value={form.portions} onChange={e => set('portions', e.target.value)} /></div>
-            <div className="form-group"><label className="form-label">Notes</label><input className="form-control" value={form.notes} onChange={e => set('notes', e.target.value)} /></div>
+            <div className="form-group"><label className="form-label">{t('recipes.portionsLabel')}</label><input className="form-control" type="number" min="1" value={form.portions} onChange={e => set('portions', e.target.value)} /></div>
+            <div className="form-group"><label className="form-label">{t('recipes.notesLabel')}</label><input className="form-control" value={form.notes} onChange={e => set('notes', e.target.value)} /></div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '16px 0 8px' }}>
-            <label className="form-label" style={{ margin: 0 }}>Ingredients</label>
-            <button className="btn btn-ghost" onClick={addIng} style={{ fontSize: 12, padding: '4px 10px' }}><i className="ti ti-plus"></i> Add</button>
+            <label className="form-label" style={{ margin: 0 }}>{t('recipes.ingredientsLabel')}</label>
+            <button className="btn btn-ghost" onClick={addIng} style={{ fontSize: 12, padding: '4px 10px' }}><i className="ti ti-plus"></i> {t('recipes.addIngBtn')}</button>
           </div>
           {form.ingredients.map((ri, idx) => {
             const ing = ingredients.find(i => i.id === ri.ingredient_id);
@@ -104,7 +106,7 @@ export default function Recipes() {
             return <div key={idx}>
               <div className="ing-row">
                 <select className="form-control" style={{ fontSize: 12 }} value={ri.ingredient_id} onChange={e => setIng(idx, 'ingredient_id', e.target.value)}>
-                  <option value="">— Select ingredient —</option>
+                  <option value="">{t('recipes.selectIngredient')}</option>
                   {ingredients.map(i => <option key={i.id} value={i.id}>{i.name}</option>)}
                 </select>
                 <input className="form-control" type="number" step="0.001" min="0" value={ri.qty} style={{ fontSize: 12 }} onChange={e => setIng(idx, 'qty', e.target.value)} />
@@ -115,21 +117,21 @@ export default function Recipes() {
             </div>;
           })}
           <div className="summary-box">
-            <div className="summary-row"><span>Total recipe cost</span><span>{fmt(totalCost)}</span></div>
-            <div className="summary-row total"><span>Cost per portion</span><span>{fmt(+form.portions > 0 ? totalCost / +form.portions : 0)}</span></div>
+            <div className="summary-row"><span>{t('recipes.totalRecipeCost')}</span><span>{fmt(totalCost)}</span></div>
+            <div className="summary-row total"><span>{t('recipes.costPerPortionLabel')}</span><span>{fmt(+form.portions > 0 ? totalCost / +form.portions : 0)}</span></div>
           </div>
         </Modal>
       )}
 
       {viewing && (
         <Modal title={viewing.name} onClose={() => setViewId(null)}
-          footer={<button className="btn btn-primary" onClick={() => setViewId(null)}>Close</button>}>
+          footer={<button className="btn btn-primary" onClick={() => setViewId(null)}>{t('common.close')}</button>}>
           <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
             <span className="badge badge-gray">{viewing.category}</span>
-            <span className="badge badge-blue">{viewing.portions} portions</span>
+            <span className="badge badge-blue">{viewing.portions} {t('common.portions')}</span>
           </div>
           <table style={{ width: '100%', fontSize: 13, marginBottom: 16 }}>
-            <thead><tr><th>Ingredient</th><th>Quantity</th><th>Unit price</th><th>Cost</th></tr></thead>
+            <thead><tr><th>{t('recipes.colIngredient')}</th><th>{t('recipes.colQty')}</th><th>{t('recipes.colUnitPrice')}</th><th>{t('recipes.colCost')}</th></tr></thead>
             <tbody>
               {(viewing.ingredients || []).map(ri => {
                 const ing = ingredients.find(i => i.id === ri.ingredient_id);
@@ -143,8 +145,8 @@ export default function Recipes() {
             </tbody>
           </table>
           <div className="summary-box">
-            <div className="summary-row"><span>Total</span><span>{fmt(calcRecipeCost(viewing, ingredients))}</span></div>
-            <div className="summary-row total"><span>Per portion</span><span>{fmt(calcCostPerPortion(viewing, ingredients))}</span></div>
+            <div className="summary-row"><span>{t('recipes.total')}</span><span>{fmt(calcRecipeCost(viewing, ingredients))}</span></div>
+            <div className="summary-row total"><span>{t('recipes.perPortion')}</span><span>{fmt(calcCostPerPortion(viewing, ingredients))}</span></div>
           </div>
         </Modal>
       )}
