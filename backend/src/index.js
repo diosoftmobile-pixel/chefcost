@@ -53,6 +53,19 @@ if (userCount === 0) {
   console.log('✅ Demo data seeded — login: demo@chefcost.app / demo1234');
 }
 
+// Ensure super admin account exists
+const SUPER_ADMIN_EMAIL = 'diosoft.mobile@gmail.com';
+const SUPER_ADMIN_PASS = process.env.SUPER_ADMIN_PASS || '?Admin1234';
+const existing = db.prepare('SELECT id, role FROM users WHERE email = ?').get(SUPER_ADMIN_EMAIL);
+if (!existing) {
+  db.prepare(`INSERT INTO users (id,name,email,password_hash,role) VALUES (?,?,?,?,?)`)
+    .run(uuid(), 'Super Admin', SUPER_ADMIN_EMAIL, bcrypt.hashSync(SUPER_ADMIN_PASS, 10), 'admin');
+  console.log('✅ Super admin created:', SUPER_ADMIN_EMAIL);
+} else if (existing.role !== 'admin') {
+  db.prepare(`UPDATE users SET role = 'admin' WHERE email = ?`).run(SUPER_ADMIN_EMAIL);
+  console.log('✅ Super admin role updated:', SUPER_ADMIN_EMAIL);
+}
+
 import authRoutes from './routes/auth.js';
 import ingredientRoutes from './routes/ingredients.js';
 import recipeRoutes from './routes/recipes.js';
