@@ -76,43 +76,13 @@ db.prepare("UPDATE users SET subscription_status='active' WHERE role='admin' AND
 // Ensure demo account always stays as 'demo' (read-only, never paid)
 db.prepare("UPDATE users SET subscription_status='demo' WHERE email='demo@chefcost.app' AND subscription_status != 'demo'").run();
 
-import authRoutes from './routes/auth.js';
-import ingredientRoutes from './routes/ingredients.js';
-import recipeRoutes from './routes/recipes.js';
-import menuRoutes from './routes/menus.js';
-import eventRoutes from './routes/events.js';
-import adminRoutes from './routes/admin.js';
-import settingsRoutes from './routes/settings.js';
-import billingRoutes from './routes/billing.js';
+import { createApp } from './app.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.join(__dirname, '../../frontend/dist');
 
-const app = express();
+const app = createApp();
 const PORT = process.env.PORT || 4000;
-
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173' }));
-
-// Raw body needed for Stripe webhook
-app.use('/api/billing/webhook', express.raw({ type: 'application/json' }));
-
-app.use(express.json());
-
-app.get('/health', (_, res) => res.json({ ok: true, ts: new Date().toISOString() }));
-
-app.use('/api/auth', authRoutes);
-app.use('/api/ingredients', ingredientRoutes);
-app.use('/api/recipes', recipeRoutes);
-app.use('/api/menus', menuRoutes);
-app.use('/api/events', eventRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/settings', settingsRoutes);
-app.use('/api/billing', billingRoutes);
-
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ error: 'Internal server error' });
-});
 
 // Serve frontend in production
 if (fs.existsSync(DIST)) {

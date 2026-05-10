@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "db:migrate": "node src/db/migrate.js",
     "db:seed": "node src/db/seed.js"
   },
@@ -17,5 +19,9 @@
     "nodemailer": "^6.9.9",
     "stripe": "^14.25.0",
     "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0",
+    "vitest": "^1.6.0"
   }
 }
