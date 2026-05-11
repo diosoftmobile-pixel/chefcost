@@ -119,10 +119,10 @@ router.post('/checkout', auth, async (req, res) => {
       try {
         await stripe.customers.retrieve(customer);
       } catch (e) {
-        if (e.code === 'resource_missing') {
-          customer = null;
-          db.prepare('UPDATE users SET stripe_customer_id=NULL WHERE id=?').run(req.user.id);
-        } else throw e;
+        // Customer not found or belongs to wrong Stripe mode (test vs live) — recreate
+        console.warn('Stripe customer invalid, resetting:', customer, e.message);
+        customer = null;
+        db.prepare('UPDATE users SET stripe_customer_id=NULL WHERE id=?').run(req.user.id);
       }
     }
     if (!customer) {
@@ -136,7 +136,6 @@ router.post('/checkout', auth, async (req, res) => {
 
     const session = await stripe.checkout.sessions.create({
       customer,
-      payment_method_types: ['card'],
       mode: plan === 'trial' ? 'payment' : 'subscription',
       line_items: [{
         price_data: {
@@ -153,8 +152,8 @@ router.post('/checkout', auth, async (req, res) => {
     });
     res.json({ url: session.url });
   } catch (e) {
-    console.error('Stripe error:', e.message);
-    res.status(500).json({ error: 'Payment setup failed' });
+    console.error('Stripe checkout error:', e.type, e.code, e.message);
+    res.status(500).json({ error: e.message || 'Payment setup failed' });
   }
 });
 
