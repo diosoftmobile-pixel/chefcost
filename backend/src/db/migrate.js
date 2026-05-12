@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { v4 as uuid } from 'uuid';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dbPath = process.env.DB_PATH || path.join(__dirname, '../../data/chefcost.db');
@@ -132,6 +133,112 @@ if (!db.prepare('SELECT 1 FROM _migrations WHERE name = ?').get(MIG1)) {
   `).run();
   db.prepare('INSERT INTO _migrations (name) VALUES (?)').run(MIG1);
   console.log('✅ Migration: normalized menu_recipe portions to per-person');
+}
+
+// Migration: seed Elegance Wedding Menu + John & Mary Wedding event for demo account
+const MIG2 = 'seed_wedding_menu_v1';
+if (!db.prepare('SELECT 1 FROM _migrations WHERE name = ?').get(MIG2)) {
+  const demo = db.prepare("SELECT id FROM users WHERE email = 'demo@chefcost.app'").get();
+  if (demo) {
+    const uid = demo.id;
+
+    // Helper: get existing ingredient by name or insert new one
+    const ing = (name, category, unit, price, supplier = '') => {
+      const ex = db.prepare('SELECT id FROM ingredients WHERE user_id=? AND name=?').get(uid, name);
+      if (ex) return ex.id;
+      const id = uuid();
+      db.prepare('INSERT INTO ingredients (id,user_id,name,category,unit,purchase_qty,purchase_price,supplier) VALUES (?,?,?,?,?,?,?,?)')
+        .run(id, uid, name, category, unit, 1, price, supplier);
+      return id;
+    };
+
+    const i = {
+      beefTenderloin:    ing('Beef Tenderloin',       'Meat',           'kg',    38,   'Local Butcher'),
+      arborioRice:       ing('Arborio Rice',           'Grains',         'kg',    4.5),
+      parmesan:          ing('Parmesan Reggiano',      'Dairy',          'kg',    22),
+      whiteWine:         ing('White Wine',             'Beverages',      'liter', 9),
+      truffleOil:        ing('Truffle Oil',            'Oils & Fats',    'liter', 85),
+      atlanticSalmon:    ing('Atlantic Salmon',        'Fish & Seafood', 'kg',    28),
+      capers:            ing('Capers',                 'Vegetables',     'kg',    12),
+      lemon:             ing('Lemon',                  'Fruits',         'kg',    2.5),
+      freshDill:         ing('Fresh Dill',             'Vegetables',     'kg',    15),
+      creamCheese:       ing('Cream Cheese',           'Dairy',          'kg',    8),
+      porcini:           ing('Porcini Mushrooms',      'Vegetables',     'kg',    45),
+      freshCream:        ing('Fresh Cream',            'Dairy',          'liter', 3.8),
+      butter:            ing('Unsalted Butter',        'Dairy',          'kg',    8),
+      garlic:            ing('Garlic',                 'Vegetables',     'kg',    6),
+      redWine:           ing('Red Wine',               'Beverages',      'liter', 12),
+      potatoes:          ing('Potatoes',               'Vegetables',     'kg',    1.2),
+      greenBeans:        ing('Green Beans',            'Vegetables',     'kg',    3.5),
+      seaBass:           ing('Sea Bass',               'Fish & Seafood', 'kg',    32),
+      babySpinach:       ing('Baby Spinach',           'Vegetables',     'kg',    5),
+      darkChocolate:     ing('Dark Chocolate',         'Other',          'kg',    18),
+      raspberries:       ing('Raspberries',            'Fruits',         'kg',    14),
+    };
+
+    const sr  = db.prepare('INSERT INTO recipes (id,user_id,name,category,portions,notes) VALUES (?,?,?,?,?,?)');
+    const sri = db.prepare('INSERT INTO recipe_ingredients (id,recipe_id,ingredient_id,qty,unit) VALUES (?,?,?,?,?)');
+
+    const recipe = (name, category, portions, notes, items) => {
+      const id = uuid(); sr.run(id, uid, name, category, portions, notes);
+      items.forEach(([ingId, qty, unit]) => sri.run(uuid(), id, ingId, qty, unit));
+      return id;
+    };
+
+    // 5-course recipes — each makes 4 portions
+    const r = {
+      risotto: recipe('Truffle Risotto', 'Starter', 4, 'Creamy Arborio with truffle oil and aged Parmesan', [
+        [i.arborioRice,    0.40, 'kg'],
+        [i.parmesan,       0.08, 'kg'],
+        [i.whiteWine,      0.12, 'liter'],
+        [i.truffleOil,     0.02, 'liter'],
+        [i.butter,         0.04, 'kg'],
+      ]),
+      tartare: recipe('Salmon Tartare', 'Starter', 4, 'Fresh salmon, capers, lemon, dill cream', [
+        [i.atlanticSalmon, 0.60, 'kg'],
+        [i.capers,         0.04, 'kg'],
+        [i.lemon,          0.10, 'kg'],
+        [i.freshDill,      0.02, 'kg'],
+        [i.creamCheese,    0.08, 'kg'],
+      ]),
+      veloute: recipe('Wild Mushroom Velouté', 'Soup', 4, 'Porcini cream soup with truffle shavings', [
+        [i.porcini,        0.40, 'kg'],
+        [i.freshCream,     0.30, 'liter'],
+        [i.butter,         0.05, 'kg'],
+        [i.garlic,         0.02, 'kg'],
+      ]),
+      beef: recipe('Beef Tenderloin Royale', 'Main Course', 4, 'Pan-seared beef, red wine reduction, garlic mash, green beans', [
+        [i.beefTenderloin, 0.80, 'kg'],
+        [i.redWine,        0.20, 'liter'],
+        [i.butter,         0.05, 'kg'],
+        [i.potatoes,       0.40, 'kg'],
+        [i.garlic,         0.03, 'kg'],
+        [i.greenBeans,     0.20, 'kg'],
+      ]),
+      fondant: recipe('Dark Chocolate Fondant', 'Dessert', 4, 'Warm fondant, vanilla ice cream, raspberry coulis', [
+        [i.darkChocolate,  0.20, 'kg'],
+        [i.butter,         0.10, 'kg'],
+        [i.freshCream,     0.10, 'liter'],
+        [i.raspberries,    0.12, 'kg'],
+      ]),
+    };
+
+    // Menu: 1 portion per person, 40% markup, 19% VAT
+    const menuId = uuid();
+    db.prepare('INSERT INTO menus (id,user_id,name,description,guest_count,markup,vat) VALUES (?,?,?,?,?,?,?)')
+      .run(menuId, uid, 'Elegance Wedding Menu', 'Premium 5-course wedding dinner', 1, 40, 19);
+    const smr = db.prepare('INSERT INTO menu_recipes (id,menu_id,recipe_id,portions) VALUES (?,?,?,?)');
+    Object.values(r).forEach(rid => smr.run(uuid(), menuId, rid, 1));
+
+    // Event
+    const evId = uuid();
+    db.prepare('INSERT INTO events (id,user_id,name,client_name,client_email,client_phone,event_date,guest_count,notes,status) VALUES (?,?,?,?,?,?,?,?,?,?)')
+      .run(evId, uid, 'John & Mary Wedding', 'John & Mary Smith', 'john.mary@email.com', '', '2026-08-02', 200, 'Elegance 5-course wedding dinner', 'Sent Offer');
+    db.prepare('INSERT INTO event_menus (id,event_id,menu_id,quantity) VALUES (?,?,?,?)')
+      .run(uuid(), evId, menuId, 1);
+  }
+  db.prepare('INSERT INTO _migrations (name) VALUES (?)').run(MIG2);
+  console.log('✅ Migration: seeded Elegance Wedding Menu + John & Mary Wedding event');
 }
 
 console.log('✅ Database migrated successfully');
