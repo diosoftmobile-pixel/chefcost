@@ -86,7 +86,13 @@ export function exportEventPDF(event, menus, recipes, ingredients) {
     doc.setDrawColor(...lineGray); doc.setLineWidth(0.3);
     doc.line(ml + cw / 2, y, ml + cw, y); y += 5;
     const menuGuests = event.guest_count || 1;
-    [['Food cost (per person)', fmt(mp.cost)], [`Markup (${menu.markup}%)`, '+' + fmt(mp.selling - mp.cost)], [`VAT (${menu.vat}%)`, '+' + fmt(mp.vat)], [`Price per person`, fmt(mp.final)], [`× ${menuGuests} guests`, '']].forEach(([lbl, val]) => {
+    [
+      ['Food cost', fmt(mp.cost)],
+      [`Markup (${menu.markup}%)`, '+' + fmt(mp.selling - mp.cost)],
+      [`VAT (${menu.vat}%)`, '+' + fmt(mp.vat)],
+      ['Price / person', fmt(mp.final)],
+      [`× ${menuGuests} guests`, ''],
+    ].forEach(([lbl, val]) => {
       doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...gray);
       doc.text(lbl, ml + cw - 50, y + 3.5);
       doc.setTextColor(...dark); if (val) doc.text(val, ml + cw - 3, y + 3.5, { align: 'right' }); y += 6;

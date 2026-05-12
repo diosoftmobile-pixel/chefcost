@@ -68,7 +68,7 @@ export default {
     none: 'Niciun meniu', newModal: 'Meniu nou', editModal: 'Editează meniu',
     menuName: 'Nume meniu *', descriptionLabel: 'Descriere',
     markupPct: 'Adaos %', vatPct: 'TVA %', recipesLabel: 'Rețete', addRecipeBtn: 'Adaugă',
-    selectRecipe: '— Selectează rețetă —', portionsLabel: 'Porții',
+    selectRecipe: '— Selectează rețetă —', portionsLabel: 'Porții/pers.',
     foodCostLabel: 'Cost alimentar', pricePerPerson: 'Preț per persoană (incl. TVA)',
     createMenu: 'Creează meniu', saveEdit: 'Salvează', confirmDelete: 'Ștergi acest meniu?',
     colRecipe: 'Rețetă', colPortions: 'Porții', colCost: 'Cost',

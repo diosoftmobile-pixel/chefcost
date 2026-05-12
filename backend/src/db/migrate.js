@@ -114,5 +114,25 @@ for (const sql of alterColumns) {
   try { db.exec(sql); } catch {}
 }
 
+// Migrations table for one-time data fixes
+db.exec(`CREATE TABLE IF NOT EXISTS _migrations (name TEXT PRIMARY KEY, applied_at TEXT DEFAULT (datetime('now')))`);
+
+// Migration: convert menu_recipes.portions from total-per-event to per-person
+// Old design: portions = total portions for all guests (e.g. 30 for 30 guests)
+// New design: portions = portions per person (e.g. 1)
+// Formula: new_portions = old_portions / menu.guest_count
+const MIG1 = 'normalize_menu_recipe_portions_v1';
+if (!db.prepare('SELECT 1 FROM _migrations WHERE name = ?').get(MIG1)) {
+  db.prepare(`
+    UPDATE menu_recipes
+    SET portions = MAX(1, CAST(ROUND(CAST(portions AS REAL) /
+      COALESCE((SELECT guest_count FROM menus WHERE menus.id = menu_recipes.menu_id), 1)
+    ) AS INTEGER))
+    WHERE (SELECT guest_count FROM menus WHERE menus.id = menu_recipes.menu_id) > 1
+  `).run();
+  db.prepare('INSERT INTO _migrations (name) VALUES (?)').run(MIG1);
+  console.log('✅ Migration: normalized menu_recipe portions to per-person');
+}
+
 console.log('✅ Database migrated successfully');
 export default db;

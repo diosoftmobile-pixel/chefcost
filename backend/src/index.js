@@ -40,11 +40,11 @@ if (userCount === 0) {
     [[ingIds['Arborio Rice'],0.8,'kg'],[ingIds['Parmesan Reggiano'],0.2,'kg'],[ingIds['White Wine'],0.3,'liter']].forEach(([i,q,u])=>sri.run(uuid(),r2,i,q,u));
     const r3=uuid(); sr.run(r3,userId,'Grilled Salmon Fillet','Main Course',8,'');
     [[ingIds['Atlantic Salmon'],1.6,'kg'],[ingIds['Cherry Tomatoes'],0.4,'kg'],[ingIds['Extra Virgin Olive Oil'],0.06,'liter']].forEach(([i,q,u])=>sri.run(uuid(),r3,i,q,u));
-    const m1=uuid(); db.prepare(`INSERT INTO menus (id,user_id,name,description,guest_count,markup,vat) VALUES (?,?,?,?,?,?,?)`).run(m1,userId,'Wedding Gala Menu','Premium 3-course menu',80,35,19);
-    db.prepare(`INSERT INTO menu_recipes (id,menu_id,recipe_id,portions) VALUES (?,?,?,?)`).run(uuid(),m1,r2,80);
-    db.prepare(`INSERT INTO menu_recipes (id,menu_id,recipe_id,portions) VALUES (?,?,?,?)`).run(uuid(),m1,r1,80);
-    const m2=uuid(); db.prepare(`INSERT INTO menus (id,user_id,name,description,guest_count,markup,vat) VALUES (?,?,?,?,?,?,?)`).run(m2,userId,'Corporate Lunch','Business catering package',30,30,19);
-    db.prepare(`INSERT INTO menu_recipes (id,menu_id,recipe_id,portions) VALUES (?,?,?,?)`).run(uuid(),m2,r3,30);
+    const m1=uuid(); db.prepare(`INSERT INTO menus (id,user_id,name,description,guest_count,markup,vat) VALUES (?,?,?,?,?,?,?)`).run(m1,userId,'Wedding Gala Menu','Premium 3-course menu',1,35,19);
+    db.prepare(`INSERT INTO menu_recipes (id,menu_id,recipe_id,portions) VALUES (?,?,?,?)`).run(uuid(),m1,r2,1);
+    db.prepare(`INSERT INTO menu_recipes (id,menu_id,recipe_id,portions) VALUES (?,?,?,?)`).run(uuid(),m1,r1,1);
+    const m2=uuid(); db.prepare(`INSERT INTO menus (id,user_id,name,description,guest_count,markup,vat) VALUES (?,?,?,?,?,?,?)`).run(m2,userId,'Corporate Lunch','Business catering package',1,30,19);
+    db.prepare(`INSERT INTO menu_recipes (id,menu_id,recipe_id,portions) VALUES (?,?,?,?)`).run(uuid(),m2,r3,1);
     const e1=uuid(); db.prepare(`INSERT INTO events (id,user_id,name,client_name,client_email,client_phone,event_date,guest_count,notes,status) VALUES (?,?,?,?,?,?,?,?,?,?)`).run(e1,userId,'Smith Wedding Reception','John & Emily Smith','smith@email.com','+40 722 111 222','2026-06-15',80,'Outdoor garden venue','Sent Offer');
     db.prepare(`INSERT INTO event_menus (id,event_id,menu_id,quantity) VALUES (?,?,?,?)`).run(uuid(),e1,m1,1);
     const e2=uuid(); db.prepare(`INSERT INTO events (id,user_id,name,client_name,client_email,client_phone,event_date,guest_count,notes,status) VALUES (?,?,?,?,?,?,?,?,?,?)`).run(e2,userId,'TechCorp Annual Dinner','TechCorp Ltd.','events@techcorp.com','+40 733 444 555','2026-05-25',30,'Conference room setup','Approved');

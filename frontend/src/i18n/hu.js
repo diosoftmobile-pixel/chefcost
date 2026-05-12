@@ -68,7 +68,7 @@ export default {
     none: 'Még nincs menü', newModal: 'Új menü', editModal: 'Menü szerkesztése',
     menuName: 'Menü neve *', descriptionLabel: 'Leírás',
     markupPct: 'Haszon %', vatPct: 'ÁFA %', recipesLabel: 'Receptek', addRecipeBtn: 'Hozzáadás',
-    selectRecipe: '— Recept kiválasztása —', portionsLabel: 'Adagok',
+    selectRecipe: '— Recept kiválasztása —', portionsLabel: 'Adag/fő',
     foodCostLabel: 'Ételköltség', pricePerPerson: 'Ár személyenként (ÁFÁ-val)',
     createMenu: 'Menü létrehozása', saveEdit: 'Mentés', confirmDelete: 'Törli ezt a menüt?',
     colRecipe: 'Recept', colPortions: 'Adagok', colCost: 'Költség',

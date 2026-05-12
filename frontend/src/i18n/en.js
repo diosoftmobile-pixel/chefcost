@@ -68,7 +68,7 @@ export default {
     none: 'No menus yet', newModal: 'New menu', editModal: 'Edit menu',
     menuName: 'Menu name *', descriptionLabel: 'Description',
     markupPct: 'Markup %', vatPct: 'VAT %', recipesLabel: 'Recipes', addRecipeBtn: 'Add',
-    selectRecipe: '— Select recipe —', portionsLabel: 'Portions',
+    selectRecipe: '— Select recipe —', portionsLabel: 'Portions/person',
     foodCostLabel: 'Food cost', pricePerPerson: 'Price per person (incl. VAT)',
     createMenu: 'Create menu', saveEdit: 'Save changes', confirmDelete: 'Delete this menu?',
     colRecipe: 'Recipe', colPortions: 'Portions', colCost: 'Cost',
