@@ -26,7 +26,7 @@ router.get('/tools', (req, res) => {
 // ── Category index ────────────────────────────────────────────────────────────
 router.get('/tools/:category', (req, res) => {
   const { category } = req.params;
-  const validCategories = ['recipe', 'allergen', 'event'];
+  const validCategories = ['recipe', 'allergen', 'event', 'tool'];
   if (!validCategories.includes(category)) return res.status(404).send('Not found');
 
   const pages = PAGES.filter(p => p.category === category);

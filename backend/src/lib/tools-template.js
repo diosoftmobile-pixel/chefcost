@@ -12,6 +12,7 @@ export function buildToolPage(page, allPages) {
     recipe: 'Recipe Cost Calculators',
     allergen: 'Allergen Guides',
     event: 'Event Planning Calculators',
+    tool: 'Business Tools for Chefs',
   }[category] || 'Tools';
 
   const relatedPages = (related || [])
@@ -725,6 +726,7 @@ export function buildToolPage(page, allPages) {
     <a href="/tools/recipe">Recipe Calculators</a> &nbsp;·&nbsp;
     <a href="/tools/allergen">Allergen Guides</a> &nbsp;·&nbsp;
     <a href="/tools/event">Event Planners</a> &nbsp;·&nbsp;
+    <a href="/tools/tool">Business Tools</a> &nbsp;·&nbsp;
     <a href="/privacy">Privacy Policy</a>
   </footer>
 
@@ -814,6 +816,7 @@ export function buildCategoryPage(category, pages) {
     recipe: { title: 'Free Recipe Food Cost Calculators', desc: 'Calculate the exact food cost per portion for popular restaurant dishes. Free online calculators for professional chefs.', h1: 'Recipe Food Cost Calculators' },
     allergen: { title: 'Allergen-Free Event Planning Guides & Calculators', desc: 'Plan catering for guests with dietary restrictions. Free allergen guides and cost calculators for professional caterers.', h1: 'Allergen & Dietary Event Planning Guides' },
     event: { title: 'Catering Event Cost Calculators — Free Online Tools', desc: 'Calculate food costs and per-head pricing for any catering event. Free tools for professional caterers and event chefs.', h1: 'Catering Event Cost Calculators' },
+    tool: { title: 'Business Tools & Calculators for Chefs and Caterers', desc: 'Margin, VAT, prime cost, portion scaling and yield calculators — every back-office calculation a professional kitchen needs.', h1: 'Business Tools for Chefs and Caterers' },
   };
 
   const meta = labels[category] || { title: category, desc: '', h1: category };
@@ -903,11 +906,12 @@ export function buildCategoryPage(category, pages) {
  * Builds the top-level /tools index page.
  */
 export function buildToolsIndex(allPages) {
-  const categories = ['recipe', 'allergen', 'event'];
+  const categories = ['recipe', 'allergen', 'event', 'tool'];
   const catMeta = {
     recipe: { label: 'Recipe Calculators', desc: 'Per-portion food cost for classic restaurant dishes.', icon: '🍽️' },
     allergen: { label: 'Allergen & Dietary Guides', desc: 'Event menus for guests with dietary restrictions.', icon: '🌿' },
     event: { label: 'Event & Catering Planners', desc: 'Per-head pricing and batch costing for any event.', icon: '📋' },
+    tool: { label: 'Business Tools for Chefs', desc: 'Margin, VAT, prime cost, scaling and other back-office calculators.', icon: '🧮' },
   };
 
   const catCards = categories.map(cat => {
@@ -994,7 +998,7 @@ export function buildSitemap(allPages) {
     <priority>0.7</priority>
   </url>`).join('');
 
-  const catTags = ['recipe', 'allergen', 'event'].map(cat => `
+  const catTags = ['recipe', 'allergen', 'event', 'tool'].map(cat => `
   <url>
     <loc>https://app4chef.com/tools/${cat}</loc>
     <lastmod>${today}</lastmod>
