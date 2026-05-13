@@ -112,7 +112,7 @@ function NavBar({ onLogin, onRegister }) {
 
 function DashboardMockup() {
   return (
-    <div className="relative">
+    <div className="relative" style={{ color: '#1A1916' }}>
       <div className="rounded-[2rem] border border-white/15 bg-white p-4 shadow-2xl shadow-black/40">
         <div className="rounded-[1.4rem] bg-[#f7f4ef] p-5">
           <div className="mb-5 flex items-center justify-between">
@@ -162,13 +162,14 @@ function DashboardMockup() {
           </div>
         </div>
       </div>
-      <div className="absolute -bottom-10 -right-4 hidden w-52 rounded-[2rem] border border-white/20 bg-white p-3 shadow-2xl lg:block">
+      <div className="absolute -bottom-10 -right-4 hidden w-52 rounded-[2rem] border border-white/20 bg-white p-3 shadow-2xl lg:block"
+           style={{ color: '#1A1916' }}>
         <div className="h-28 rounded-2xl bg-gradient-to-br from-[#2b2117] to-[#c08f43]" />
         <div className="p-2">
           <p className="font-bold text-[#1A1916]">Beef Tenderloin</p>
           <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
-            <div><p className="text-gray-500">Per portion</p><p className="font-black">€4.28</p></div>
-            <div><p className="text-gray-500">Allergens</p><p className="font-black">G · M · E</p></div>
+            <div><p className="text-gray-500">Per portion</p><p className="font-black text-[#1A1916]">€4.28</p></div>
+            <div><p className="text-gray-500">Allergens</p><p className="font-black text-[#1A1916]">G · M · E</p></div>
           </div>
           <div className="mt-3 flex gap-1">
             {allergens.slice(0,5).map(a => (
