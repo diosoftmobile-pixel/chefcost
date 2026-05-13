@@ -114,6 +114,29 @@ const alterColumns = [
   "ALTER TABLE menus ADD COLUMN ai_analysis TEXT DEFAULT NULL",
   "ALTER TABLE menus ADD COLUMN ai_analyzed_at TEXT DEFAULT NULL",
   "ALTER TABLE users ADD COLUMN profit_margin REAL NOT NULL DEFAULT 30",
+  // Ingredient: yield & nutrition
+  "ALTER TABLE ingredients ADD COLUMN yield_pct REAL NOT NULL DEFAULT 100",
+  "ALTER TABLE ingredients ADD COLUMN cal_per_100g REAL NOT NULL DEFAULT 0",
+  "ALTER TABLE ingredients ADD COLUMN protein_per_100g REAL NOT NULL DEFAULT 0",
+  "ALTER TABLE ingredients ADD COLUMN carbs_per_100g REAL NOT NULL DEFAULT 0",
+  "ALTER TABLE ingredients ADD COLUMN fat_per_100g REAL NOT NULL DEFAULT 0",
+  // Events: location & operational costs
+  "ALTER TABLE events ADD COLUMN location TEXT DEFAULT ''",
+  "ALTER TABLE events ADD COLUMN staff_cost REAL NOT NULL DEFAULT 0",
+  "ALTER TABLE events ADD COLUMN transport_cost REAL NOT NULL DEFAULT 0",
+  "ALTER TABLE events ADD COLUMN rental_cost REAL NOT NULL DEFAULT 0",
+  "ALTER TABLE events ADD COLUMN packaging_cost REAL NOT NULL DEFAULT 0",
+  "ALTER TABLE events ADD COLUMN other_costs REAL NOT NULL DEFAULT 0",
+  // Users: company profile & defaults
+  "ALTER TABLE users ADD COLUMN company_name TEXT DEFAULT ''",
+  "ALTER TABLE users ADD COLUMN company_address TEXT DEFAULT ''",
+  "ALTER TABLE users ADD COLUMN vat_number TEXT DEFAULT ''",
+  "ALTER TABLE users ADD COLUMN company_email TEXT DEFAULT ''",
+  "ALTER TABLE users ADD COLUMN company_phone TEXT DEFAULT ''",
+  "ALTER TABLE users ADD COLUMN default_vat REAL NOT NULL DEFAULT 19",
+  "ALTER TABLE users ADD COLUMN food_cost_target REAL NOT NULL DEFAULT 32",
+  // Menus: quote_number for PDF Quotes screen
+  "ALTER TABLE events ADD COLUMN quote_number TEXT DEFAULT NULL",
 ];
 for (const sql of alterColumns) {
   try { db.exec(sql); } catch {}

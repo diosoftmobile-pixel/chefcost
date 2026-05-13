@@ -15,93 +15,149 @@ function changeLang(code) {
   localStorage.setItem('cc_lang', code);
 }
 
+function NavItem({ to, icon, label, badge, end }) {
+  return (
+    <NavLink to={to} end={end} className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+      <i className={`ti ${icon}`}></i>
+      <span className="nav-label-text">{label}</span>
+      {badge !== undefined && badge !== null && (
+        <span className="nav-badge">{badge}</span>
+      )}
+    </NavLink>
+  );
+}
+
 export default function Layout() {
   const { user, logout, ingredients, recipes, menus, events, isPaid } = useApp();
   const { t, i18n: i18nInst } = useTranslation();
 
+  const initials = (user?.name || 'U').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+
   return (
     <div className="app">
       <aside className="sidebar">
+        {/* Brand */}
         <div className="sidebar-brand">
           <div className="brand-icon"><i className="ti ti-chef-hat"></i></div>
-          <div className="brand-name">App4Chef</div>
-          <div className="brand-sub">{t('nav.brandSub')}</div>
+          <div>
+            <div className="brand-name">App4Chef</div>
+            <div className="brand-sub">{t('nav.brandSub')}</div>
+          </div>
         </div>
+
+        {/* Workspace card */}
+        <div className="sidebar-workspace">
+          <div className="workspace-avatar">{initials}</div>
+          <div className="workspace-info">
+            <div className="workspace-name">{user?.name}</div>
+            <div className="workspace-plan">
+              {user?.subscription_status === 'active' ? t('nav.planPro') :
+               user?.subscription_status === 'trial' ? t('nav.planTrial') :
+               t('nav.planFree')}
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation */}
         <nav className="sidebar-nav">
           <div className="nav-section">
-            <div className="nav-label">{t('nav.overview')}</div>
-            <NavLink to="/" end className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
-              <i className="ti ti-layout-dashboard"></i> {t('nav.dashboard')}
-            </NavLink>
+            <div className="nav-section-label">{t('nav.overview')}</div>
+            <NavItem to="/" end icon="ti-layout-dashboard" label={t('nav.dashboard')} />
           </div>
+
           <div className="nav-section">
-            <div className="nav-label">{t('nav.costing')}</div>
-            <NavLink to="/ingredients" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
-              <i className="ti ti-basket"></i> {t('nav.ingredients')}
-              <span className="nav-badge">{ingredients.length}</span>
-            </NavLink>
-            <NavLink to="/recipes" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
-              <i className="ti ti-notebook"></i> {t('nav.recipes')}
-              <span className="nav-badge">{recipes.length}</span>
-            </NavLink>
-            <NavLink to="/menus" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
-              <i className="ti ti-list"></i> {t('nav.menus')}
-              <span className="nav-badge">{menus.length}</span>
-            </NavLink>
+            <div className="nav-section-label">{t('nav.costing')}</div>
+            <NavItem to="/ingredients" icon="ti-basket" label={t('nav.ingredients')} badge={ingredients.length} />
+            <NavItem to="/recipes" icon="ti-notebook" label={t('nav.recipes')} badge={recipes.length} />
+            <NavItem to="/menus" icon="ti-list" label={t('nav.menus')} badge={menus.length} />
           </div>
+
           <div className="nav-section">
-            <div className="nav-label">{t('nav.operations')}</div>
-            <NavLink to="/events" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
-              <i className="ti ti-calendar-event"></i> {t('nav.events')}
-              <span className="nav-badge">{events.length}</span>
-            </NavLink>
+            <div className="nav-section-label">{t('nav.operations')}</div>
+            <NavItem to="/events" icon="ti-calendar-event" label={t('nav.events')} badge={events.length} />
+            <NavItem to="/quotes" icon="ti-file-invoice" label={t('nav.quotes')} />
           </div>
+
           <div className="nav-section">
-            <div className="nav-label">{t('nav.account')}</div>
-            <NavLink to="/settings" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
-              <i className="ti ti-settings"></i> {t('nav.settings')}
-            </NavLink>
-            <NavLink to="/billing" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
-              <i className="ti ti-credit-card"></i> {t('nav.billing')}
-              {!isPaid && <span className="nav-badge" style={{ background: 'var(--amber)', color: '#000' }}>FREE</span>}
-            </NavLink>
+            <div className="nav-section-label">{t('nav.insights')}</div>
+            <NavItem to="/allergens" icon="ti-shield-check" label={t('nav.allergens')} />
+            <NavItem to="/reports" icon="ti-chart-bar" label={t('nav.reports')} />
+            <NavItem to="/ai-advisor" icon="ti-robot" label={t('nav.aiAdvisor')} />
           </div>
+
+          <div className="nav-section">
+            <div className="nav-section-label">{t('nav.account')}</div>
+            <NavItem to="/settings" icon="ti-settings" label={t('nav.settings')} />
+            <NavItem
+              to="/billing"
+              icon="ti-credit-card"
+              label={t('nav.billing')}
+              badge={!isPaid ? 'FREE' : null}
+            />
+          </div>
+
           {user?.role === 'admin' && (
             <div className="nav-section">
-              <div className="nav-label">{t('nav.administration')}</div>
-              <NavLink to="/admin" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
-                <i className="ti ti-shield-lock"></i> {t('nav.admin')}
-              </NavLink>
+              <div className="nav-section-label">{t('nav.administration')}</div>
+              <NavItem to="/admin" icon="ti-shield-lock" label={t('nav.admin')} />
             </div>
           )}
         </nav>
+
+        {/* AI Promo card */}
+        <div className="sidebar-ai-card">
+          <div className="ai-card-icon">🤖</div>
+          <div className="ai-card-text">
+            <div className="ai-card-title">{t('nav.aiCardTitle')}</div>
+            <div className="ai-card-desc">{t('nav.aiCardDesc')}</div>
+          </div>
+        </div>
+
+        {/* Footer */}
         <div className="sidebar-footer">
-          <div style={{ display: 'flex', gap: 4, marginBottom: 10 }}>
+          <div className="sidebar-langs">
             {LANGS.map(l => (
               <button
                 key={l.code}
                 onClick={() => changeLang(l.code)}
-                style={{
-                  flex: 1, fontSize: 11, padding: '3px 0', border: '1px solid var(--border)',
-                  borderRadius: 4, cursor: 'pointer', fontWeight: i18nInst.language === l.code ? 700 : 400,
-                  background: i18nInst.language === l.code ? 'var(--accent)' : 'transparent',
-                  color: i18nInst.language === l.code ? '#fff' : 'var(--text3)',
-                }}
+                className={`lang-btn${i18nInst.language === l.code ? ' active' : ''}`}
               >
                 {l.label}
               </button>
             ))}
           </div>
-          <div style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 8 }}>
-            <i className="ti ti-user" style={{ marginRight: 6 }}></i>
-            {user?.name} <span className="badge badge-gray" style={{ marginLeft: 4 }}>{user?.role}</span>
-          </div>
-          <button className="btn btn-ghost" style={{ width: '100%', justifyContent: 'center', fontSize: 12 }} onClick={logout}>
-            <i className="ti ti-logout"></i> {t('nav.signOut')}
+          <button className="btn btn-ghost sidebar-logout" onClick={logout}>
+            <i className="ti ti-logout"></i>
+            <span className="nav-label-text">{t('nav.signOut')}</span>
           </button>
         </div>
       </aside>
+
       <div className="main">
+        {/* Mobile bottom nav */}
+        <nav className="mobile-bottom-nav">
+          <NavLink to="/" end className={({ isActive }) => `mobile-nav-item${isActive ? ' active' : ''}`}>
+            <i className="ti ti-layout-dashboard"></i>
+            <span>{t('nav.dashboard')}</span>
+          </NavLink>
+          <NavLink to="/ingredients" className={({ isActive }) => `mobile-nav-item${isActive ? ' active' : ''}`}>
+            <i className="ti ti-basket"></i>
+            <span>{t('nav.ingredients')}</span>
+          </NavLink>
+          <NavLink to="/menus" className={({ isActive }) => `mobile-nav-item${isActive ? ' active' : ''}`}>
+            <i className="ti ti-list"></i>
+            <span>{t('nav.menus')}</span>
+          </NavLink>
+          <NavLink to="/events" className={({ isActive }) => `mobile-nav-item${isActive ? ' active' : ''}`}>
+            <i className="ti ti-calendar-event"></i>
+            <span>{t('nav.events')}</span>
+          </NavLink>
+          <NavLink to="/settings" className={({ isActive }) => `mobile-nav-item${isActive ? ' active' : ''}`}>
+            <i className="ti ti-settings"></i>
+            <span>{t('nav.settings')}</span>
+          </NavLink>
+        </nav>
+
         <Outlet />
       </div>
     </div>

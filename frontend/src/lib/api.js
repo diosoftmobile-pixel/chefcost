@@ -27,6 +27,7 @@ export const api = {
   createRecipe: (d) => req('POST', '/recipes', d),
   updateRecipe: (id, d) => req('PUT', `/recipes/${id}`, d),
   deleteRecipe: (id) => req('DELETE', `/recipes/${id}`),
+  duplicateRecipe: (id) => req('POST', `/recipes/${id}/duplicate`),
 
   getMenus: () => req('GET', '/menus'),
   createMenu: (d) => req('POST', '/menus', d),
@@ -38,6 +39,8 @@ export const api = {
   createEvent: (d) => req('POST', '/events', d),
   updateEvent: (id, d) => req('PUT', `/events/${id}`, d),
   deleteEvent: (id) => req('DELETE', `/events/${id}`),
+  markEventSent: (id) => req('POST', `/events/${id}/mark-sent`),
+  duplicateEvent: (id) => req('POST', `/events/${id}/duplicate`),
 
   getAdminUsers: () => req('GET', '/admin/users'),
   deleteAdminUser: (id) => req('DELETE', `/admin/users/${id}`),
@@ -54,4 +57,11 @@ export const api = {
   createPortal: () => req('POST', '/billing/portal'),
   cancelSubscription: () => req('POST', '/billing/cancel'),
   reactivateSubscription: () => req('POST', '/billing/reactivate'),
+
+  // Reports
+  getMenuReport: () => req('GET', '/reports/menus'),
+  getEventReport: () => req('GET', '/reports/events'),
+  getIngredientReport: () => req('GET', '/reports/ingredients'),
+  getAllergenReport: () => req('GET', '/reports/allergens'),
+  getMonthlyReport: () => req('GET', '/reports/monthly'),
 };

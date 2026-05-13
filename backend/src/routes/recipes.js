@@ -67,4 +67,22 @@ router.delete('/:id', requireSubscription, (req, res) => {
   res.json({ ok: true });
 });
 
+router.post('/:id/duplicate', requireSubscription, (req, res) => {
+  const original = getRecipeWithIngredients(req.params.id);
+  if (!original || original.user_id !== req.user.id) return res.status(404).json({ error: 'Not found' });
+  const newId = uuid();
+  const tx = db.transaction(() => {
+    db.prepare('INSERT INTO recipes (id,user_id,name,category,portions,notes) VALUES (?,?,?,?,?,?)').run(
+      newId, req.user.id, original.name + ' (copy)', original.category, original.portions, original.notes
+    );
+    (original.ingredients || []).forEach(i => {
+      db.prepare('INSERT INTO recipe_ingredients (id,recipe_id,ingredient_id,qty,unit) VALUES (?,?,?,?,?)').run(
+        uuid(), newId, i.ingredient_id, i.qty, i.unit || 'kg'
+      );
+    });
+  });
+  tx();
+  res.status(201).json(getRecipeWithIngredients(newId));
+});
+
 export default router;

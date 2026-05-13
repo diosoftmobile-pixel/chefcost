@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../hooks/useApp.jsx';
 import { api } from '../lib/api.js';
-import { fmt, calcRecipeCost, calcCostPerPortion, unitPrice } from '../lib/calc.js';
+import { fmt, calcRecipeCost, calcCostPerPortion, calcCaloriesPerPortion, usableCost } from '../lib/calc.js';
 import { ALLERGENS, getRecipeAllergens } from '../lib/allergens.js';
 import Modal from '../components/Modal.jsx';
 
@@ -16,10 +16,13 @@ export default function Recipes() {
   const { recipes, setRecipes, ingredients, isPaid } = useApp();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [search, setSearch] = useState('');
+  const [filterCat, setFilterCat] = useState('');
   const [modal, setModal] = useState(null);
   const [viewId, setViewId] = useState(null);
   const [form, setForm] = useState(blank());
   const [saving, setSaving] = useState(false);
+  const [duplicating, setDuplicating] = useState(null);
 
   const openAdd = () => { setForm(blank()); setModal('add'); };
   const openEdit = r => { setForm({ ...r, ingredients: r.ingredients.map(i => ({ ...i })) }); setModal(r.id); };
@@ -32,7 +35,7 @@ export default function Recipes() {
 
   const totalCost = form.ingredients.reduce((s, ri) => {
     const ing = ingredients.find(i => i.id === ri.ingredient_id);
-    return s + (ing ? unitPrice(ing) * +ri.qty : 0);
+    return s + (ing ? usableCost(ing) * +ri.qty : 0);
   }, 0);
 
   const save = async () => {
@@ -53,8 +56,22 @@ export default function Recipes() {
     setRecipes(p => p.filter(r => r.id !== id));
   };
 
+  const duplicate = async id => {
+    setDuplicating(id);
+    try {
+      const copy = await api.duplicateRecipe(id);
+      setRecipes(p => [...p, copy]);
+    } catch (e) { alert(e.message); }
+    finally { setDuplicating(null); }
+  };
+
   const tCat = cat => { const idx = CATS.indexOf(cat); return idx >= 0 ? t(`recipes.${CAT_KEYS[idx]}`) : cat; };
   const viewing = viewId ? recipes.find(r => r.id === viewId) : null;
+
+  const filtered = recipes.filter(r =>
+    r.name.toLowerCase().includes(search.toLowerCase()) &&
+    (!filterCat || r.category === filterCat)
+  );
 
   return (
     <>
@@ -67,8 +84,8 @@ export default function Recipes() {
       </div>
 
       {!isPaid && (
-        <div style={{ margin: '0 0 16px', padding: '12px 20px', background: 'var(--amber-soft, #fef9ec)', border: '1px solid var(--amber, #f59e0b)', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
-          <i className="ti ti-lock" style={{ color: 'var(--amber, #f59e0b)', fontSize: 18 }}></i>
+        <div style={{ margin: '0 0 16px', padding: '12px 20px', background: '#fef9ec', border: '1px solid #f59e0b', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <i className="ti ti-lock" style={{ color: '#f59e0b', fontSize: 18 }}></i>
           <div>
             <div style={{ fontWeight: 600, fontSize: 13 }}>{t('recipes.lockedTitle')}</div>
             <div style={{ fontSize: 12, color: 'var(--text3)', marginTop: 2 }}>{t('recipes.lockedDesc')}</div>
@@ -80,20 +97,52 @@ export default function Recipes() {
       )}
 
       <div className="page-content">
+        <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
+          <div className="search-wrap" style={{ flex: 1, minWidth: 200 }}>
+            <i className="ti ti-search"></i>
+            <input className="form-control" placeholder={t('recipes.searchPlaceholder', 'Search recipes…')} value={search} onChange={e => setSearch(e.target.value)} style={{ paddingLeft: 34 }} />
+          </div>
+          <select className="form-control" style={{ width: 180 }} value={filterCat} onChange={e => setFilterCat(e.target.value)}>
+            <option value="">{t('ingredients.allCategories')}</option>
+            {CATS.map((c, i) => <option key={c} value={c}>{t(`recipes.${CAT_KEYS[i]}`)}</option>)}
+          </select>
+        </div>
+
         <div className="card">
           <table>
-            <thead><tr><th>{t('recipes.colRecipe')}</th><th>{t('recipes.colCategory')}</th><th>{t('recipes.colPortions')}</th><th>{t('recipes.colTotalCost')}</th><th>{t('recipes.colCostPerPortion')}</th><th>{t('recipes.colIngredients')}</th><th>{t('recipes.colAllergens')}</th><th></th></tr></thead>
+            <thead>
+              <tr>
+                <th>{t('recipes.colRecipe')}</th>
+                <th>{t('recipes.colCategory')}</th>
+                <th>{t('recipes.colPortions')}</th>
+                <th>{t('recipes.colTotalCost')}</th>
+                <th>{t('recipes.colCostPerPortion')}</th>
+                <th>{t('recipes.colCalories')}</th>
+                <th>{t('recipes.colIngredients')}</th>
+                <th>{t('recipes.colAllergens')}</th>
+                <th></th>
+              </tr>
+            </thead>
             <tbody>
-              {recipes.length === 0 && <tr><td colSpan={8}><div className="empty-state"><i className="ti ti-notebook"></i><p>{t('recipes.none')}</p></div></td></tr>}
-              {recipes.map(r => {
+              {filtered.length === 0 && (
+                <tr><td colSpan={9}>
+                  <div className="empty-state">
+                    <i className="ti ti-notebook"></i>
+                    <p>{search || filterCat ? t('ingredients.noResults') : t('recipes.none')}</p>
+                  </div>
+                </td></tr>
+              )}
+              {filtered.map(r => {
                 const allergenKeys = getRecipeAllergens(r, ingredients);
+                const cal = calcCaloriesPerPortion(r, ingredients);
                 return (
                   <tr key={r.id}>
-                    <td>{r.name}</td>
+                    <td style={{ fontWeight: 500 }}>{r.name}</td>
                     <td><span className="badge badge-gray">{tCat(r.category)}</span></td>
                     <td>{r.portions}</td>
                     <td className="mono">{fmt(calcRecipeCost(r, ingredients))}</td>
                     <td className="mono accent">{fmt(calcCostPerPortion(r, ingredients))}</td>
+                    <td>{cal > 0 ? <span style={{ fontSize: 12 }}>{Math.round(cal)} kcal</span> : <span className="text3">—</span>}</td>
                     <td><span className="badge badge-blue">{r.ingredients?.length || 0} {t('common.items')}</span></td>
                     <td>
                       {allergenKeys.length > 0
@@ -105,12 +154,19 @@ export default function Recipes() {
                           </div>
                         : <span style={{ color: 'var(--text3)', fontSize: 12 }}>—</span>}
                     </td>
-                    <td><div className="action-btns">
-                      <button className="icon-btn" onClick={() => setViewId(r.id)}><i className="ti ti-eye"></i></button>
-                      {isPaid && <button className="icon-btn" onClick={() => openEdit(r)}><i className="ti ti-edit"></i></button>}
-                      {isPaid && <button className="icon-btn danger" onClick={() => del(r.id)}><i className="ti ti-trash"></i></button>}
-                      {!isPaid && <i className="ti ti-lock" style={{ color: 'var(--text3)', fontSize: 14, padding: '0 8px' }}></i>}
-                    </div></td>
+                    <td>
+                      <div className="action-btns">
+                        <button className="icon-btn" onClick={() => setViewId(r.id)}><i className="ti ti-eye"></i></button>
+                        {isPaid && (
+                          <button className="icon-btn" title={t('recipes.duplicate')} onClick={() => duplicate(r.id)} disabled={duplicating === r.id}>
+                            <i className={`ti ${duplicating === r.id ? 'ti-loader-2' : 'ti-copy'}`}></i>
+                          </button>
+                        )}
+                        {isPaid && <button className="icon-btn" onClick={() => openEdit(r)}><i className="ti ti-edit"></i></button>}
+                        {isPaid && <button className="icon-btn danger" onClick={() => del(r.id)}><i className="ti ti-trash"></i></button>}
+                        {!isPaid && <i className="ti ti-lock" style={{ color: 'var(--text3)', fontSize: 14, padding: '0 8px' }}></i>}
+                      </div>
+                    </td>
                   </tr>
                 );
               })}
@@ -123,14 +179,26 @@ export default function Recipes() {
         <Modal title={modal === 'add' ? t('recipes.newModal') : t('recipes.editModal')} onClose={close}
           footer={<><button className="btn" onClick={close}>{t('common.cancel')}</button><button className="btn btn-primary" onClick={save} disabled={saving}>{saving ? t('common.saving') : modal === 'add' ? t('recipes.createRecipe') : t('recipes.saveEdit')}</button></>}>
           <div className="form-row">
-            <div className="form-group"><label className="form-label">{t('recipes.recipeName')}</label><input className="form-control" value={form.name} onChange={e => set('name', e.target.value)} /></div>
-            <div className="form-group"><label className="form-label">{t('recipes.categoryLabel')}</label>
-              <select className="form-control" value={form.category} onChange={e => set('category', e.target.value)}>{CATS.map((c, i) => <option key={c} value={c}>{t(`recipes.${CAT_KEYS[i]}`)}</option>)}</select>
+            <div className="form-group">
+              <label className="form-label">{t('recipes.recipeName')}</label>
+              <input className="form-control" value={form.name} onChange={e => set('name', e.target.value)} />
+            </div>
+            <div className="form-group">
+              <label className="form-label">{t('recipes.categoryLabel')}</label>
+              <select className="form-control" value={form.category} onChange={e => set('category', e.target.value)}>
+                {CATS.map((c, i) => <option key={c} value={c}>{t(`recipes.${CAT_KEYS[i]}`)}</option>)}
+              </select>
             </div>
           </div>
           <div className="form-row">
-            <div className="form-group"><label className="form-label">{t('recipes.portionsLabel')}</label><input className="form-control" type="number" min="1" value={form.portions} onChange={e => set('portions', e.target.value)} /></div>
-            <div className="form-group"><label className="form-label">{t('recipes.notesLabel')}</label><input className="form-control" value={form.notes} onChange={e => set('notes', e.target.value)} /></div>
+            <div className="form-group">
+              <label className="form-label">{t('recipes.portionsLabel')}</label>
+              <input className="form-control" type="number" min="1" value={form.portions} onChange={e => set('portions', e.target.value)} />
+            </div>
+            <div className="form-group">
+              <label className="form-label">{t('recipes.notesLabel')}</label>
+              <input className="form-control" value={form.notes} onChange={e => set('notes', e.target.value)} />
+            </div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '16px 0 8px' }}>
             <label className="form-label" style={{ margin: 0 }}>{t('recipes.ingredientsLabel')}</label>
@@ -138,19 +206,28 @@ export default function Recipes() {
           </div>
           {form.ingredients.map((ri, idx) => {
             const ing = ingredients.find(i => i.id === ri.ingredient_id);
-            const cost = ing ? unitPrice(ing) * +ri.qty : 0;
-            return <div key={idx}>
-              <div className="ing-row">
-                <select className="form-control" style={{ fontSize: 12 }} value={ri.ingredient_id} onChange={e => setIng(idx, 'ingredient_id', e.target.value)}>
-                  <option value="">{t('recipes.selectIngredient')}</option>
-                  {ingredients.map(i => <option key={i.id} value={i.id}>{i.name}</option>)}
-                </select>
-                <input className="form-control" type="number" step="0.001" min="0" value={ri.qty} style={{ fontSize: 12 }} onChange={e => setIng(idx, 'qty', e.target.value)} />
-                <select className="form-control" style={{ fontSize: 12 }} value={ri.unit} onChange={e => setIng(idx, 'unit', e.target.value)}>{UNITS.map(u => <option key={u}>{u}</option>)}</select>
-                <button className="icon-btn danger" onClick={() => removeIng(idx)}><i className="ti ti-x"></i></button>
+            const cost = ing ? usableCost(ing) * +ri.qty : 0;
+            const hasYield = ing && parseFloat(ing.yield_pct) > 0 && parseFloat(ing.yield_pct) < 100;
+            return (
+              <div key={idx}>
+                <div className="ing-row">
+                  <select className="form-control" style={{ fontSize: 12 }} value={ri.ingredient_id} onChange={e => setIng(idx, 'ingredient_id', e.target.value)}>
+                    <option value="">{t('recipes.selectIngredient')}</option>
+                    {ingredients.map(i => <option key={i.id} value={i.id}>{i.name}</option>)}
+                  </select>
+                  <input className="form-control" type="number" step="0.001" min="0" value={ri.qty} style={{ fontSize: 12 }} onChange={e => setIng(idx, 'qty', e.target.value)} />
+                  <select className="form-control" style={{ fontSize: 12 }} value={ri.unit} onChange={e => setIng(idx, 'unit', e.target.value)}>
+                    {UNITS.map(u => <option key={u}>{u}</option>)}
+                  </select>
+                  <button className="icon-btn danger" onClick={() => removeIng(idx)}><i className="ti ti-x"></i></button>
+                </div>
+                {ing && (
+                  <div style={{ textAlign: 'right', fontSize: 11, color: hasYield ? 'var(--amber)' : 'var(--text3)', padding: '2px 0 6px', fontFamily: 'var(--mono)' }}>
+                    {fmt(cost)} {hasYield ? `(yield-adjusted)` : ''}
+                  </div>
+                )}
               </div>
-              {ing && <div style={{ textAlign: 'right', fontSize: 11, color: 'var(--text3)', padding: '2px 0 6px', fontFamily: 'var(--mono)' }}>{fmt(cost)}</div>}
-            </div>;
+            );
           })}
           <div className="summary-box">
             <div className="summary-row"><span>{t('recipes.totalRecipeCost')}</span><span>{fmt(totalCost)}</span></div>
@@ -165,12 +242,15 @@ export default function Recipes() {
           <div style={{ display: 'flex', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
             <span className="badge badge-gray">{tCat(viewing.category)}</span>
             <span className="badge badge-blue">{viewing.portions} {t('common.portions')}</span>
+            {calcCaloriesPerPortion(viewing, ingredients) > 0 && (
+              <span className="badge badge-green">~{Math.round(calcCaloriesPerPortion(viewing, ingredients))} kcal / {t('common.portion')}</span>
+            )}
           </div>
           {(() => {
             const allergenKeys = getRecipeAllergens(viewing, ingredients);
             return allergenKeys.length > 0 ? (
-              <div style={{ marginBottom: 16, padding: '10px 14px', background: 'var(--amber-soft, #fef9ec)', border: '1px solid var(--amber, #f59e0b)', borderRadius: 8 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--amber, #f59e0b)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>
+              <div style={{ marginBottom: 16, padding: '10px 14px', background: '#fef9ec', border: '1px solid #f59e0b', borderRadius: 8 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>
                   {t('recipes.allergensLabel')} (EU)
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
@@ -188,11 +268,18 @@ export default function Recipes() {
               {(viewing.ingredients || []).map(ri => {
                 const ing = ingredients.find(i => i.id === ri.ingredient_id);
                 if (!ing) return null;
-                return <tr key={ri.id || ri.ingredient_id}>
-                  <td>{ing.name}</td><td>{ri.qty} {ri.unit}</td>
-                  <td>{fmt(unitPrice(ing))}/{ing.unit}</td>
-                  <td className="mono accent">{fmt(unitPrice(ing) * ri.qty)}</td>
-                </tr>;
+                const hasYield = parseFloat(ing.yield_pct) > 0 && parseFloat(ing.yield_pct) < 100;
+                return (
+                  <tr key={ri.id || ri.ingredient_id}>
+                    <td>
+                      {ing.name}
+                      {hasYield && <span style={{ fontSize: 10, color: 'var(--amber)', marginLeft: 4 }}>{ing.yield_pct}% yield</span>}
+                    </td>
+                    <td>{ri.qty} {ri.unit}</td>
+                    <td>{fmt(usableCost(ing))}/{ing.unit}</td>
+                    <td className="mono accent">{fmt(usableCost(ing) * ri.qty)}</td>
+                  </tr>
+                );
               })}
             </tbody>
           </table>

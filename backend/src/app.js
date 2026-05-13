@@ -8,6 +8,7 @@ import eventRoutes from './routes/events.js';
 import adminRoutes from './routes/admin.js';
 import settingsRoutes from './routes/settings.js';
 import billingRoutes from './routes/billing.js';
+import reportsRoutes from './routes/reports.js';
 
 export function createApp() {
   const app = express();
@@ -24,6 +25,7 @@ export function createApp() {
   app.use('/api/admin', adminRoutes);
   app.use('/api/settings', settingsRoutes);
   app.use('/api/billing', billingRoutes);
+  app.use('/api/reports', reportsRoutes);
 
   app.use((err, req, res, next) => {
     console.error(err);
