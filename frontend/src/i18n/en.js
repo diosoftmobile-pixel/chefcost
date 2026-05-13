@@ -33,7 +33,7 @@ export default {
     allActiveEvents: 'All active events', ingredients: 'ingredients',
     confirmedBookings: 'Confirmed bookings', recipeCostRanking: 'Recipe Cost Ranking',
     noRecipes: 'No recipes yet', upcomingEvents: 'Upcoming Events', noEvents: 'No events yet',
-    perPortion: '/portion', subtitle: 'Here's your kitchen at a glance.',
+    perPortion: '/portion', subtitle: "Here's your kitchen at a glance.",
     goodMorning: 'Good morning', goodAfternoon: 'Good afternoon', goodEvening: 'Good evening',
     newEvent: 'New event', avgFoodCost: 'Avg Food Cost %', grossMargin: 'Gross Margin',
     target: 'Target:', profit: 'profit', revenue: 'revenue',
