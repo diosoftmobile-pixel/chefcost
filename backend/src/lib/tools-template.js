@@ -1,4 +1,4 @@
-// ── Shared analytics snippet (GA4 + Microsoft Clarity placeholder) ─────────────
+// ── Shared analytics snippet (GA4 + Microsoft Clarity) ─────────────────────────
 // Injected into every SSR tool page so traffic is captured the same as the SPA.
 const ANALYTICS_SNIPPET = `
   <!-- Google Analytics 4 -->
@@ -8,6 +8,15 @@ const ANALYTICS_SNIPPET = `
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-V9JWPMLF45', { anonymize_ip: true });
+  </script>
+
+  <!-- Microsoft Clarity (session recordings + heatmaps) -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "wqmvajwdi7");
   </script>`;
 
 /**
