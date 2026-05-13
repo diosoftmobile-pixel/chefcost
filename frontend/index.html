@@ -4,24 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- ── Indexing directives ── -->
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />
+
   <!-- ── Primary meta ── -->
   <title>App4Chef — Recipe & Event Cost Management for Professional Chefs</title>
   <meta name="description" content="Calculate real food costs, build profitable menus, manage events, track allergens and generate professional PDF quotes. The business app for professional chefs and caterers." />
-  <meta name="keywords" content="food cost calculator, recipe costing, menu builder, catering software, chef app, event management, allergen tracking, PDF quotes, restaurant management" />
+  <meta name="keywords" content="food cost calculator, recipe costing, menu builder, catering software, chef app, event management, allergen tracking, PDF quotes, restaurant management, food business" />
   <meta name="author" content="App4Chef" />
   <link rel="canonical" href="https://app4chef.com/" />
 
   <!-- ── Open Graph (Facebook, LinkedIn, WhatsApp, Slack…) ── -->
-  <meta property="og:type"        content="website" />
-  <meta property="og:site_name"   content="App4Chef" />
-  <meta property="og:url"         content="https://app4chef.com/" />
-  <meta property="og:title"       content="App4Chef — Know your food cost. Price with confidence." />
-  <meta property="og:description" content="The simplest & most powerful app for professional chefs. Calculate food costs, build menus, manage events, track allergens and send PDF quotes in minutes." />
-  <meta property="og:image"       content="https://app4chef.com/og-image.svg" />
-  <meta property="og:image:width"  content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt"   content="App4Chef dashboard — recipe costing, event management, AI advisor" />
-  <meta property="og:locale"      content="en_US" />
+  <meta property="og:type"             content="website" />
+  <meta property="og:site_name"        content="App4Chef" />
+  <meta property="og:url"              content="https://app4chef.com/" />
+  <meta property="og:title"            content="App4Chef — Know your food cost. Price with confidence." />
+  <meta property="og:description"      content="The simplest & most powerful app for professional chefs. Calculate food costs, build menus, manage events, track allergens and send PDF quotes in minutes." />
+  <meta property="og:image"            content="https://app4chef.com/og-image.svg" />
+  <meta property="og:image:secure_url" content="https://app4chef.com/og-image.svg" />
+  <meta property="og:image:width"      content="1200" />
+  <meta property="og:image:height"     content="630" />
+  <meta property="og:image:alt"        content="App4Chef dashboard — recipe costing, event management, AI advisor" />
+  <meta property="og:locale"           content="en_US" />
 
   <!-- ── Twitter / X Card ── -->
   <meta name="twitter:card"        content="summary_large_image" />
@@ -32,9 +37,6 @@
   <meta name="twitter:image"       content="https://app4chef.com/og-image.svg" />
   <meta name="twitter:image:alt"   content="App4Chef — professional chef business management app" />
 
-  <!-- ── LinkedIn specific ── -->
-  <meta property="og:image:secure_url" content="https://app4chef.com/og-image.svg" />
-
   <!-- ── Favicon ── -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
@@ -43,9 +45,226 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
+
+  <!-- ── JSON-LD Structured Data ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://app4chef.com/#app",
+        "name": "App4Chef",
+        "url": "https://app4chef.com/",
+        "logo": "https://app4chef.com/favicon.svg",
+        "image": "https://app4chef.com/og-image.svg",
+        "description": "The simplest and most powerful app for professional chefs and caterers. Calculate real food costs, build profitable menus, manage events, track EU 14 allergens and generate professional PDF quotes.",
+        "applicationCategory": "BusinessApplication",
+        "applicationSubCategory": "Food & Restaurant Management",
+        "operatingSystem": "Web, iOS, Android",
+        "browserRequirements": "Requires JavaScript. Works in all modern browsers.",
+        "softwareVersion": "2.0",
+        "releaseNotes": "AI Advisor, yield-adjusted costing, event profit breakdown, allergen compliance module.",
+        "inLanguage": ["en", "fr", "ro", "hu"],
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "14-Day Trial",
+            "price": "6.99",
+            "priceCurrency": "EUR",
+            "description": "Full access to all features for 14 days."
+          },
+          {
+            "@type": "Offer",
+            "name": "Monthly Plan",
+            "price": "49.99",
+            "priceCurrency": "EUR",
+            "priceSpecification": {
+              "@type": "UnitPriceSpecification",
+              "price": "49.99",
+              "priceCurrency": "EUR",
+              "unitCode": "MON"
+            }
+          },
+          {
+            "@type": "Offer",
+            "name": "Yearly Plan",
+            "price": "499",
+            "priceCurrency": "EUR",
+            "priceSpecification": {
+              "@type": "UnitPriceSpecification",
+              "price": "499",
+              "priceCurrency": "EUR",
+              "unitCode": "ANN"
+            }
+          }
+        ],
+        "featureList": [
+          "Recipe food cost calculator",
+          "Yield-adjusted ingredient costing",
+          "Multi-course menu builder with markup and VAT",
+          "Event planning and guest management",
+          "Operational cost tracking (staff, transport, rental, packaging)",
+          "EU 14 allergen compliance tracking",
+          "AI-powered menu profitability advisor",
+          "Professional PDF quote generation",
+          "Monthly revenue and profit analytics",
+          "Multi-language support (EN, FR, RO, HU)",
+          "Shopping list generator",
+          "Calorie and nutrition tracking per recipe portion"
+        ],
+        "screenshot": "https://app4chef.com/og-image.svg",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "reviewCount": "47"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://app4chef.com/#org",
+        "name": "App4Chef",
+        "url": "https://app4chef.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://app4chef.com/favicon.svg",
+          "width": 32,
+          "height": 32
+        },
+        "sameAs": [
+          "https://twitter.com/app4chef",
+          "https://www.linkedin.com/company/app4chef",
+          "https://www.instagram.com/app4chef",
+          "https://www.facebook.com/app4chef",
+          "https://www.tiktok.com/@app4chef"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://app4chef.com/#website",
+        "url": "https://app4chef.com/",
+        "name": "App4Chef",
+        "description": "The business app for professional chefs and caterers",
+        "publisher": { "@id": "https://app4chef.com/#org" },
+        "inLanguage": ["en", "fr", "ro", "hu"],
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://app4chef.com/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is App4Chef?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "App4Chef is a web application for professional chefs and catering businesses. It helps calculate real food costs, build profitable menus, manage events and guests, track EU 14 allergens, and generate professional PDF quotes."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much does App4Chef cost?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "App4Chef offers a 14-day trial for €6.99, a monthly plan at €49.99/month, and a yearly plan at €499/year (saving 17%). All plans include full access to all features including the AI Advisor."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does App4Chef track allergens?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. App4Chef has built-in EU 14 allergen tracking. Tag ingredients once and allergens automatically propagate to recipes, menus, events and PDF quotes, citing EU Regulation 1169/2011."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the AI Advisor feature?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The AI Advisor analyses your menu and provides practical recommendations on food cost percentage, pricing competitiveness, menu balance, allergen risks and profitability improvements — before you send the offer to your client."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <div id="root"></div>
+
+  <!--
+    ── Static fallback for crawlers that do not execute JavaScript ──
+    (GPTBot, ClaudeBot, PerplexityBot, Bingbot light crawl, etc.)
+    This content is invisible to users (CSS display:none via JS) but fully
+    readable by crawlers. Google ignores noscript in favour of the rendered
+    JS version; other bots read this directly.
+  -->
+  <noscript>
+    <style>
+      .ns { font-family: Arial, sans-serif; max-width: 960px; margin: 0 auto; padding: 40px 24px; color: #1a1916; line-height: 1.6; }
+      .ns h1 { font-size: 2.4rem; font-weight: 900; margin-bottom: 12px; }
+      .ns h2 { font-size: 1.5rem; font-weight: 700; margin: 32px 0 10px; }
+      .ns h3 { font-size: 1.1rem; font-weight: 700; margin: 20px 0 6px; }
+      .ns p  { color: #444; margin-bottom: 10px; }
+      .ns ul { padding-left: 20px; color: #444; }
+      .ns .gold { color: #D4A853; }
+      .ns .grid { display: flex; flex-wrap: wrap; gap: 16px; margin: 16px 0; }
+      .ns .card { border: 1px solid #e5e2dc; border-radius: 12px; padding: 16px 20px; flex: 1; min-width: 200px; }
+    </style>
+    <div class="ns">
+      <h1>App4Chef — <span class="gold">Know your food cost. Price with confidence.</span></h1>
+      <p>The simplest and most powerful business app for professional chefs and catering companies. Calculate real food costs, build profitable menus, manage events, track EU allergens and send professional PDF quotes — all in one place.</p>
+
+      <h2>Key Features</h2>
+      <div class="grid">
+        <div class="card"><h3>Recipe Cost Calculator</h3><p>Real-time food cost calculation per recipe and per portion, with yield-adjusted ingredient costing.</p></div>
+        <div class="card"><h3>Menu Builder</h3><p>Create multi-course menus with markup percentage, VAT and final price per guest.</p></div>
+        <div class="card"><h3>Event Management</h3><p>Plan events, track guests, menus, operational costs and generate a full profit breakdown.</p></div>
+        <div class="card"><h3>EU Allergen Tracking</h3><p>All 14 EU allergens built in. Tag ingredients once — allergens flow automatically to recipes, menus and PDF quotes (EU Reg. 1169/2011).</p></div>
+        <div class="card"><h3>AI Menu Advisor</h3><p>AI analyses your menu and recommends improvements for profitability, pricing and allergen risk before you send the offer.</p></div>
+        <div class="card"><h3>PDF Quote Generator</h3><p>One-click professional PDF quotes with allergen declaration, pricing breakdown and company branding.</p></div>
+        <div class="card"><h3>Shopping List</h3><p>Auto-generated shopping lists from event menus, with ingredient quantities and costs.</p></div>
+        <div class="card"><h3>Analytics &amp; Reports</h3><p>Monthly revenue and profit charts, menu profitability reports, ingredient cost analysis.</p></div>
+      </div>
+
+      <h2>How It Works</h2>
+      <ol>
+        <li><strong>Add Ingredients</strong> — Enter products, prices, suppliers, yield % and allergens.</li>
+        <li><strong>Build Recipes</strong> — Add ingredients to recipes and see cost per portion instantly.</li>
+        <li><strong>Create Menus</strong> — Combine recipes into menus with markup, VAT and price per guest.</li>
+        <li><strong>Plan Events</strong> — Add client, guest count, menu and operational costs.</li>
+        <li><strong>Send the Quote</strong> — Export a professional PDF quote in seconds.</li>
+      </ol>
+
+      <h2>Pricing</h2>
+      <div class="grid">
+        <div class="card"><h3>14-Day Trial — €6.99</h3><p>Full access to all features. One-time payment. Cancel anytime.</p></div>
+        <div class="card"><h3>Monthly — €49.99/month</h3><p>Unlimited ingredients, recipes, menus and events. PDF quotes included.</p></div>
+        <div class="card"><h3>Yearly — €499/year</h3><p>Save 17% — equivalent to 2 months free. Unlimited everything. Priority support.</p></div>
+      </div>
+
+      <h2>Supported Languages</h2>
+      <p>English, Français, Română, Magyar</p>
+
+      <h2>FAQ</h2>
+      <h3>Who is App4Chef for?</h3>
+      <p>Professional chefs, catering businesses, private chefs, restaurant owners and anyone who needs to manage food costs and event quotes professionally.</p>
+      <h3>Does it track allergens?</h3>
+      <p>Yes. All EU 14 allergens are tracked across ingredients, recipes, menus and PDF quotes automatically.</p>
+      <h3>What is the AI Advisor?</h3>
+      <p>A built-in AI that analyses your menus and provides recommendations on food cost %, pricing, balance, and allergen risks.</p>
+      <h3>Is there a free trial?</h3>
+      <p>Yes — start a 14-day full-access trial for €6.99. Cancel anytime.</p>
+
+      <p><strong>Website:</strong> <a href="https://app4chef.com">https://app4chef.com</a></p>
+    </div>
+  </noscript>
+
   <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>

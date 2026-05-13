@@ -1,0 +1,33 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /ingredients
+Disallow: /recipes
+Disallow: /menus
+Disallow: /events
+Disallow: /quotes
+Disallow: /reports
+Disallow: /allergens
+Disallow: /ai-advisor
+Disallow: /settings
+Disallow: /billing
+
+# AI crawlers — welcome to index the public landing page
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+
+User-agent: Googlebot
+Allow: /
+
+Sitemap: https://app4chef.com/sitemap.xml

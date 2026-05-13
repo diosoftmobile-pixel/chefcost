@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Landing page — available in 4 languages via JS i18n, canonical is EN -->
+  <url>
+    <loc>https://app4chef.com/</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://app4chef.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://app4chef.com/"/>
+    <xhtml:link rel="alternate" hreflang="ro" href="https://app4chef.com/"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://app4chef.com/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://app4chef.com/"/>
+  </url>
+
+</urlset>
