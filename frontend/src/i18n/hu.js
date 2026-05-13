@@ -333,6 +333,8 @@ export default {
       col1Title: 'Termék', col1Links: ['Funkciók', 'Hogyan működik', 'Árak', 'AI Tanácsadó'],
       col2Title: 'Jogi', col2Links: ['Adatvédelmi irányelvek', 'Felhasználási feltételek', 'Cookie irányelv'],
       col3Title: 'Fiók', col3Links: ['Bejelentkezés', 'Fiók létrehozása', 'Demo fiók'],
+      shareLabel: 'App4Chef megosztása', shareOn: 'Megosztás itt:', follow: 'Kövessen minket:',
+      copyLink: 'Link másolása', copied: 'Másolva!',
     },
     mockup: {
       dashboard: 'Vezérlőpult', profitability: 'Esemény jövedelmezőség',

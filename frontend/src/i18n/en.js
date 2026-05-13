@@ -337,6 +337,8 @@ export default {
       col1Title: 'Product', col1Links: ['Features', 'How it works', 'Pricing', 'AI Advisor'],
       col2Title: 'Legal', col2Links: ['Privacy Policy', 'Terms of Service', 'Cookie Policy'],
       col3Title: 'Account', col3Links: ['Sign in', 'Create account', 'Demo account'],
+      shareLabel: 'Share App4Chef', shareOn: 'Share on', follow: 'Follow us on',
+      copyLink: 'Copy link', copied: 'Copied!',
     },
     mockup: {
       dashboard: 'Dashboard', profitability: 'Event Profitability',

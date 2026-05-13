@@ -334,6 +334,8 @@ export default {
       col1Title: 'Produit', col1Links: ['Fonctionnalités', 'Fonctionnement', 'Tarifs', 'Conseiller IA'],
       col2Title: 'Légal', col2Links: ['Politique de confidentialité', 'CGU', 'Politique cookies'],
       col3Title: 'Compte', col3Links: ['Se connecter', 'Créer un compte', 'Compte démo'],
+      shareLabel: 'Partager App4Chef', shareOn: 'Partager sur', follow: 'Nous suivre sur',
+      copyLink: 'Copier le lien', copied: 'Copié !',
     },
     mockup: {
       dashboard: 'Tableau de bord', profitability: 'Rentabilité des événements',

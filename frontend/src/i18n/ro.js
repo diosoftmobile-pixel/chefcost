@@ -324,6 +324,8 @@ export default {
       col1Title: 'Produs', col1Links: ['Funcționalități', 'Cum funcționează', 'Prețuri', 'Consilier AI'],
       col2Title: 'Legal', col2Links: ['Politică de confidențialitate', 'Termeni și condiții', 'Politică cookies'],
       col3Title: 'Cont', col3Links: ['Autentificare', 'Creați un cont', 'Cont demo'],
+      shareLabel: 'Distribuie App4Chef', shareOn: 'Distribuie pe', follow: 'Urmărește-ne pe',
+      copyLink: 'Copiază linkul', copied: 'Copiat!',
     },
     mockup: {
       dashboard: 'Panou de control', profitability: 'Profitabilitatea evenimentelor',
