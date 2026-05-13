@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../hooks/useApp.jsx';
 import { api } from '../lib/api.js';
 import { fmt, unitPrice } from '../lib/calc.js';
+import { ALLERGENS, parseAllergens } from '../lib/allergens.js';
 import Modal from '../components/Modal.jsx';
 
 const CATS = ['Meat','Fish & Seafood','Vegetables','Fruits','Dairy','Grains','Oils & Fats','Spices','Beverages','Other'];
 const CAT_KEYS = ['catMeat','catFish','catVegetables','catFruits','catDairy','catGrains','catOils','catSpices','catBeverages','catOther'];
 const UNITS = ['kg','gram','liter','ml','piece','pack'];
-const blank = () => ({ name:'', category:'Vegetables', unit:'kg', purchase_qty:1, purchase_price:0, supplier:'', notes:'' });
+const blank = () => ({ name:'', category:'Vegetables', unit:'kg', purchase_qty:1, purchase_price:0, supplier:'', notes:'', allergens:[] });
 
 export default function Ingredients() {
   const { ingredients, setIngredients, isPaid } = useApp();
@@ -24,9 +25,13 @@ export default function Ingredients() {
   const filtered = ingredients.filter(i => i.name.toLowerCase().includes(search.toLowerCase()) || i.category.toLowerCase().includes(search.toLowerCase()));
 
   const openAdd = () => { setForm(blank()); setModal('add'); };
-  const openEdit = (i) => { setForm({ ...i }); setModal(i.id); };
+  const openEdit = (i) => { setForm({ ...i, allergens: parseAllergens(i.allergens) }); setModal(i.id); };
   const close = () => setModal(null);
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  const toggleAllergen = key => setForm(f => ({
+    ...f,
+    allergens: f.allergens.includes(key) ? f.allergens.filter(a => a !== key) : [...f.allergens, key],
+  }));
 
   const save = async () => {
     if (!form.name) return alert(t('common.nameRequired'));
@@ -89,24 +94,37 @@ export default function Ingredients() {
         </div>
         <div className="card">
           <table>
-            <thead><tr><th>{t('ingredients.colName')}</th><th>{t('ingredients.colCategory')}</th><th>{t('ingredients.colUnit')}</th><th>{t('ingredients.colPurchasePrice')}</th><th>{t('ingredients.colPricePerUnit')}</th><th>{t('ingredients.colSupplier')}</th><th></th></tr></thead>
+            <thead><tr><th>{t('ingredients.colName')}</th><th>{t('ingredients.colCategory')}</th><th>{t('ingredients.colUnit')}</th><th>{t('ingredients.colPurchasePrice')}</th><th>{t('ingredients.colPricePerUnit')}</th><th>{t('ingredients.colSupplier')}</th><th>{t('ingredients.colAllergens')}</th><th></th></tr></thead>
             <tbody>
-              {filtered.length === 0 && <tr><td colSpan={7}><div className="empty-state"><i className="ti ti-basket"></i><p>{search ? t('ingredients.noResults') : t('ingredients.none')}</p></div></td></tr>}
-              {filtered.map(i => (
-                <tr key={i.id}>
-                  <td>{i.name}</td>
-                  <td><span className="badge badge-gray">{tCat(i.category)}</span></td>
-                  <td>{i.purchase_qty} {i.unit}</td>
-                  <td>{fmt(i.purchase_price)}</td>
-                  <td className="mono accent">{fmt(unitPrice(i))}/{i.unit} · {fmt((i.unit==='kg'||i.unit==='liter') ? unitPrice(i)/1000 : unitPrice(i))}/{baseUnit(i.unit)}</td>
-                  <td>{i.supplier || '—'}</td>
-                  <td><div className="action-btns">
-                    {isPaid && <button className="icon-btn" onClick={() => openEdit(i)}><i className="ti ti-edit"></i></button>}
-                    {isPaid && <button className="icon-btn danger" onClick={() => del(i.id)}><i className="ti ti-trash"></i></button>}
-                    {!isPaid && <i className="ti ti-lock" style={{ color: 'var(--text3)', fontSize: 14, padding: '0 8px' }}></i>}
-                  </div></td>
-                </tr>
-              ))}
+              {filtered.length === 0 && <tr><td colSpan={8}><div className="empty-state"><i className="ti ti-basket"></i><p>{search ? t('ingredients.noResults') : t('ingredients.none')}</p></div></td></tr>}
+              {filtered.map(i => {
+                const ings = parseAllergens(i.allergens);
+                return (
+                  <tr key={i.id}>
+                    <td>{i.name}</td>
+                    <td><span className="badge badge-gray">{tCat(i.category)}</span></td>
+                    <td>{i.purchase_qty} {i.unit}</td>
+                    <td>{fmt(i.purchase_price)}</td>
+                    <td className="mono accent">{fmt(unitPrice(i))}/{i.unit} · {fmt((i.unit==='kg'||i.unit==='liter') ? unitPrice(i)/1000 : unitPrice(i))}/{baseUnit(i.unit)}</td>
+                    <td>{i.supplier || '—'}</td>
+                    <td>
+                      {ings.length > 0
+                        ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+                            {ings.map(key => {
+                              const a = ALLERGENS.find(x => x.key === key);
+                              return a ? <span key={key} className="allergen-badge">{a.num}. {a.label}</span> : null;
+                            })}
+                          </div>
+                        : <span style={{ color: 'var(--text3)', fontSize: 12 }}>—</span>}
+                    </td>
+                    <td><div className="action-btns">
+                      {isPaid && <button className="icon-btn" onClick={() => openEdit(i)}><i className="ti ti-edit"></i></button>}
+                      {isPaid && <button className="icon-btn danger" onClick={() => del(i.id)}><i className="ti ti-trash"></i></button>}
+                      {!isPaid && <i className="ti ti-lock" style={{ color: 'var(--text3)', fontSize: 14, padding: '0 8px' }}></i>}
+                    </div></td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -136,6 +154,24 @@ export default function Ingredients() {
             <div className="form-group"><label className="form-label">{t('ingredients.supplierLabel')}</label><input className="form-control" value={form.supplier} onChange={e => set('supplier', e.target.value)} placeholder={t('common.optional')} /></div>
           </div>
           <div className="form-group"><label className="form-label">{t('ingredients.notesLabel')}</label><input className="form-control" value={form.notes} onChange={e => set('notes', e.target.value)} /></div>
+          <div className="form-group">
+            <label className="form-label">{t('ingredients.allergensLabel')} <span style={{ fontWeight: 400, color: 'var(--text3)', fontSize: 11 }}>EU 14</span></label>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '6px 12px', marginTop: 4 }}>
+              {ALLERGENS.map(a => (
+                <label key={a.key} style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontSize: 13 }}>
+                  <input
+                    type="checkbox"
+                    checked={form.allergens.includes(a.key)}
+                    onChange={() => toggleAllergen(a.key)}
+                    style={{ accentColor: 'var(--gold)', width: 14, height: 14, cursor: 'pointer' }}
+                  />
+                  <span style={{ color: form.allergens.includes(a.key) ? 'var(--gold)' : 'var(--text2)' }}>
+                    {a.num}. {a.label}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
           <div className="summary-box"><div className="summary-row"><span>{t('ingredients.pricePerBaseUnit')}</span><span>{+form.purchase_qty > 0 ? calcDisplay() : '—'}</span></div></div>
         </Modal>
       )}

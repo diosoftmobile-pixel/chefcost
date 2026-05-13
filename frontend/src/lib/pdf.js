@@ -1,5 +1,6 @@
 import { jsPDF } from 'jspdf';
 import { fmt, calcMenuFinalPrice, calcEventTotal, buildShoppingList, calcCostPerPortion } from './calc.js';
+import { ALLERGENS, getEventAllergens } from './allergens.js';
 
 export function exportEventPDF(event, menus, recipes, ingredients) {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
@@ -136,6 +137,28 @@ export function exportEventPDF(event, menus, recipes, ingredients) {
     doc.text(fmt(data.cost), ml + cw - 3, y + 5, { align: 'right' });
     y += 7;
   });
+
+  // ── Allergen Declaration ──
+  const allergenKeys = getEventAllergens(event, menus, recipes, ingredients);
+  if (allergenKeys.length > 0) {
+    if (y > 240) { doc.addPage(); y = 20; }
+    y += 4;
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(...dark);
+    doc.text('Allergen Declaration (EU Regulation 1169/2011)', ml, y); y += 7;
+    doc.setFillColor(254, 249, 236); doc.roundedRect(ml, y, cw, 8, 2, 2, 'F');
+    doc.setDrawColor(245, 158, 11); doc.setLineWidth(0.5); doc.roundedRect(ml, y, cw, 8, 2, 2, 'S');
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(180, 110, 0);
+    doc.text('⚠  This menu contains the following allergens:', ml + 3, y + 5.5); y += 10;
+    doc.setFillColor(...lightbg); doc.roundedRect(ml, y, cw, 12, 2, 2, 'F');
+    const resolvedAllergens = ALLERGENS.filter(a => allergenKeys.includes(a.key));
+    const allergenText = resolvedAllergens.map(a => `${a.num}. ${a.label}`).join('   ');
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...dark);
+    const lines = doc.splitTextToSize(allergenText, cw - 6);
+    lines.forEach((line, li) => { doc.text(line, ml + 3, y + 4.5 + li * 5); });
+    y += Math.max(12, lines.length * 5 + 4) + 4;
+    doc.setFont('helvetica', 'italic'); doc.setFontSize(7.5); doc.setTextColor(...gray);
+    doc.text('Please inform guests with allergies or intolerances before serving.', ml, y); y += 8;
+  }
 
   const ph = 297;
   doc.setDrawColor(...lineGray); doc.setLineWidth(0.3); doc.line(ml, ph - 16, ml + cw, ph - 16);

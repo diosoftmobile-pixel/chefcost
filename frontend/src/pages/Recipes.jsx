@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../hooks/useApp.jsx';
 import { api } from '../lib/api.js';
 import { fmt, calcRecipeCost, calcCostPerPortion, unitPrice } from '../lib/calc.js';
+import { ALLERGENS, getRecipeAllergens } from '../lib/allergens.js';
 import Modal from '../components/Modal.jsx';
 
 const CATS = ['Starter','Main Course','Dessert','Side Dish','Soup','Salad','Other'];
@@ -81,25 +82,38 @@ export default function Recipes() {
       <div className="page-content">
         <div className="card">
           <table>
-            <thead><tr><th>{t('recipes.colRecipe')}</th><th>{t('recipes.colCategory')}</th><th>{t('recipes.colPortions')}</th><th>{t('recipes.colTotalCost')}</th><th>{t('recipes.colCostPerPortion')}</th><th>{t('recipes.colIngredients')}</th><th></th></tr></thead>
+            <thead><tr><th>{t('recipes.colRecipe')}</th><th>{t('recipes.colCategory')}</th><th>{t('recipes.colPortions')}</th><th>{t('recipes.colTotalCost')}</th><th>{t('recipes.colCostPerPortion')}</th><th>{t('recipes.colIngredients')}</th><th>{t('recipes.colAllergens')}</th><th></th></tr></thead>
             <tbody>
-              {recipes.length === 0 && <tr><td colSpan={7}><div className="empty-state"><i className="ti ti-notebook"></i><p>{t('recipes.none')}</p></div></td></tr>}
-              {recipes.map(r => (
-                <tr key={r.id}>
-                  <td>{r.name}</td>
-                  <td><span className="badge badge-gray">{tCat(r.category)}</span></td>
-                  <td>{r.portions}</td>
-                  <td className="mono">{fmt(calcRecipeCost(r, ingredients))}</td>
-                  <td className="mono accent">{fmt(calcCostPerPortion(r, ingredients))}</td>
-                  <td><span className="badge badge-blue">{r.ingredients?.length || 0} {t('common.items')}</span></td>
-                  <td><div className="action-btns">
-                    <button className="icon-btn" onClick={() => setViewId(r.id)}><i className="ti ti-eye"></i></button>
-                    {isPaid && <button className="icon-btn" onClick={() => openEdit(r)}><i className="ti ti-edit"></i></button>}
-                    {isPaid && <button className="icon-btn danger" onClick={() => del(r.id)}><i className="ti ti-trash"></i></button>}
-                    {!isPaid && <i className="ti ti-lock" style={{ color: 'var(--text3)', fontSize: 14, padding: '0 8px' }}></i>}
-                  </div></td>
-                </tr>
-              ))}
+              {recipes.length === 0 && <tr><td colSpan={8}><div className="empty-state"><i className="ti ti-notebook"></i><p>{t('recipes.none')}</p></div></td></tr>}
+              {recipes.map(r => {
+                const allergenKeys = getRecipeAllergens(r, ingredients);
+                return (
+                  <tr key={r.id}>
+                    <td>{r.name}</td>
+                    <td><span className="badge badge-gray">{tCat(r.category)}</span></td>
+                    <td>{r.portions}</td>
+                    <td className="mono">{fmt(calcRecipeCost(r, ingredients))}</td>
+                    <td className="mono accent">{fmt(calcCostPerPortion(r, ingredients))}</td>
+                    <td><span className="badge badge-blue">{r.ingredients?.length || 0} {t('common.items')}</span></td>
+                    <td>
+                      {allergenKeys.length > 0
+                        ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+                            {allergenKeys.map(key => {
+                              const a = ALLERGENS.find(x => x.key === key);
+                              return a ? <span key={key} className="allergen-badge">{a.num}. {a.label}</span> : null;
+                            })}
+                          </div>
+                        : <span style={{ color: 'var(--text3)', fontSize: 12 }}>—</span>}
+                    </td>
+                    <td><div className="action-btns">
+                      <button className="icon-btn" onClick={() => setViewId(r.id)}><i className="ti ti-eye"></i></button>
+                      {isPaid && <button className="icon-btn" onClick={() => openEdit(r)}><i className="ti ti-edit"></i></button>}
+                      {isPaid && <button className="icon-btn danger" onClick={() => del(r.id)}><i className="ti ti-trash"></i></button>}
+                      {!isPaid && <i className="ti ti-lock" style={{ color: 'var(--text3)', fontSize: 14, padding: '0 8px' }}></i>}
+                    </div></td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -148,10 +162,26 @@ export default function Recipes() {
       {viewing && (
         <Modal title={viewing.name} onClose={() => setViewId(null)}
           footer={<button className="btn btn-primary" onClick={() => setViewId(null)}>{t('common.close')}</button>}>
-          <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
             <span className="badge badge-gray">{tCat(viewing.category)}</span>
             <span className="badge badge-blue">{viewing.portions} {t('common.portions')}</span>
           </div>
+          {(() => {
+            const allergenKeys = getRecipeAllergens(viewing, ingredients);
+            return allergenKeys.length > 0 ? (
+              <div style={{ marginBottom: 16, padding: '10px 14px', background: 'var(--amber-soft, #fef9ec)', border: '1px solid var(--amber, #f59e0b)', borderRadius: 8 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--amber, #f59e0b)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>
+                  {t('recipes.allergensLabel')} (EU)
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                  {allergenKeys.map(key => {
+                    const a = ALLERGENS.find(x => x.key === key);
+                    return a ? <span key={key} className="allergen-badge">{a.num}. {a.label}</span> : null;
+                  })}
+                </div>
+              </div>
+            ) : null;
+          })()}
           <table style={{ width: '100%', fontSize: 13, marginBottom: 16 }}>
             <thead><tr><th>{t('recipes.colIngredient')}</th><th>{t('recipes.colQty')}</th><th>{t('recipes.colUnitPrice')}</th><th>{t('recipes.colCost')}</th></tr></thead>
             <tbody>
