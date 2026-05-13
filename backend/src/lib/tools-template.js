@@ -1,3 +1,15 @@
+// ── Shared analytics snippet (GA4 + Microsoft Clarity placeholder) ─────────────
+// Injected into every SSR tool page so traffic is captured the same as the SPA.
+const ANALYTICS_SNIPPET = `
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9JWPMLF45"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-V9JWPMLF45', { anonymize_ip: true });
+  </script>`;
+
 /**
  * Generates a full SEO-optimised HTML page for a programmatic tools page.
  * Pure function — no I/O, no side-effects.
@@ -116,6 +128,7 @@ export function buildToolPage(page, allPages) {
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  ${ANALYTICS_SNIPPET}
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">${faqSchema}</script>
@@ -845,6 +858,7 @@ export function buildCategoryPage(category, pages) {
   <meta property="og:url" content="${canonicalUrl}" />
   <meta property="og:image" content="https://app4chef.com/og-image.svg" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  ${ANALYTICS_SNIPPET}
   <script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -941,6 +955,7 @@ export function buildToolsIndex(allPages) {
   <meta property="og:url" content="https://app4chef.com/tools" />
   <meta property="og:image" content="https://app4chef.com/og-image.svg" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  ${ANALYTICS_SNIPPET}
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --bg:#F9F7F3; --surface:#fff; --dark:#1A1916; --accent:#D4A853; --text:#2C2B28; --muted:#6B6860; --border:#E8E4DA; }
