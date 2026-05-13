@@ -152,3 +152,5 @@ select.form-control { appearance: none; cursor: pointer; }
 /* Ingredient builder row */
 .ing-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
 .ing-row:last-child { border-bottom: none; }
+
+@keyframes pulse { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }

@@ -32,6 +32,7 @@ export const api = {
   createMenu: (d) => req('POST', '/menus', d),
   updateMenu: (id, d) => req('PUT', `/menus/${id}`, d),
   deleteMenu: (id) => req('DELETE', `/menus/${id}`),
+  analyzeMenu: (id) => req('POST', `/menus/${id}/analyze`),
 
   getEvents: () => req('GET', '/events'),
   createEvent: (d) => req('POST', '/events', d),

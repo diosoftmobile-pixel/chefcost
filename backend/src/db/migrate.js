@@ -111,6 +111,8 @@ const alterColumns = [
   "ALTER TABLE users ADD COLUMN cancel_at TEXT DEFAULT NULL",
   "ALTER TABLE users ADD COLUMN subscription_plan TEXT DEFAULT NULL",
   "ALTER TABLE ingredients ADD COLUMN allergens TEXT NOT NULL DEFAULT '[]'",
+  "ALTER TABLE menus ADD COLUMN ai_analysis TEXT DEFAULT NULL",
+  "ALTER TABLE menus ADD COLUMN ai_analyzed_at TEXT DEFAULT NULL",
 ];
 for (const sql of alterColumns) {
   try { db.exec(sql); } catch {}

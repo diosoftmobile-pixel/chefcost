@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
+import Anthropic from '@anthropic-ai/sdk';
 import db from '../db/index.js';
 import { auth } from '../middleware/auth.js';
 import { requireSubscription } from '../middleware/subscription.js';
@@ -52,6 +53,93 @@ router.delete('/:id', requireSubscription, (req, res) => {
   if (!menu) return res.status(404).json({ error: 'Not found' });
   db.prepare('DELETE FROM menus WHERE id = ?').run(req.params.id);
   res.json({ ok: true });
+});
+
+// ── Chef's AI Advisor ──
+router.post('/:id/analyze', requireSubscription, async (req, res) => {
+  const menu = db.prepare('SELECT * FROM menus WHERE id = ? AND user_id = ?').get(req.params.id, req.user.id);
+  if (!menu) return res.status(404).json({ error: 'Not found' });
+
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return res.status(503).json({ error: 'AI Advisor is not configured. Add ANTHROPIC_API_KEY to your environment.' });
+
+  // Build full menu context
+  const menuRecipes = db.prepare(`
+    SELECT mr.portions, r.name, r.category, r.portions AS recipe_portions,
+           r.notes
+    FROM menu_recipes mr
+    JOIN recipes r ON r.id = mr.recipe_id
+    WHERE mr.menu_id = ?
+    ORDER BY r.category
+  `).all(req.params.id);
+
+  // Get ingredients + allergens for each recipe
+  const recipeDetails = menuRecipes.map(mr => {
+    const ings = db.prepare(`
+      SELECT i.name, i.category, ri.qty, ri.unit, i.allergens,
+             ROUND(i.purchase_price / NULLIF(i.purchase_qty, 0) * ri.qty, 3) AS cost
+      FROM recipe_ingredients ri
+      JOIN ingredients i ON i.id = ri.ingredient_id
+      JOIN recipes r ON r.id = ri.recipe_id
+      WHERE r.name = ? AND ri.recipe_id IN (
+        SELECT recipe_id FROM menu_recipes WHERE menu_id = ?
+      )
+    `).all(mr.name, req.params.id);
+    return { ...mr, ingredients: ings };
+  });
+
+  const totalFoodCost = recipeDetails.reduce((s, r) => s + r.ingredients.reduce((ss, i) => ss + (i.cost || 0), 0), 0);
+  const selling = totalFoodCost * (1 + menu.markup / 100);
+  const finalPrice = selling * (1 + menu.vat / 100);
+  const foodCostPct = finalPrice > 0 ? (totalFoodCost / finalPrice * 100).toFixed(1) : '—';
+
+  // Collect all allergens across all recipes
+  const allergenKeys = new Set();
+  recipeDetails.forEach(r => r.ingredients.forEach(i => {
+    try { JSON.parse(i.allergens || '[]').forEach(a => allergenKeys.add(a)); } catch {}
+  }));
+  const EU_ALLERGENS = { gluten:'Gluten', crustaceans:'Crustaceans', eggs:'Eggs', fish:'Fish', peanuts:'Peanuts', soybeans:'Soybeans', milk:'Milk', nuts:'Tree Nuts', celery:'Celery', mustard:'Mustard', sesame:'Sesame', sulphites:'Sulphites', lupin:'Lupin', molluscs:'Molluscs' };
+  const allergenList = [...allergenKeys].map(k => EU_ALLERGENS[k] || k).join(', ') || 'None declared';
+
+  const prompt = `You are a professional culinary consultant and food cost expert advising a chef.
+
+Analyze this menu and provide a concise, practical Chef's Advisory Report. Be direct, professional, and specific.
+
+MENU: "${menu.name}"
+Description: ${menu.description || 'None'}
+Markup: ${menu.markup}% | VAT: ${menu.vat}% | Price per person: €${finalPrice.toFixed(2)}
+Food cost: €${totalFoodCost.toFixed(2)} (${foodCostPct}% of price)
+
+COURSES (${recipeDetails.length} recipes):
+${recipeDetails.map(r => `- ${r.name} [${r.category}] — ${r.portions} portion/person | Ingredients: ${r.ingredients.map(i => i.name).join(', ')}`).join('\n')}
+
+ALLERGENS PRESENT: ${allergenList}
+
+Write a Chef's Advisory Report with these sections (keep each section to 1-3 sentences max, be specific):
+
+**Menu Balance** — Comment on course variety, flow, and overall composition.
+**Food Cost Analysis** — Is the ${foodCostPct}% food cost ratio healthy? Industry standard is 28-35%. Recommend adjustments if needed.
+**Pricing Recommendation** — Is €${finalPrice.toFixed(2)}/person competitive? Suggest a range if off.
+**Allergen Alert** — Highlight EU compliance concerns and dishes guests should be warned about.
+**Chef's Tip** — One specific improvement: a substitution, technique, or addition that would elevate this menu.
+
+Keep the full report under 200 words. Use clear professional language suitable for a chef.`;
+
+  try {
+    const client = new Anthropic({ apiKey });
+    const message = await client.messages.create({
+      model: 'claude-haiku-4-5',
+      max_tokens: 600,
+      messages: [{ role: 'user', content: prompt }],
+    });
+
+    const analysis = message.content[0].text;
+    db.prepare("UPDATE menus SET ai_analysis=?, ai_analyzed_at=datetime('now') WHERE id=?").run(analysis, req.params.id);
+    res.json({ analysis, analyzed_at: new Date().toISOString() });
+  } catch (err) {
+    console.error('AI Advisor error:', err.message);
+    res.status(500).json({ error: 'AI analysis failed: ' + err.message });
+  }
 });
 
 export default router;
