@@ -125,6 +125,9 @@ export default {
     trialEnds: 'Próbaverzió lejárata:',
     cancelledOn: 'Az előfizetés {{date}}-ig érvényes. Addig teljes hozzáférése van.',
     upgradeHint: 'Frissítsen az alapanyagok és receptek hozzáadásához és szerkesztéséhez.',
+    profitMargin: 'Célzott haszonkulcs',
+    profitMarginDesc: 'Alapértelmezett árrésként használva új menük létrehozásakor. Az e cél alatt lévő menük jelölve lesznek.',
+    profitMarginPct: 'Célzott árrés %',
   },
   billing: {
     title: 'Számlázás és tervek', subtitle: 'Válassza a konyhájához illő tervet.',

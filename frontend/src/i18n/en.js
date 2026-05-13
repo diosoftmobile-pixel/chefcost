@@ -126,6 +126,9 @@ export default {
     trialEnds: 'Trial ends:',
     cancelledOn: 'Subscription cancels on {{date}}. You have full access until then.',
     upgradeHint: 'Upgrade to unlock adding and editing ingredients and recipes.',
+    profitMargin: 'Target Profit Margin',
+    profitMarginDesc: 'Used as the default markup when creating new menus. Menus below this target are flagged.',
+    profitMarginPct: 'Target markup %',
   },
   billing: {
     title: 'Billing & Plans', subtitle: 'Choose the plan that works for your kitchen.',

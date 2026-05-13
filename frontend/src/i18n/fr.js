@@ -125,6 +125,9 @@ export default {
     trialEnds: "Essai expire le :",
     cancelledOn: "L'abonnement se termine le {{date}}. Vous avez un accès complet jusqu'à cette date.",
     upgradeHint: 'Passez à la version supérieure pour ajouter et modifier des ingrédients et recettes.',
+    profitMargin: 'Marge bénéficiaire cible',
+    profitMarginDesc: 'Utilisée comme majoration par défaut lors de la création de nouveaux menus. Les menus en dessous de cet objectif sont signalés.',
+    profitMarginPct: 'Majoration cible %',
   },
   billing: {
     title: 'Facturation et plans', subtitle: 'Choisissez le plan adapté à votre cuisine.',

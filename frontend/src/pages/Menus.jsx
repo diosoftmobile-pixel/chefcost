@@ -6,7 +6,7 @@ import { api } from '../lib/api.js';
 import { fmt, calcMenuFinalPrice, calcCostPerPortion } from '../lib/calc.js';
 import Modal from '../components/Modal.jsx';
 
-const blank = () => ({ name:'', description:'', markup:30, vat:19, recipes:[] });
+const blank = (user) => ({ name:'', description:'', markup: user?.profit_margin ?? 30, vat:19, recipes:[] });
 
 // Render markdown-like bold sections from AI output
 function AiText({ text }) {
@@ -31,7 +31,7 @@ function AiText({ text }) {
 }
 
 export default function Menus() {
-  const { menus, setMenus, recipes, ingredients, isPaid } = useApp();
+  const { menus, setMenus, recipes, ingredients, isPaid, user } = useApp();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [modal, setModal] = useState(null);
@@ -42,7 +42,7 @@ export default function Menus() {
   const [analyzing, setAnalyzing] = useState(false);  // AI loading state
   const [aiModal, setAiModal] = useState(null);       // { menuId, analysis, analyzed_at }
 
-  const openAdd = () => { setForm(blank()); setAiAdvisor(false); setModal('add'); };
+  const openAdd = () => { setForm(blank(user)); setAiAdvisor(false); setModal('add'); };
   const openEdit = m => { setForm({ ...m, recipes: (m.recipes || []).map(r => ({ ...r })) }); setAiAdvisor(false); setModal(m.id); };
   const close = () => setModal(null);
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
@@ -174,7 +174,17 @@ export default function Menus() {
                     <div style={{ fontSize: 11, color: 'var(--text3)' }}>{m.description}</div>
                   </td>
                   <td className="mono">{fmt(p.cost)}</td>
-                  <td><span className="badge badge-amber">{m.markup}%</span></td>
+                  <td>
+                    {(() => {
+                      const target = user?.profit_margin ?? 30;
+                      const pct = parseFloat(m.markup);
+                      const cls = pct >= target ? 'badge-green' : pct >= target * 0.8 ? 'badge-amber' : 'badge-red';
+                      const tip = pct >= target
+                        ? `✓ At or above target (${target}%)`
+                        : `Below target (${target}%) by ${(target - pct).toFixed(1)}%`;
+                      return <span className={`badge ${cls}`} title={tip}>{m.markup}%</span>;
+                    })()}
+                  </td>
                   <td><span className="badge badge-gray">{m.vat}%</span></td>
                   <td className="mono accent" style={{ fontWeight: 500 }}>{fmt(p.final)}</td>
                   <td><div className="action-btns">
@@ -198,7 +208,19 @@ export default function Menus() {
           <div className="form-group"><label className="form-label">{t('menus.menuName')}</label><input className="form-control" value={form.name} onChange={e => set('name', e.target.value)} /></div>
           <div className="form-group"><label className="form-label">{t('menus.descriptionLabel')}</label><input className="form-control" value={form.description} onChange={e => set('description', e.target.value)} /></div>
           <div className="form-row">
-            <div className="form-group"><label className="form-label">{t('menus.markupPct')}</label><input className="form-control" type="number" min="0" step="0.5" value={form.markup} onChange={e => set('markup', e.target.value)} /></div>
+            <div className="form-group">
+              <label className="form-label">{t('menus.markupPct')}</label>
+              <input className="form-control" type="number" min="0" step="0.5" value={form.markup} onChange={e => set('markup', e.target.value)} />
+              {(() => {
+                const target = user?.profit_margin ?? 30;
+                const pct = parseFloat(form.markup);
+                if (!isNaN(pct)) {
+                  if (pct >= target) return <div style={{ fontSize: 11, marginTop: 4, color: 'var(--green)' }}>✓ Meets target ({target}%)</div>;
+                  return <div style={{ fontSize: 11, marginTop: 4, color: 'var(--red)' }}>↓ Below target ({target}%) by {(target - pct).toFixed(1)}%</div>;
+                }
+                return null;
+              })()}
+            </div>
             <div className="form-group"><label className="form-label">{t('menus.vatPct')}</label><input className="form-control" type="number" min="0" step="0.5" value={form.vat} onChange={e => set('vat', e.target.value)} /></div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '16px 0 8px' }}>

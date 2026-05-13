@@ -125,6 +125,9 @@ export default {
     trialEnds: 'Trial expiră:',
     cancelledOn: 'Abonamentul se termină pe {{date}}. Ai acces complet până atunci.',
     upgradeHint: 'Abonează-te pentru a adăuga și edita ingrediente și rețete.',
+    profitMargin: 'Marjă de profit țintă',
+    profitMarginDesc: 'Folosită ca adaos implicit la crearea meniurilor noi. Meniurile sub această țintă sunt marcate.',
+    profitMarginPct: 'Adaos țintă %',
   },
   billing: {
     title: 'Facturare și planuri', subtitle: 'Alege planul potrivit pentru bucătăria ta.',
