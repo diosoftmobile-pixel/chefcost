@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider, useApp } from './hooks/useApp.jsx';
 import Layout from './components/Layout.jsx';
+import Landing from './pages/Landing.jsx';
 import AuthPage from './pages/AuthPage.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Ingredients from './pages/Ingredients.jsx';
@@ -14,7 +15,7 @@ import Billing from './pages/Billing.jsx';
 function ProtectedRoutes() {
   const { user, loading } = useApp();
   if (loading) return <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100vh', color:'var(--text3)' }}>Loading…</div>;
-  if (!user) return <AuthPage />;
+  if (!user) return <Landing />;
 
   // Free accounts must choose a plan before accessing the app
   const isFree = user.subscription_status === 'free';

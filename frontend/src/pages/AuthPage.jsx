@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useApp } from '../hooks/useApp.jsx';
 
-export default function AuthPage() {
+export default function AuthPage({ initialMode = 'login' }) {
   const { login, register } = useApp();
   const { t } = useTranslation();
-  const [mode, setMode] = useState('login');
+  const [mode, setMode] = useState(initialMode);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
