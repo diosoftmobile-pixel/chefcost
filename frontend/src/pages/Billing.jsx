@@ -29,7 +29,21 @@ export default function Billing() {
       window.location.href = url;
     } catch (e) {
       if (e.message === 'stripe_not_configured') {
-        setMsg(t('billing.stripeNotConfigured'));
+        // Stripe not yet wired up — activate trial directly for trial plan
+        if (plan === 'trial') {
+          try {
+            await api.startTrial();
+            await refreshUser();
+            setMsg(t('billing.trialStarted'));
+          } catch (e2) {
+            setMsg(e2.message === 'Trial or subscription already used'
+              ? t('billing.trialUsed')
+              : e2.message);
+          }
+        } else {
+          // Paid plans genuinely need Stripe — show a friendly note
+          setMsg(t('billing.stripeNotConfigured'));
+        }
       } else {
         setMsg(e.message);
       }
