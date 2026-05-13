@@ -100,6 +100,7 @@ export default function Layout() {
             <div className="nav-section">
               <div className="nav-section-label">{t('nav.administration')}</div>
               <NavItem to="/admin" icon="ti-shield-lock" label={t('nav.admin')} />
+              <NavItem to="/admin/research" icon="ti-message-question" label={t('nav.research') || 'Research'} />
             </div>
           )}
         </nav>

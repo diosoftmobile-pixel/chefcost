@@ -1055,6 +1055,18 @@ export function buildSitemap(allPages) {
     <priority>0.9</priority>
   </url>
 
+  <!-- Research form, 4 languages -->
+  <url>
+    <loc>https://app4chef.com/research</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://app4chef.com/research"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://app4chef.com/research/fr"/>
+    <xhtml:link rel="alternate" hreflang="ro" href="https://app4chef.com/research/ro"/>
+    <xhtml:link rel="alternate" hreflang="hu" href="https://app4chef.com/research/hu"/>
+  </url>
+
   <!-- Category index pages -->
   ${catTags}
 

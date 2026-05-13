@@ -4,7 +4,7 @@ export default {
     account: 'Cont',
     dashboard: 'Panou de control', ingredients: 'Ingrediente', recipes: 'Rețete', menus: 'Meniuri',
     events: 'Evenimente', quotes: 'Oferte PDF', allergens: 'Alergeni', reports: 'Rapoarte',
-    aiAdvisor: 'Consilier IA', admin: 'Panou Admin',
+    aiAdvisor: 'Consilier IA', admin: 'Panou Admin', research: 'Cercetare',
     signOut: 'Deconectare', brandSub: 'Cea mai simplă & puternică aplicație pentru chefi',
     settings: 'Setări', billing: 'Facturare',
     planPro: 'Plan Pro', planTrial: 'Probă', planFree: 'Gratuit',

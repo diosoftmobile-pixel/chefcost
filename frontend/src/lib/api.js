@@ -47,6 +47,14 @@ export const api = {
   setAdminSubscription: (id, subscription_status) => req('PUT', `/admin/users/${id}/subscription`, { subscription_status }),
   lockAdminUser: (id, locked) => req('PUT', `/admin/users/${id}/lock`, { locked }),
 
+  // Research responses
+  getResearchResponses: () => req('GET', '/admin/research'),
+  getResearchResponse: (id) => req('GET', `/admin/research/${id}`),
+  markResearchReviewed: (id, reviewed) => req('PUT', `/admin/research/${id}/reviewed`, { reviewed }),
+  deleteResearchResponse: (id) => req('DELETE', `/admin/research/${id}`),
+  // Redeem trial code (used by /redeem page)
+  redeemResearchCode: (code) => req('POST', '/research/redeem', { code }),
+
   getSettings: () => req('GET', '/settings'),
   updateSettings: (d) => req('PUT', '/settings', d),
 

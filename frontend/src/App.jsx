@@ -9,6 +9,8 @@ import Recipes from './pages/Recipes.jsx';
 import Menus from './pages/Menus.jsx';
 import Events from './pages/Events.jsx';
 import Admin from './pages/Admin.jsx';
+import AdminResearch from './pages/AdminResearch.jsx';
+import Redeem from './pages/Redeem.jsx';
 import Settings from './pages/Settings.jsx';
 import Billing from './pages/Billing.jsx';
 import Allergens from './pages/Allergens.jsx';
@@ -19,6 +21,10 @@ import AIAdvisor from './pages/AIAdvisor.jsx';
 function ProtectedRoutes() {
   const { user, loading } = useApp();
   if (loading) return <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100vh', color:'var(--text3)' }}>Loading…</div>;
+
+  // /redeem must work for both logged-out and free users — handle before other gates
+  if (window.location.pathname === '/redeem') return <Redeem />;
+
   if (!user) return <Landing />;
 
   // Free accounts must choose a plan before accessing the app
@@ -50,6 +56,7 @@ function ProtectedRoutes() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/billing" element={<Billing />} />
         {user.role === 'admin' && <Route path="/admin" element={<Admin />} />}
+        {user.role === 'admin' && <Route path="/admin/research" element={<AdminResearch />} />}
         <Route path="*" element={<Navigate to="/" />} />
       </Route>
     </Routes>

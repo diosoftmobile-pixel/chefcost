@@ -4,7 +4,7 @@ export default {
     account: 'Compte',
     dashboard: 'Tableau de bord', ingredients: 'Ingrédients', recipes: 'Recettes', menus: 'Menus',
     events: 'Événements', quotes: 'Devis PDF', allergens: 'Allergènes', reports: 'Rapports',
-    aiAdvisor: 'Conseiller IA', admin: 'Panneau Admin',
+    aiAdvisor: 'Conseiller IA', admin: 'Panneau Admin', research: 'Recherche',
     signOut: 'Se déconnecter', brandSub: "L'app la plus simple & puissante pour les chefs",
     settings: 'Paramètres', billing: 'Facturation',
     planPro: 'Plan Pro', planTrial: 'Essai', planFree: 'Gratuit',

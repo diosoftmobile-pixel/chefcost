@@ -4,7 +4,7 @@ export default {
     administration: 'Administration', account: 'Account',
     dashboard: 'Dashboard', ingredients: 'Ingredients', recipes: 'Recipes', menus: 'Menus',
     events: 'Events', quotes: 'PDF Quotes', allergens: 'Allergens', reports: 'Reports',
-    aiAdvisor: 'AI Advisor', admin: 'Admin Panel',
+    aiAdvisor: 'AI Advisor', admin: 'Admin Panel', research: 'Research',
     signOut: 'Sign out', brandSub: 'The simplest & most powerful App for Chefs',
     settings: 'Settings', billing: 'Billing & Plans',
     planPro: 'Pro Plan', planTrial: 'Trial', planFree: 'Free Plan',

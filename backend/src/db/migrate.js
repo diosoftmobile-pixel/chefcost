@@ -97,6 +97,49 @@ db.exec(`
     menu_id TEXT NOT NULL REFERENCES menus(id) ON DELETE CASCADE,
     quantity INTEGER NOT NULL DEFAULT 1
   );
+
+  CREATE TABLE IF NOT EXISTS research_responses (
+    id TEXT PRIMARY KEY,
+    created_at TEXT DEFAULT (datetime('now')),
+    language TEXT NOT NULL DEFAULT 'en',
+    trial_code TEXT UNIQUE NOT NULL,
+    redeemed_at TEXT DEFAULT NULL,
+    redeemed_user_id TEXT DEFAULT NULL,
+    -- Section 1: identity
+    name TEXT DEFAULT '',
+    email TEXT NOT NULL,
+    role TEXT DEFAULT '',
+    business_type TEXT DEFAULT '',
+    country TEXT DEFAULT '',
+    city TEXT DEFAULT '',
+    -- Section 2: operation
+    team_size TEXT DEFAULT '',
+    events_per_week TEXT DEFAULT '',
+    avg_ticket TEXT DEFAULT '',
+    years_experience TEXT DEFAULT '',
+    -- Section 3: how they work today
+    recipe_costing_method TEXT DEFAULT '',
+    quote_building_method TEXT DEFAULT '',
+    tools_used TEXT DEFAULT '',
+    hours_per_week TEXT DEFAULT '',
+    pricing_confidence INTEGER DEFAULT NULL,
+    -- Section 4: real pain
+    biggest_frustration TEXT DEFAULT '',
+    last_mistake TEXT DEFAULT '',
+    magic_wand TEXT DEFAULT '',
+    whats_stopping TEXT DEFAULT '',
+    -- Section 5: buying intent
+    tried_software TEXT DEFAULT '',
+    stopped_reason TEXT DEFAULT '',
+    must_have_feature TEXT DEFAULT '',
+    monthly_budget TEXT DEFAULT '',
+    decision_maker TEXT DEFAULT '',
+    -- Section 6: contact
+    allow_followup INTEGER NOT NULL DEFAULT 0,
+    beta_tester TEXT DEFAULT '',
+    -- admin tracking
+    reviewed INTEGER NOT NULL DEFAULT 0
+  );
 `);
 
 // Add new columns to existing tables (idempotent)

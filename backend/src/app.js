@@ -10,6 +10,7 @@ import settingsRoutes from './routes/settings.js';
 import billingRoutes from './routes/billing.js';
 import reportsRoutes from './routes/reports.js';
 import toolsRouter from './routes/tools.js';
+import researchRouter from './routes/research.js';
 
 export function createApp() {
   const app = express();
@@ -22,6 +23,7 @@ export function createApp() {
   // Programmatic SEO pages + dynamic sitemap — registered before static middleware
   // so these routes take priority over the SPA catch-all in index.js
   app.use(toolsRouter);
+  app.use(researchRouter);
 
   app.use('/api/auth', authRoutes);
   app.use('/api/ingredients', ingredientRoutes);

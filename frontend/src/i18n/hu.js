@@ -4,7 +4,7 @@ export default {
     account: 'Fiók',
     dashboard: 'Vezérlőpult', ingredients: 'Alapanyagok', recipes: 'Receptek', menus: 'Menük',
     events: 'Események', quotes: 'PDF Ajánlatok', allergens: 'Allergének', reports: 'Riportok',
-    aiAdvisor: 'AI Tanácsadó', admin: 'Admin Panel',
+    aiAdvisor: 'AI Tanácsadó', admin: 'Admin Panel', research: 'Kutatás',
     signOut: 'Kijelentkezés', brandSub: 'A legegyszerűbb & legerősebb app séfeknek',
     settings: 'Beállítások', billing: 'Számlázás',
     planPro: 'Pro Plan', planTrial: 'Próba', planFree: 'Ingyenes',
