@@ -153,4 +153,108 @@ export default {
     cancelledDesc: 'You have full access until {{date}}. After that your account reverts to demo mode.',
     switchPlanHint: 'To switch between monthly and yearly, use',
   },
+  landing: {
+    nav: {
+      features: 'Features', howItWorks: 'How it works', pricing: 'Pricing', aiAdvisor: 'AI Advisor',
+      login: 'Log in', startTrial: 'Start 14-Day Trial',
+    },
+    hero: {
+      badge: 'The business app for professional chefs',
+      h1: 'Know your food cost.', h1gold: 'Price with confidence.',
+      p: 'Calculate real food costs, build profitable menus, manage events, track allergens and generate professional PDF quotes in minutes.',
+      checks: ['Recipe & Cost Calculator', 'Allergen & Nutrition Tracking', 'Event Management', 'AI-Powered Menu Advisor'],
+      ctaTrial: 'Start 14-Day Trial — €6.99', ctaSignin: 'Sign in',
+      note1: '14-day full access', note2: 'Cancel anytime', note3: 'Demo: demo@chefcost.app / demo1234',
+    },
+    features: {
+      items: [
+        { title: 'Recipe & Cost Calculator', text: 'Real-time recipe food cost and portion calculation.' },
+        { title: 'Menu Builder', text: 'Create multi-course menus with markup, VAT and price per guest.' },
+        { title: 'Event Management', text: 'Plan events, manage guests, menus, budgets and shopping lists.' },
+        { title: 'Allergen Tracking', text: 'EU 14 allergen tracking built into every ingredient and recipe.' },
+        { title: 'AI Advisor', text: 'Get AI insights to improve profitability, balance and pricing.' },
+        { title: 'Professional Quotes', text: 'One-click PDF quotes that look premium and win more clients.' },
+      ],
+    },
+    problem: {
+      label: 'Food costing made simple', h2: 'Stop pricing menus by instinct.',
+      p: 'Most chefs use Excel, habit or competitor guessing. App4Chef gives you real cost visibility before you send the offer.',
+      items: ['Margins disappear without being noticed', 'Event quotes take hours and contain mistakes', 'Allergen declarations are managed manually', 'Ingredient prices are hard to update everywhere'],
+    },
+    featList: {
+      label: 'Powerful features for chefs', h2: 'Everything you need to run a profitable kitchen',
+      p: 'From ingredient database to final client proposal, App4Chef helps food businesses manage the full workflow of costing, planning, pricing and delivering events.',
+      items: ['Real-time recipe costing', 'Automatic price updates', 'Menu pricing per guest', 'Event cost calculator', 'Shopping list generator', 'Professional PDF quotes', 'EU allergen tracking', 'AI-powered menu advisor', 'Multi-language support', 'Secure cloud backup'],
+    },
+    steps: {
+      label: 'How it works', h2: 'From recipe to profitable event in 5 simple steps',
+      items: [
+        { title: 'Add Ingredients', text: 'Enter products, prices, suppliers and allergens.' },
+        { title: 'Build Recipes', text: 'Create recipes and calculate cost per portion.' },
+        { title: 'Create Menus', text: 'Combine recipes and define markup, VAT and price.' },
+        { title: 'Plan Events', text: 'Add the client, guest count, menu and event details.' },
+        { title: 'Send Offer', text: 'Export a professional PDF quote in seconds.' },
+      ],
+    },
+    ai: {
+      badge: "Chef's AI Advisor", h2: 'Your AI culinary consultant, built in.',
+      p: 'The AI Advisor reviews your menu and gives practical feedback before you send the offer to your client.',
+      cards: ['Menu balance', 'Food cost %', 'Pricing competitiveness', 'Allergen risks', 'Profitability', 'Chef improvement tips'],
+      mockTitle: 'AI Menu Review', mockH3: 'Wedding Premium Menu',
+      mockItems: [
+        { title: 'Menu Balance', text: 'Strong structure with clear premium positioning.' },
+        { title: 'Food Cost Analysis', text: 'Food cost is 29.4%, inside the recommended range.' },
+        { title: 'Pricing Recommendation', text: 'Increase dessert markup by 8–10% for better margin.' },
+        { title: 'Allergen Alert', text: 'Contains gluten, milk, eggs and nuts. Add visible guest warning.' },
+      ],
+    },
+    allergen: {
+      label: 'Allergen compliance', h2: 'EU allergen tracking built into every recipe.',
+      p: 'Tag ingredients once and App4Chef automatically carries allergens into recipes, menus, events and PDF quotes — citing EU Regulation 1169/2011.',
+      list: ['Gluten','Crustaceans','Eggs','Fish','Peanuts','Soy','Milk','Nuts','Celery','Mustard','Sesame','Sulphites','Lupin','Molluscs'],
+      pdfLabel: 'PDF Quote Preview', pdfH3: 'Corporate Dinner — Q-083509',
+      pdfGuests: 'Guests', pdfPrice: 'Price per guest', pdfVat: 'VAT', pdfTotal: 'Grand Total',
+      pdfAllergenTitle: 'Allergen Declaration',
+      pdfAllergenText: 'This menu contains: Gluten, Milk, Eggs, Nuts. Please inform guests with allergies before serving. (EU Reg. 1169/2011)',
+    },
+    pricing: {
+      label: 'Pricing', h2: 'Start with a 14-day trial', p: 'Full access to all features. Cancel anytime.',
+      note: 'Secure payments by Stripe · Cancel anytime', bestValue: 'Best Value',
+      plans: [
+        { name: '14-Day Trial', price: '€6.99', period: 'one-time', cta: 'Start 14-Day Trial', items: ['Full access to all features', 'Includes AI Advisor', 'Credit card required', 'Cancel anytime'] },
+        { name: 'Monthly', price: '€49.99', period: '/month', cta: 'Start Monthly Plan', items: ['Unlimited ingredients', 'Unlimited recipes & menus', 'Unlimited events', 'PDF quotes included'] },
+        { name: 'Yearly', price: '€499', period: '/year', cta: 'Start Yearly Plan', items: ['Save 17%', 'Equivalent to 2 months free', 'Unlimited everything', 'Priority support'] },
+      ],
+    },
+    testimonials: {
+      label: 'Trusted by chefs worldwide', h2: 'Built for chefs who want control',
+      items: [
+        { name: 'Marco Bianchi', role: 'Executive Chef', quote: 'Now I know exactly which dishes make money and which ones need repricing.' },
+        { name: 'Elena Popescu', role: 'Catering Owner', quote: 'I can quote a 200-person wedding in minutes. My offers finally look professional.' },
+        { name: 'Thomas Dubois', role: 'Private Chef', quote: 'The allergen tracking and PDF quotes are exactly what I needed for premium clients.' },
+      ],
+    },
+    cta: {
+      h2: 'Stop guessing. Start calculating.',
+      p: 'Know your food cost, protect your margins, manage allergens and send professional quotes from one simple app.',
+      btn: 'Start Your 14-Day Trial', demo: 'Or try the demo —',
+    },
+    footer: {
+      tagline: 'The simplest and most powerful app for chefs and caterers.',
+      copyright: '© 2026 App4Chef. All rights reserved.',
+      col1Title: 'Product', col1Links: ['Features', 'How it works', 'Pricing', 'AI Advisor'],
+      col2Title: 'Legal', col2Links: ['Privacy Policy', 'Terms of Service', 'Cookie Policy'],
+      col3Title: 'Account', col3Links: ['Sign in', 'Create account', 'Demo account'],
+    },
+    mockup: {
+      dashboard: 'Dashboard', profitability: 'Event Profitability',
+      totalEvents: 'Total Events', foodCost: 'Food Cost', revenue: 'Revenue',
+      costOverview: 'Cost Overview', costSplit: 'Cost Split', costSplitSub: 'Food · Labor · Logistics · Other',
+      upcomingEvents: 'Upcoming Events',
+      event1: ['Wedding Menu', 'May 31', 'Sent Offer', '€4,280'],
+      event2: ['Corporate Dinner', 'June 08', 'Approved', '€2,930'],
+      recipeCard: 'Beef Tenderloin', perPortion: 'Per portion', allergensLabel: 'Allergens',
+    },
+    lang: { en: 'English', fr: 'Français', ro: 'Română', hu: 'Magyar' },
+  },
 };

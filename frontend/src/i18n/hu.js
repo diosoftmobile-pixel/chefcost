@@ -152,4 +152,108 @@ export default {
     cancelledDesc: '{{date}}-ig teljes hozzáférése van. Utána fiókja demo módra vált.',
     switchPlanHint: 'A havi és éves csomag közötti váltáshoz használja a',
   },
+  landing: {
+    nav: {
+      features: 'Funkciók', howItWorks: 'Hogyan működik', pricing: 'Árak', aiAdvisor: 'AI Tanácsadó',
+      login: 'Bejelentkezés', startTrial: '14 napos próba',
+    },
+    hero: {
+      badge: 'Az üzleti app professzionális séfeknek',
+      h1: 'Ismerd meg az ételköltségeket.', h1gold: 'Árazz magabiztosan.',
+      p: 'Számítsa ki a valós ételköltségeket, építsen nyereséges menüket, kezelje az eseményeket, kövesse nyomon az allergéneket, és generáljon professzionális PDF ajánlatokat percek alatt.',
+      checks: ['Recept és költségkalkulátor', 'Allergén és táplálkozáskövetés', 'Eseménykezelés', 'AI-alapú menü tanácsadó'],
+      ctaTrial: '14 napos próba — 6,99 €', ctaSignin: 'Bejelentkezés',
+      note1: '14 napos teljes hozzáférés', note2: 'Bármikor lemondható', note3: 'Demo: demo@chefcost.app / demo1234',
+    },
+    features: {
+      items: [
+        { title: 'Recept kalkulátor', text: 'Valós idejű ételköltség és adagonkénti kalkuláció.' },
+        { title: 'Menü építő', text: 'Hozzon létre többfogásos menüket árrés, ÁFA és vendégenkénti árral.' },
+        { title: 'Eseménykezelés', text: 'Tervezzen eseményeket, kezelje a vendégeket, menüket, költségvetéseket és bevásárlólistákat.' },
+        { title: 'Allergén követés', text: 'EU 14 allergén beépítve minden összetevőbe és receptbe.' },
+        { title: 'AI Tanácsadó', text: 'AI betekintések a jövedelmezőség, egyensúly és árazás javítására.' },
+        { title: 'Professzionális ajánlatok', text: 'Egy kattintásos PDF ajánlatok, amelyek prémiumnak tűnnek és több ügyfelet nyernek.' },
+      ],
+    },
+    problem: {
+      label: 'Ételköltség kalkuláció egyszerűen', h2: 'Hagyja abba az ösztönös árazást.',
+      p: 'A legtöbb séf Excelt, megszokást vagy versenytárs-árakat alkalmaz. Az App4Chef valós költség-átláthatóságot ad, mielőtt elküldi az ajánlatot.',
+      items: ['A haszonkulcsok észrevétlenül eltűnnek', 'Az esemény ajánlatok órákat vesznek igénybe és hibákat tartalmaznak', 'Az allergén nyilatkozatokat manuálisan kezelik', 'Az összetevők árát nehéz mindenhol frissíteni'],
+    },
+    featList: {
+      label: 'Erőteljes funkciók séfeknek', h2: 'Minden, amire szüksége van egy nyereséges konyha működtetéséhez',
+      p: 'Az összetevő adatbázistól az ügyfélajánlatig az App4Chef segít az élelmiszeripari vállalkozásoknak kezelni a teljes munkafolyamatot.',
+      items: ['Valós idejű receptköltség', 'Automatikus árazás frissítés', 'Menü ára vendégenként', 'Eseményköltség kalkulátor', 'Bevásárlólista generátor', 'Professzionális PDF ajánlatok', 'EU allergén követés', 'AI-alapú menü tanácsadó', 'Többnyelvű támogatás', 'Biztonságos felhő mentés'],
+    },
+    steps: {
+      label: 'Hogyan működik', h2: 'Recepttől nyereséges eseményig 5 egyszerű lépésben',
+      items: [
+        { title: 'Összetevők hozzáadása', text: 'Adja meg a termékeket, árakat, szállítókat és allergéneket.' },
+        { title: 'Receptek létrehozása', text: 'Hozzon létre recepteket és számítsa ki az adagonkénti költséget.' },
+        { title: 'Menük létrehozása', text: 'Kombinálja a recepteket és határozza meg az árrést, ÁFÁ-t és az árat.' },
+        { title: 'Események tervezése', text: 'Adja hozzá az ügyfelet, vendégszámot, menüt és az esemény részleteit.' },
+        { title: 'Ajánlat küldése', text: 'Exportáljon professzionális PDF ajánlatot másodpercek alatt.' },
+      ],
+    },
+    ai: {
+      badge: 'Chef AI Tanácsadó', h2: 'Beépített AI kulináris tanácsadó.',
+      p: 'Az AI Tanácsadó áttekinti a menüt és gyakorlati visszajelzést ad, mielőtt elküldi az ajánlatot az ügyfélnek.',
+      cards: ['Menü egyensúly', 'Ételköltség %', 'Árazási versenyképesség', 'Allergén kockázatok', 'Jövedelmezőség', 'Fejlesztési tippek'],
+      mockTitle: 'AI Menü Értékelés', mockH3: 'Esküvői Prémium Menü',
+      mockItems: [
+        { title: 'Menü egyensúly', text: 'Erős struktúra, egyértelmű prémium pozicionálással.' },
+        { title: 'Ételköltség elemzés', text: 'Az ételköltség 29,4%, az ajánlott tartományon belül.' },
+        { title: 'Árazási javaslat', text: 'Növelje a desszert árrését 8–10%-kal a jobb haszonkulcsért.' },
+        { title: 'Allergén figyelmeztetés', text: 'Glutént, tejet, tojást és diót tartalmaz. Adjon látható vendégfigyelmeztetést.' },
+      ],
+    },
+    allergen: {
+      label: 'Allergén megfelelőség', h2: 'EU allergén követés beépítve minden receptbe.',
+      p: 'Jelölje meg az összetevőket egyszer, és az App4Chef automatikusan továbbítja az allergéneket receptekbe, menükbe, eseményekbe és PDF ajánlatokba — az EU 1169/2011 rendelet hivatkozásával.',
+      list: ['Glutén','Rákféle','Tojás','Hal','Mogyoró','Szója','Tej','Diófélék','Zeller','Mustár','Szezám','Szulfit','Csillagfürt','Puhatestű'],
+      pdfLabel: 'PDF Ajánlat előnézet', pdfH3: 'Vállalati Vacsora — Q-083509',
+      pdfGuests: 'Vendégek', pdfPrice: 'Ár vendégenként', pdfVat: 'ÁFA', pdfTotal: 'Végösszeg',
+      pdfAllergenTitle: 'Allergén nyilatkozat',
+      pdfAllergenText: 'Ez a menü tartalmaz: Glutén, Tej, Tojás, Dió. Kérjük, tájékoztassa az allergiás vendégeket tálalás előtt. (EU Rend. 1169/2011)',
+    },
+    pricing: {
+      label: 'Árak', h2: 'Kezdje egy 14 napos próbával', p: 'Teljes hozzáférés az összes funkcióhoz. Bármikor lemondható.',
+      note: 'Biztonságos fizetés Stripe-pal · Bármikor lemondható', bestValue: 'Legjobb érték',
+      plans: [
+        { name: '14 napos próba', price: '6,99 €', period: 'egyszeri díj', cta: '14 napos próba indítása', items: ['Teljes hozzáférés az összes funkcióhoz', 'AI Tanácsadó tartalmazza', 'Bankkártya szükséges', 'Bármikor lemondható'] },
+        { name: 'Havi', price: '49,99 €', period: '/hó', cta: 'Havi előfizetés', items: ['Korlátlan összetevők', 'Korlátlan receptek és menük', 'Korlátlan események', 'PDF ajánlatok mellékelve'] },
+        { name: 'Éves', price: '499 €', period: '/év', cta: 'Éves előfizetés', items: ['17% megtakarítás', '2 hónap ingyenes', 'Korlátlan minden', 'Prioritásos support'] },
+      ],
+    },
+    testimonials: {
+      label: 'Séfek bíznak benne világszerte', h2: 'Séfeknek készült, akik kontrollt akarnak',
+      items: [
+        { name: 'Marco Bianchi', role: 'Executive Chef', quote: 'Most pontosan tudom, melyik fogás hoz nyereséget és melyiket kell újraárazni.' },
+        { name: 'Elena Popescu', role: 'Catering tulajdonos', quote: 'Percek alatt árajánlatot tudok adni egy 200 fős esküvőre. Az ajánlataim végre professzionálisak.' },
+        { name: 'Thomas Dubois', role: 'Magán séf', quote: 'Az allergén követés és a PDF ajánlatok pontosan azok, amire prémium ügyfeleimnél szükségem volt.' },
+      ],
+    },
+    cta: {
+      h2: 'Hagyja abba a találgatást. Kezdjen el számolni.',
+      p: 'Ismerje meg ételköltségeit, védje haszonkulcsait, kezelje az allergéneket, és küldjön professzionális ajánlatokat egyetlen egyszerű appból.',
+      btn: 'Indítsa el a 14 napos próbát', demo: 'Vagy próbálja ki a demót —',
+    },
+    footer: {
+      tagline: 'A legegyszerűbb és leghatékonyabb app séfeknek és étkeztetési vállalkozásoknak.',
+      copyright: '© 2026 App4Chef. Minden jog fenntartva.',
+      col1Title: 'Termék', col1Links: ['Funkciók', 'Hogyan működik', 'Árak', 'AI Tanácsadó'],
+      col2Title: 'Jogi', col2Links: ['Adatvédelmi irányelvek', 'Felhasználási feltételek', 'Cookie irányelv'],
+      col3Title: 'Fiók', col3Links: ['Bejelentkezés', 'Fiók létrehozása', 'Demo fiók'],
+    },
+    mockup: {
+      dashboard: 'Vezérlőpult', profitability: 'Esemény jövedelmezőség',
+      totalEvents: 'Összes esemény', foodCost: 'Ételköltség', revenue: 'Bevétel',
+      costOverview: 'Költség áttekintés', costSplit: 'Költségstruktúra', costSplitSub: 'Étel · Személyzet · Logisztika · Egyéb',
+      upcomingEvents: 'Közelgő események',
+      event1: ['Esküvői menü', 'Máj. 31', 'Ajánlat küldve', '4 280 €'],
+      event2: ['Vállalati vacsora', 'Jún. 08', 'Jóváhagyva', '2 930 €'],
+      recipeCard: 'Marhaszűz', perPortion: 'Adagonként', allergensLabel: 'Allergének',
+    },
+    lang: { en: 'English', fr: 'Français', ro: 'Română', hu: 'Magyar' },
+  },
 };

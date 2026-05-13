@@ -152,4 +152,108 @@ export default {
     cancelledDesc: "Vous avez un accès complet jusqu'au {{date}}. Ensuite votre compte repasse en mode démo.",
     switchPlanHint: 'Pour changer de mensuel à annuel, utilisez',
   },
+  landing: {
+    nav: {
+      features: 'Fonctionnalités', howItWorks: 'Fonctionnement', pricing: 'Tarifs', aiAdvisor: 'Conseiller IA',
+      login: 'Se connecter', startTrial: 'Essai 14 jours',
+    },
+    hero: {
+      badge: "L'app métier pour les chefs professionnels",
+      h1: 'Connaissez votre coût alimentaire.', h1gold: 'Fixez vos prix avec confiance.',
+      p: 'Calculez vos coûts réels, créez des menus rentables, gérez vos événements, suivez les allergènes et générez des devis PDF professionnels en quelques minutes.',
+      checks: ['Calculateur de coûts des recettes', 'Suivi des allergènes et nutrition', 'Gestion des événements', 'Conseiller IA pour les menus'],
+      ctaTrial: 'Essai 14 jours — 6,99 €', ctaSignin: 'Se connecter',
+      note1: 'Accès complet 14 jours', note2: 'Sans engagement', note3: 'Démo : demo@chefcost.app / demo1234',
+    },
+    features: {
+      items: [
+        { title: 'Calculateur de recettes', text: 'Calcul du coût alimentaire et du coût par portion en temps réel.' },
+        { title: 'Constructeur de menu', text: "Créez des menus multi-services avec majoration, TVA et prix par convive." },
+        { title: 'Gestion des événements', text: "Planifiez les événements, gérez les convives, menus, budgets et listes d'achats." },
+        { title: 'Suivi des allergènes', text: '14 allergènes EU intégrés dans chaque ingrédient et recette.' },
+        { title: 'Conseiller IA', text: "Obtenez des insights IA pour améliorer la rentabilité, l'équilibre et le prix." },
+        { title: 'Devis professionnels', text: 'Devis PDF en un clic, élégants et qui convertissent plus de clients.' },
+      ],
+    },
+    problem: {
+      label: 'Le coûtage alimentaire simplifié', h2: "Arrêtez de fixer vos prix à l'instinct.",
+      p: "La plupart des chefs utilisent Excel, l'habitude ou devinent les prix concurrents. App4Chef vous donne une visibilité réelle des coûts avant d'envoyer le devis.",
+      items: ["Les marges disparaissent sans qu'on s'en aperçoive", "Les devis d'événements prennent des heures et contiennent des erreurs", 'Les déclarations d\'allergènes sont gérées manuellement', 'Les prix des ingrédients sont difficiles à mettre à jour partout'],
+    },
+    featList: {
+      label: 'Des fonctionnalités puissantes pour les chefs', h2: 'Tout ce dont vous avez besoin pour gérer une cuisine rentable',
+      p: "De la base d'ingrédients à la proposition client finale, App4Chef aide les professionnels à gérer l'ensemble du processus de coûtage, planification, tarification et réalisation des événements.",
+      items: ['Coûtage des recettes en temps réel', 'Mise à jour automatique des prix', 'Prix du menu par convive', "Calculateur de coût d'événement", "Générateur de liste d'achats", 'Devis PDF professionnels', 'Suivi des allergènes EU', 'Conseiller IA pour les menus', 'Support multilingue', 'Sauvegarde cloud sécurisée'],
+    },
+    steps: {
+      label: 'Fonctionnement', h2: "De la recette à l'événement rentable en 5 étapes simples",
+      items: [
+        { title: 'Ajouter des ingrédients', text: 'Saisissez produits, prix, fournisseurs et allergènes.' },
+        { title: 'Créer des recettes', text: 'Créez des recettes et calculez le coût par portion.' },
+        { title: 'Créer des menus', text: 'Combinez les recettes et définissez majoration, TVA et prix.' },
+        { title: 'Planifier les événements', text: 'Ajoutez le client, le nombre de convives, le menu et les détails.' },
+        { title: 'Envoyer le devis', text: 'Exportez un devis PDF professionnel en quelques secondes.' },
+      ],
+    },
+    ai: {
+      badge: 'Conseiller IA du Chef', h2: 'Votre consultant culinaire IA, intégré.',
+      p: "Le Conseiller IA analyse votre menu et fournit des retours pratiques avant l'envoi du devis à votre client.",
+      cards: ['Équilibre du menu', 'Coût alimentaire %', 'Compétitivité des prix', 'Risques allergènes', 'Rentabilité', "Conseils d'amélioration"],
+      mockTitle: 'Analyse du menu IA', mockH3: 'Menu Premium Mariage',
+      mockItems: [
+        { title: 'Équilibre du menu', text: 'Structure solide avec un positionnement premium clair.' },
+        { title: 'Analyse du coût alimentaire', text: 'Le coût alimentaire est de 29,4 %, dans la plage recommandée.' },
+        { title: 'Recommandation tarifaire', text: 'Augmentez la majoration du dessert de 8 à 10 % pour une meilleure marge.' },
+        { title: 'Alerte allergènes', text: 'Contient gluten, lait, œufs et noix. Ajoutez un avertissement visible aux convives.' },
+      ],
+    },
+    allergen: {
+      label: 'Conformité allergènes', h2: 'Suivi des allergènes EU intégré dans chaque recette.',
+      p: 'Étiquetez les ingrédients une fois et App4Chef transmet automatiquement les allergènes dans les recettes, menus, événements et devis PDF — citant le Règlement UE 1169/2011.',
+      list: ['Gluten','Crustacés','Œufs','Poisson','Arachides','Soja','Lait','Fruits à coque','Céleri','Moutarde','Sésame','Sulfites','Lupin','Mollusques'],
+      pdfLabel: 'Aperçu du devis PDF', pdfH3: "Dîner d'entreprise — Q-083509",
+      pdfGuests: 'Convives', pdfPrice: 'Prix par convive', pdfVat: 'TVA', pdfTotal: 'Total général',
+      pdfAllergenTitle: 'Déclaration des allergènes',
+      pdfAllergenText: 'Ce menu contient : Gluten, Lait, Œufs, Noix. Veuillez informer les convives allergiques avant de servir. (Rég. UE 1169/2011)',
+    },
+    pricing: {
+      label: 'Tarifs', h2: 'Commencez avec un essai de 14 jours', p: 'Accès complet à toutes les fonctionnalités. Sans engagement.',
+      note: 'Paiements sécurisés par Stripe · Sans engagement', bestValue: 'Meilleure offre',
+      plans: [
+        { name: 'Essai 14 jours', price: '6,99 €', period: 'paiement unique', cta: "Commencer l'essai 14 jours", items: ['Accès complet à toutes les fonctionnalités', 'Inclut le Conseiller IA', 'Carte bancaire requise', 'Sans engagement'] },
+        { name: 'Mensuel', price: '49,99 €', period: '/mois', cta: "S'abonner mensuellement", items: ['Ingrédients illimités', 'Recettes & menus illimités', 'Événements illimités', 'Devis PDF inclus'] },
+        { name: 'Annuel', price: '499 €', period: '/an', cta: "S'abonner annuellement", items: ['Économisez 17 %', 'Équivalent à 2 mois gratuits', 'Tout illimité', 'Support prioritaire'] },
+      ],
+    },
+    testimonials: {
+      label: 'Approuvé par les chefs du monde entier', h2: 'Conçu pour les chefs qui veulent garder le contrôle',
+      items: [
+        { name: 'Marco Bianchi', role: 'Chef Exécutif', quote: 'Je sais maintenant exactement quels plats sont rentables et lesquels doivent être retarifés.' },
+        { name: 'Elena Popescu', role: 'Propriétaire traiteur', quote: 'Je peux établir un devis pour un mariage de 200 personnes en quelques minutes. Mes offres ont enfin l\'air professionnelles.' },
+        { name: 'Thomas Dubois', role: 'Chef particulier', quote: "Le suivi des allergènes et les devis PDF sont exactement ce dont j'avais besoin pour mes clients premium." },
+      ],
+    },
+    cta: {
+      h2: 'Arrêtez de deviner. Commencez à calculer.',
+      p: 'Connaissez votre coût alimentaire, protégez vos marges, gérez les allergènes et envoyez des devis professionnels depuis une simple application.',
+      btn: 'Commencer votre essai de 14 jours', demo: 'Ou essayez la démo —',
+    },
+    footer: {
+      tagline: "L'app la plus simple et la plus puissante pour les chefs et traiteurs.",
+      copyright: '© 2026 App4Chef. Tous droits réservés.',
+      col1Title: 'Produit', col1Links: ['Fonctionnalités', 'Fonctionnement', 'Tarifs', 'Conseiller IA'],
+      col2Title: 'Légal', col2Links: ['Politique de confidentialité', 'CGU', 'Politique cookies'],
+      col3Title: 'Compte', col3Links: ['Se connecter', 'Créer un compte', 'Compte démo'],
+    },
+    mockup: {
+      dashboard: 'Tableau de bord', profitability: 'Rentabilité des événements',
+      totalEvents: 'Total événements', foodCost: 'Coût alimentaire', revenue: "Chiffre d'affaires",
+      costOverview: 'Aperçu des coûts', costSplit: 'Répartition', costSplitSub: 'Alim. · Personnel · Logistique · Autre',
+      upcomingEvents: 'Événements à venir',
+      event1: ['Menu Mariage', '31 mai', 'Offre envoyée', '4 280 €'],
+      event2: ["Dîner d'entreprise", '8 juin', 'Approuvé', '2 930 €'],
+      recipeCard: 'Filet de bœuf', perPortion: 'Par portion', allergensLabel: 'Allergènes',
+    },
+    lang: { en: 'English', fr: 'Français', ro: 'Română', hu: 'Magyar' },
+  },
 };

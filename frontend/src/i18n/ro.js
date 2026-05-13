@@ -152,4 +152,108 @@ export default {
     cancelledDesc: 'Ai acces complet până pe {{date}}. După aceea contul tău revine la modul demo.',
     switchPlanHint: 'Pentru a schimba între lunar și anual, folosește',
   },
+  landing: {
+    nav: {
+      features: 'Funcționalități', howItWorks: 'Cum funcționează', pricing: 'Prețuri', aiAdvisor: 'Consilier AI',
+      login: 'Autentificare', startTrial: 'Încearcă 14 zile',
+    },
+    hero: {
+      badge: 'Aplicația profesională pentru bucătari',
+      h1: 'Cunoaște-ți costul alimentar.', h1gold: 'Stabilește prețuri cu încredere.',
+      p: 'Calculați costurile reale, construiți meniuri profitabile, gestionați evenimente, urmăriți alergenii și generați oferte PDF profesionale în câteva minute.',
+      checks: ['Calculator rețete și costuri', 'Urmărire alergeni și nutriție', 'Gestionare evenimente', 'Consilier AI pentru meniuri'],
+      ctaTrial: 'Încearcă 14 zile — 6,99 €', ctaSignin: 'Autentificare',
+      note1: 'Acces complet 14 zile', note2: 'Poți anula oricând', note3: 'Demo: demo@chefcost.app / demo1234',
+    },
+    features: {
+      items: [
+        { title: 'Calculator de costuri', text: 'Calcul în timp real al costului alimentar pe porție.' },
+        { title: 'Constructor de meniu', text: 'Creați meniuri multi-course cu adaos, TVA și preț per oaspete.' },
+        { title: 'Gestionare evenimente', text: 'Planificați evenimente, gestionați oaspeți, meniuri, bugete și liste de cumpărături.' },
+        { title: 'Urmărire alergeni', text: '14 alergeni EU integrați în fiecare ingredient și rețetă.' },
+        { title: 'Consilier AI', text: 'Obțineți sfaturi AI pentru a îmbunătăți profitabilitatea și prețurile.' },
+        { title: 'Oferte profesionale', text: 'Oferte PDF cu un singur clic, care arată premium și câștigă mai mulți clienți.' },
+      ],
+    },
+    problem: {
+      label: 'Calculul costurilor simplu', h2: 'Opriți stabilirea prețurilor din instinct.',
+      p: 'Majoritatea bucătarilor folosesc Excel, obișnuința sau ghicesc prețurile concurenților. App4Chef vă oferă vizibilitate reală a costurilor înainte de a trimite oferta.',
+      items: ['Marjele dispar fără să fie observate', 'Ofertele pentru evenimente durează ore și conțin greșeli', 'Declarațiile de alergeni sunt gestionate manual', 'Prețurile ingredientelor sunt greu de actualizat peste tot'],
+    },
+    featList: {
+      label: 'Funcționalități puternice pentru bucătari', h2: 'Tot ce aveți nevoie pentru a conduce o bucătărie profitabilă',
+      p: 'De la baza de date cu ingrediente până la propunerea finală pentru client, App4Chef ajută afacerile din sectorul alimentar să gestioneze întregul flux de lucru.',
+      items: ['Calculul costurilor rețetelor în timp real', 'Actualizare automată a prețurilor', 'Prețul meniului per oaspete', 'Calculator cost eveniment', 'Generator de liste de cumpărături', 'Oferte PDF profesionale', 'Urmărire alergeni EU', 'Consilier AI pentru meniuri', 'Suport multilingv', 'Backup securizat în cloud'],
+    },
+    steps: {
+      label: 'Cum funcționează', h2: 'De la rețetă la eveniment profitabil în 5 pași simpli',
+      items: [
+        { title: 'Adaugă ingrediente', text: 'Introduceți produse, prețuri, furnizori și alergeni.' },
+        { title: 'Creează rețete', text: 'Creați rețete și calculați costul per porție.' },
+        { title: 'Creează meniuri', text: 'Combinați rețetele și definiți adaosul, TVA și prețul.' },
+        { title: 'Planifică evenimente', text: 'Adăugați clientul, numărul de oaspeți, meniul și detaliile.' },
+        { title: 'Trimite oferta', text: 'Exportați o ofertă PDF profesională în câteva secunde.' },
+      ],
+    },
+    ai: {
+      badge: 'Consilierul AI al Bucătarului', h2: 'Consultantul tău culinar AI, integrat.',
+      p: 'Consilierul AI analizează meniul tău și oferă feedback practic înainte de a trimite oferta clientului.',
+      cards: ['Echilibrul meniului', 'Costul alimentar %', 'Competitivitatea prețurilor', 'Riscuri alergeni', 'Profitabilitate', 'Sfaturi de îmbunătățire'],
+      mockTitle: 'Analiză meniu AI', mockH3: 'Meniu Premium Nuntă',
+      mockItems: [
+        { title: 'Echilibrul meniului', text: 'Structură solidă cu poziționare premium clară.' },
+        { title: 'Analiza costului alimentar', text: 'Costul alimentar este 29,4%, în intervalul recomandat.' },
+        { title: 'Recomandare de preț', text: 'Creșteți adaosul la desert cu 8–10% pentru marje mai bune.' },
+        { title: 'Alertă alergeni', text: 'Conține gluten, lapte, ouă și nuci. Adăugați un avertisment vizibil pentru oaspeți.' },
+      ],
+    },
+    allergen: {
+      label: 'Conformitate alergeni', h2: 'Urmărirea alergenilor EU integrată în fiecare rețetă.',
+      p: 'Etichetați ingredientele o singură dată și App4Chef transmite automat alergenii în rețete, meniuri, evenimente și oferte PDF — citând Regulamentul UE 1169/2011.',
+      list: ['Gluten','Crustacee','Ouă','Pește','Arahide','Soia','Lapte','Nuci','Țelină','Muștar','Susan','Sulfiți','Lupin','Moluște'],
+      pdfLabel: 'Previzualizare ofertă PDF', pdfH3: 'Cina corporativă — Q-083509',
+      pdfGuests: 'Oaspeți', pdfPrice: 'Preț per oaspete', pdfVat: 'TVA', pdfTotal: 'Total general',
+      pdfAllergenTitle: 'Declarație alergeni',
+      pdfAllergenText: 'Acest meniu conține: Gluten, Lapte, Ouă, Nuci. Vă rugăm informați oaspeții cu alergii înainte de servire. (Reg. UE 1169/2011)',
+    },
+    pricing: {
+      label: 'Prețuri', h2: 'Începeți cu o perioadă de probă de 14 zile', p: 'Acces complet la toate funcționalitățile. Puteți anula oricând.',
+      note: 'Plăți sigure prin Stripe · Puteți anula oricând', bestValue: 'Cea mai bună ofertă',
+      plans: [
+        { name: 'Probă 14 zile', price: '6,99 €', period: 'plată unică', cta: 'Începeți proba de 14 zile', items: ['Acces complet la toate funcționalitățile', 'Include Consilierul AI', 'Card bancar necesar', 'Puteți anula oricând'] },
+        { name: 'Lunar', price: '49,99 €', period: '/lună', cta: 'Abonament lunar', items: ['Ingrediente nelimitate', 'Rețete și meniuri nelimitate', 'Evenimente nelimitate', 'Oferte PDF incluse'] },
+        { name: 'Anual', price: '499 €', period: '/an', cta: 'Abonament anual', items: ['Economisiți 17%', 'Echivalent cu 2 luni gratuite', 'Totul nelimitat', 'Suport prioritar'] },
+      ],
+    },
+    testimonials: {
+      label: 'Apreciat de bucătari din toată lumea', h2: 'Construit pentru bucătari care vor control',
+      items: [
+        { name: 'Marco Bianchi', role: 'Chef Executiv', quote: 'Acum știu exact care feluri de mâncare aduc profit și care trebuie reprefixate.' },
+        { name: 'Elena Popescu', role: 'Proprietar catering', quote: 'Pot face o ofertă pentru o nuntă de 200 persoane în câteva minute. Ofertele mele arată în sfârșit profesional.' },
+        { name: 'Thomas Dubois', role: 'Chef particular', quote: 'Urmărirea alergenilor și ofertele PDF sunt exact ce aveam nevoie pentru clienții premium.' },
+      ],
+    },
+    cta: {
+      h2: 'Opriți ghicitul. Începeți calculul.',
+      p: 'Cunoașteți-vă costul alimentar, protejați-vă marjele, gestionați alergenii și trimiteți oferte profesionale dintr-o singură aplicație simplă.',
+      btn: 'Începeți proba de 14 zile', demo: 'Sau încercați demo-ul —',
+    },
+    footer: {
+      tagline: 'Cea mai simplă și mai puternică aplicație pentru bucătari și catering.',
+      copyright: '© 2026 App4Chef. Toate drepturile rezervate.',
+      col1Title: 'Produs', col1Links: ['Funcționalități', 'Cum funcționează', 'Prețuri', 'Consilier AI'],
+      col2Title: 'Legal', col2Links: ['Politică de confidențialitate', 'Termeni și condiții', 'Politică cookies'],
+      col3Title: 'Cont', col3Links: ['Autentificare', 'Creați un cont', 'Cont demo'],
+    },
+    mockup: {
+      dashboard: 'Panou de control', profitability: 'Profitabilitatea evenimentelor',
+      totalEvents: 'Total evenimente', foodCost: 'Cost alimentar', revenue: 'Venituri',
+      costOverview: 'Prezentare costuri', costSplit: 'Structură costuri', costSplitSub: 'Alim. · Personal · Logistică · Alte',
+      upcomingEvents: 'Evenimente viitoare',
+      event1: ['Meniu Nuntă', '31 mai', 'Ofertă trimisă', '4.280 €'],
+      event2: ['Cină corporativă', '8 iun.', 'Aprobat', '2.930 €'],
+      recipeCard: 'File de vită', perPortion: 'Per porție', allergensLabel: 'Alergeni',
+    },
+    lang: { en: 'English', fr: 'Français', ro: 'Română', hu: 'Magyar' },
+  },
 };
