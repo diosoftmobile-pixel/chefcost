@@ -244,7 +244,7 @@ export default {
   landing: {
     nav: {
       features: 'Funkciók', howItWorks: 'Hogyan működik', pricing: 'Árak', aiAdvisor: 'AI Tanácsadó',
-      login: 'Bejelentkezés', startTrial: '14 napos próba',
+      login: 'Bejelentkezés', startTrial: '14 napos próba — 6,99 €',
     },
     hero: {
       badge: 'Az üzleti app professzionális séfeknek',

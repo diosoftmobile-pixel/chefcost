@@ -587,10 +587,11 @@ export function buildToolPage(page, allPages) {
       <div class="nav-logo-mark">4</div>
       App4Chef
     </a>
-    <a href="/?signup=1" class="nav-cta">Start Free Trial</a>
+    <a href="/?signup=1" class="nav-cta">Try 14 Days — €6.99</a>
   </nav>
 
   <!-- Breadcrumb -->
+
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <a href="/">Home</a>
     <span aria-hidden="true">›</span>
@@ -680,7 +681,7 @@ export function buildToolPage(page, allPages) {
       <div class="sidebar-cta">
         <h3>Tired of spreadsheets?</h3>
         <p>App4Chef automates all your food cost calculations, scales recipes instantly, and tracks margins across your full menu.</p>
-        <a href="/?signup=1" class="btn-primary">Start Free 14-Day Trial</a>
+        <a href="/?signup=1" class="btn-primary">Try 14 Days — €6.99</a>
       </div>
 
       ${relatedCards.length ? `
@@ -714,7 +715,7 @@ export function buildToolPage(page, allPages) {
     <h2 id="cta-heading">Start Costing Recipes the Professional Way</h2>
     <p>Join chefs and catering businesses who use App4Chef to control food costs and protect margins.</p>
     <a href="/?signup=1" class="btn-primary" style="display:inline-block; padding: 14px 32px; font-size:16px">
-      Try App4Chef Free — No Credit Card
+      Try App4Chef — 14 Days for €6.99
     </a>
   </section>
 
@@ -876,7 +877,7 @@ export function buildCategoryPage(category, pages) {
 <body>
   <nav class="top-nav">
     <a href="/" class="nav-logo"><div class="nav-logo-mark">4</div>App4Chef</a>
-    <a href="/?signup=1" class="nav-cta">Start Free Trial</a>
+    <a href="/?signup=1" class="nav-cta">Try 14 Days — €6.99</a>
   </nav>
   <nav class="breadcrumb">
     <a href="/">Home</a> › <span aria-current="page">${escHtml(meta.h1)}</span>
@@ -961,7 +962,7 @@ export function buildToolsIndex(allPages) {
 <body>
   <nav class="top-nav">
     <a href="/" class="nav-logo"><div class="nav-logo-mark">4</div>App4Chef</a>
-    <a href="/?signup=1" class="nav-cta">Start Free Trial</a>
+    <a href="/?signup=1" class="nav-cta">Try 14 Days — €6.99</a>
   </nav>
   <header class="hero">
     <h1>Free Food Cost Calculators</h1>

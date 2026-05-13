@@ -248,7 +248,7 @@ export default {
   landing: {
     nav: {
       features: 'Features', howItWorks: 'How it works', pricing: 'Pricing', aiAdvisor: 'AI Advisor',
-      login: 'Log in', startTrial: 'Start 14-Day Trial',
+      login: 'Log in', startTrial: 'Try 14 Days — €6.99',
     },
     hero: {
       badge: 'The business app for professional chefs',

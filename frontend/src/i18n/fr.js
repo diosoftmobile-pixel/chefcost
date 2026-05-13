@@ -245,7 +245,7 @@ export default {
   landing: {
     nav: {
       features: 'Fonctionnalités', howItWorks: 'Fonctionnement', pricing: 'Tarifs', aiAdvisor: 'Conseiller IA',
-      login: 'Se connecter', startTrial: 'Essai 14 jours',
+      login: 'Se connecter', startTrial: 'Essai 14 jours — 6,99 €',
     },
     hero: {
       badge: "L'app métier pour les chefs professionnels",

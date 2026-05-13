@@ -235,7 +235,7 @@ export default {
   landing: {
     nav: {
       features: 'Funcționalități', howItWorks: 'Cum funcționează', pricing: 'Prețuri', aiAdvisor: 'Consilier AI',
-      login: 'Autentificare', startTrial: 'Încearcă 14 zile',
+      login: 'Autentificare', startTrial: 'Încearcă 14 zile — 6,99 €',
     },
     hero: {
       badge: 'Aplicația profesională pentru bucătari',
